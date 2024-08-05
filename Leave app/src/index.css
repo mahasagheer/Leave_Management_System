@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+}
+
+/* From Uiverse.io by eslam-hany */
+.card {
+  position: relative;
+  width: 400px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #9ad6f2;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: "";
+  width: 10%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: bold;
+  background-color: #4a9dc9;
+  transition: all 0.5s;
+}
+
+.card::before {
+  top: 0;
+  right: 0;
+  border-radius: 0 15px 0 100%;
+}
+
+.card::after {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 15px;
+}
+
+.card:hover::before,
+.card:hover:after {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transition: all 1s;
+}
+
+.box {
+  border-radius: 30px;
+  background: linear-gradient(145deg, #e6e6e6, #ffffff);
+  box-shadow: 12px 12px 24px #d4d4d4, -12px -12px 24px #ffffff;
+}
+.anim {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: moveup 0.5s linear forwards;
+}
+
+@keyframes moveup {
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  --c: no-repeat linear-gradient(orange 0 0);
+  background: var(--c), var(--c), var(--c), var(--c), var(--c), var(--c),
+    var(--c), var(--c), var(--c);
+  background-size: 16px 16px;
+  animation: l32-1 1s infinite, l32-2 1s infinite;
+}
+@keyframes l32-1 {
+  0%,
+  100% {
+    width: 45px;
+    height: 45px;
+  }
+  35%,
+  65% {
+    width: 65px;
+    height: 65px;
+  }
+}
+@keyframes l32-2 {
+  0%,
+  40% {
+    background-position: 0 0, 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%,
+      100% 0, 50% 0, 50% 50%;
+  }
+  60%,
+  100% {
+    background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0,
+      50% 0, 0 0, 50% 50%;
+  }
+}
+
+/* @keyframes square-in-center {
+  from {
+    clip-path: inset(100% 100% 100% 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+[transition-style="in:square:center"] {
+  animation: 2.5s cubic-bezier(0.25, 1, 0.3, 1) square-in-center both;
+} */

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -5,14 +6,24 @@ import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 
 const AddUser = () => {
+  const local = localStorage.getItem("user");
   const { data } = useContext(AuthContext);
-
+  const navigate = useNavigate();
+  let role;
+  let userId;
+  // Formik Validation
+  if (data.role === "admin") {
+    role = "HR";
+  }
+  if (data.role === "HR") {
+    role = "user";
+  }
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
         name: "",
         email: "",
-        role: "",
+        role: role,
         salary: "",
         age: "",
         exit_date: "",
@@ -44,7 +55,73 @@ const AddUser = () => {
         employee_id: Yup.number(),
       }),
       onSubmit: (values) => {
-        console.log(values);
+        axios
+          .post(
+            "http://localhost:3000/users",
+            {
+              name: values.name,
+              email: values.email,
+              salary: values.salary,
+              age: values.age,
+              exit_date: values.exit_date,
+              Job_title: values.Job_title,
+              gender: values.gender,
+              hire_date: values.hire_date,
+              department: values.department,
+              city: values.city,
+              password: values.password,
+              role: values.role,
+            },
+            {
+              headers: {
+                Authorization: `${local}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            userId = res.data.user;
+            axios
+              .post("http://localhost:3000/employee_leave_detail", {
+                employee_id: userId,
+                annual_leave: values.annual_leave,
+                sick_leave: values.sick_leave,
+              })
+              .then(function (response) {
+                console.log(response);
+                axios.post(
+                  "http://localhost:3000/send_email/invite_employee",
+                  {
+                    name: values.name,
+                    email: values.email,
+                    password: values.password,
+                  },
+                  {
+                    headers: {
+                      Authorization: `${local}`,
+                    },
+                  }
+                );
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .then(function (response) {
+            axios
+              .post("http://localhost:3000/inbox_messages", {
+                employee_id: userId,
+              })
+              .then((res) => console.log(res))
+              .catch((err) => console.log(err));
+            navigate("/user_added_successfully");
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
 
@@ -59,9 +136,9 @@ const AddUser = () => {
               ensure all necessary details are recorded for onboarding.
             </p>
             <p></p>
-            <form className="mx-[15%]" onSubmit={handleSubmit}>
+            <form class="mx-[15%]" onSubmit={handleSubmit}>
               <div className="flex gap-4 justify-between">
-                <div className="mb-5">
+                <div class="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
@@ -75,16 +152,16 @@ const AddUser = () => {
                     name="name"
                     value={values.name}
                     id="base-input"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   {errors.name && touched.name ? (
                     <p className="text-red-600 text-sm">{errors.name}</p>
                   ) : null}
                 </div>
-                <div className="mb-5">
+                <div class="mb-5">
                   <label
                     htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Salary
                   </label>
@@ -101,7 +178,7 @@ const AddUser = () => {
                     <p className="text-red-600 text-sm">{errors.salary}</p>
                   ) : null}
                 </div>{" "}
-                <div className="mb-5">
+                <div class="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -115,13 +192,13 @@ const AddUser = () => {
                     value={values.age}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   {errors.age && touched.age ? (
                     <p className="text-red-600 text-sm">{errors.age}</p>
                   ) : null}
                 </div>{" "}
-                <div className="mb-5">
+                <div class="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -159,6 +236,7 @@ const AddUser = () => {
               >
                 {data.role === "admin" ? (
                   <>
+                    {" "}
                     <option>Human Resources Manager</option>
                     <option>Talent Acquisition Specialist</option>
                     <option>HR Generalist</option>
@@ -166,6 +244,7 @@ const AddUser = () => {
                 ) : null}
                 {data.role === "HR" ? (
                   <>
+                    {" "}
                     <option>Marketing Manager</option>
                     <option>Digital Marketing Specialist</option>
                     <option>Social Media Manager</option>
@@ -239,7 +318,7 @@ const AddUser = () => {
                 <p className="text-red-600 text-sm">{errors.gender}</p>
               ) : null}
 
-              <div className="mb-5">
+              <div class="mb-5">
                 <label
                   htmlFor="base-input"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -310,8 +389,8 @@ const AddUser = () => {
               {errors.city && touched.city ? (
                 <p className="text-red-600 text-sm">{errors.city}</p>
               ) : null}
-              <div className="grid md:grid-cols-2 md:gap-6">
-                <div className="relative z-0 w-full mb-5 group">
+              <div class="grid md:grid-cols-2 md:gap-6">
+                <div class="relative z-0 w-full mb-5 group">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -332,7 +411,7 @@ const AddUser = () => {
                     <p className="text-red-600 text-sm">{errors.email}</p>
                   ) : null}
                 </div>
-                <div className="relative z-0 w-full mb-5 group">
+                <div class="relative z-0 w-full mb-5 group">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

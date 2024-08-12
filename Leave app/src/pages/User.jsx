@@ -1,103 +1,134 @@
-import React, { useEffect } from "react";
-import Aos from "aos";
-import "aos/dist/aos.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../service/authentication";
 
 const User = () => {
+  const { data } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+  const local = localStorage.getItem("user");
+
   useEffect(() => {
-    Aos.init({ duration: 2000 });
+    axios
+      .get("http://localhost:3000/users", {
+        headers: {
+          Authorization: `${local}`,
+        },
+      })
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+  let filter;
+  if (data.role === "HR") {
+    filter = users.filter((data) => data.role === "user");
+  }
+  if (data.role === "admin") {
+    filter = users.filter((data) => data.role === "user" || data.role === "HR");
+  }
   return (
     <>
-      {" "}
       <section id="user">
         <div className="p-4 sm:ml-64">
-          <div className="p-4 border-2 border-gray-200 h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
+          <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+              <h1 className="text-3xl text-center py-6">Employee List</h1>
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
                   <tr>
                     <th
                       scope="col"
-                      class="px-3 py-3 bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3 bg-gray-50 dark:bg-gray-800"
                     >
                       Employee ID{" "}
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Full Name
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3 bg-gray-50 dark:bg-gray-800"
                     >
                       Job Title{" "}
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Gender
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-3  bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3  bg-gray-50 dark:bg-gray-800"
                     >
                       Age
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Hire Date
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-3  bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3  bg-gray-50 dark:bg-gray-800"
                     >
-                      Annual Salary (USD)
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                      Bonus %
+                      Salary (USD)
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-3  bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3  bg-gray-50 dark:bg-gray-800"
                     >
                       Department
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       City
                     </th>
                     <th
                       scope="col"
-                      class="px-6 py-3  bg-gray-50 dark:bg-gray-800"
+                      className="px-6 py-3  bg-gray-50 dark:bg-gray-800"
                     >
                       Exit Date
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Email
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3  bg-gray-50 dark:bg-gray-800"
-                    >
-                      Password
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="border-b border-gray-200 dark:border-gray-700">
-                    <th
-                      scope="row"
-                      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800"
-                    ></th>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                    <td class="px-6 py-4"></td>
-                    <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800"></td>
-                  </tr>
-                </tbody>
+
+                {filter.map((data) => {
+                  return (
+                    <tbody key={data._id}>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <Link to={`/user/${data._id}`}>
+                          <td className="px-8 py-6 bg-gray-50 dark:bg-gray-800">
+                            {data._id}
+                          </td>
+                        </Link>
+                        <td className="px-6 py-4">{data.name}</td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.Job_title}
+                        </td>
+                        <td className="px-6 py-4">{data.gender}</td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.age}
+                        </td>
+                        <td className="px-6 py-4">
+                          {data.hire_date.substring(0, 10)}
+                        </td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.salary}
+                        </td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.department}
+                        </td>
+                        <td className="px-6 py-4">{data.city}</td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.exit_date}
+                        </td>
+                        <td className="px-6 py-4">{data.email}</td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
               </table>
             </div>
           </div>

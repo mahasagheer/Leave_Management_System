@@ -1,34 +1,29 @@
-import axios from "axios";
+import React, { useState } from "react";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useContext } from "react";
-import { AuthContext } from "../service/authentication";
 
-const AddUser = () => {
-  const { data } = useContext(AuthContext);
+const updateUser = () => {
+  const [data, setData] = useState([]);
 
+  // Formik Validation
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        name: "",
-        email: "",
-        role: "",
-        salary: "",
-        age: "",
-        exit_date: "",
-        Job_title: "",
-        gender: "",
-        hire_date: "",
-        department: "",
-        city: "",
+        name: data.name,
+        salary: data.salary,
+        age: data.age,
+        exit_date: data.exit_date,
+        Job_title: data.Job_title,
+        gender: data.gender,
+        hire_date: data.hire_date,
+        department: data.department,
+        city: data.city,
+        email: data.email,
         password: "",
-        annual_leave: "",
-        sick_leave: "",
-        employee_id: "",
       },
       validationSchema: Yup.object({
         name: Yup.string().min(4).max(20).required(),
-        email: Yup.string().required(),
         salary: Yup.number().required(),
         age: Yup.number().required(),
         exit_date: Yup.string().required(),
@@ -37,11 +32,8 @@ const AddUser = () => {
         hire_date: Yup.date().required(),
         department: Yup.string().required(),
         city: Yup.string().required(),
+        email: Yup.string().required(),
         password: Yup.string().required(),
-        role: Yup.string(),
-        annual_leave: Yup.number().required(),
-        sick_leave: Yup.number().required(),
-        employee_id: Yup.number(),
       }),
       onSubmit: (values) => {
         console.log(values);
@@ -53,7 +45,7 @@ const AddUser = () => {
       <section id="addUser">
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
-            <h1 className="text-3xl text-center my-4">Add New Employee</h1>
+            <h1 className="text-3xl text-center my-4">Update Employee</h1>
             <p className="my-6 text-center ">
               Please fill out this form to add a new employee to the team and
               ensure all necessary details are recorded for onboarding.
@@ -74,6 +66,7 @@ const AddUser = () => {
                     onBlur={handleBlur}
                     name="name"
                     value={values.name}
+                    defaultValue={data.name}
                     id="base-input"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
@@ -92,6 +85,7 @@ const AddUser = () => {
                     name="salary"
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    defaultValue={data.salary}
                     value={values.salary}
                     type="number"
                     id="base-input"
@@ -157,36 +151,28 @@ const AddUser = () => {
                 onBlur={handleBlur}
                 className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                {data.role === "admin" ? (
-                  <>
-                    <option>Human Resources Manager</option>
-                    <option>Talent Acquisition Specialist</option>
-                    <option>HR Generalist</option>
-                  </>
-                ) : null}
-                {data.role === "HR" ? (
-                  <>
-                    <option>Marketing Manager</option>
-                    <option>Digital Marketing Specialist</option>
-                    <option>Social Media Manager</option>
-                    <option>Brand Manager</option>
-                    <option>Sales Manager</option>
-                    <option>Sales Representative</option>
-                    <option>Business Development Manager</option>
-                    <option>Software Engineer</option>
-                    <option>Frontend Developer</option>
-                    <option>Backend Developer</option>
-                    <option>IT Support Specialist</option>
-                    <option>Data Scientist</option>
-                    <option>Financial Analyst</option>
-                    <option>Accountant</option>
-                    <option>Graphic Designer</option>
-                    <option>UX/UI Designer</option>
-                    <option>Content Creator</option>
-                    <option>Research Scientist</option>
-                    <option>Customer Service Manager</option>
-                  </>
-                ) : null}
+                <option>Marketing Manager</option>
+                <option>Digital Marketing Specialist</option>
+                <option>Social Media Manager</option>
+                <option>Brand Manager</option>
+                <option>Sales Manager</option>
+                <option>Sales Representative</option>
+                <option>Business Development Manager</option>
+                <option>Human Resources Manager</option>
+                <option>Talent Acquisition Specialist</option>
+                <option>HR Generalist</option>
+                <option>Software Engineer</option>
+                <option>Frontend Developer</option>
+                <option>Backend Developer</option>
+                <option>IT Support Specialist</option>
+                <option>Data Scientist</option>
+                <option>Financial Analyst</option>
+                <option>Accountant</option>
+                <option>Graphic Designer</option>
+                <option>UX/UI Designer</option>
+                <option>Content Creator</option>
+                <option>Research Scientist</option>
+                <option>Customer Service Manager</option>
               </select>
               {errors.Job_title && touched.Job_title ? (
                 <p className="text-red-600 text-sm">{errors.Job_title}</p>
@@ -305,7 +291,7 @@ const AddUser = () => {
                 <option>Islamabad</option>
                 <option>Karachi</option>
                 <option>Lahore</option>
-                <option>Faisalabad</option>
+                <option>Fasialabad</option>
               </select>
               {errors.city && touched.city ? (
                 <p className="text-red-600 text-sm">{errors.city}</p>
@@ -354,45 +340,6 @@ const AddUser = () => {
                   ) : null}
                 </div>
               </div>
-              <label
-                htmlFor="annual_leave"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Annual Leave
-              </label>
-              <select
-                id="annual_leave"
-                value={values.annual_leave}
-                name="annual_leave"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option>25</option>
-                <option>20</option>
-                <option>15</option>
-                <option>8</option>
-              </select>
-              <label
-                htmlFor="sick_leave"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Sick Leave
-              </label>
-              <select
-                id="sick_leave"
-                value={values.sick_leave}
-                name="sick_leave"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option>15</option>
-                <option>12</option>
-                <option>10</option>
-                <option>5</option>
-              </select>
-
               <button
                 type="submit"
                 className="text-white ease-in-out duration-300 transition bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -407,4 +354,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default updateUser;

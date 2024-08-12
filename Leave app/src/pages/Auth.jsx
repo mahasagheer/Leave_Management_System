@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "../login.png";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../service/authentication";
 import Aos from "aos";
 import "aos/dist/aos.css";
 const Auth = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const handleSubmit = () => {
-  //   axios
-  //     .post("/api", {
-  //       email: email,
-  //       password: password,
-  //     })
-  //     .then(function (response) {
-  //       console.log(response);
-  //       navigate("/dashboard");
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // };
+  const { setEmail, setPassword, handleSubmit } = useContext(AuthContext);
+
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
@@ -36,7 +21,7 @@ const Auth = () => {
             Effortlessly manage your time off and streamline your leave requests
             with ease.
           </p>
-          <form className="flex flex-col pb-10">
+          <form className="flex flex-col pb-10" onSubmit={handleSubmit}>
             <br />
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -57,8 +42,8 @@ const Auth = () => {
                 id="email-address-icon"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-12 p-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@gmail.com"
+                name="email"
               />
-              {email}
             </div>
             <br />
             <div className="relative">
@@ -86,8 +71,8 @@ const Auth = () => {
                 id="email-address-icon"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-12 p-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Password"
+                name="password"
               />
-              {password}
             </div>
             <br />
             <button
@@ -102,7 +87,6 @@ const Auth = () => {
           <img src={Image} alt="" data-aos="fade-up" />
         </div>
       </div>
-      {/* )} */}
     </>
   );
 };

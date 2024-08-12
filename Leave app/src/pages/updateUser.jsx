@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const updateUser = () => {
   const [data, setData] = useState([]);
-
+  const local = localStorage.getItem("user");
+  const navigate = useNavigate();
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/users/${id}`, {
+        headers: {
+          Authorization: `${local}`,
+        },
+      })
+      .then((res) => {
+        const userData = res.data.data;
+        setData(userData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   // Formik Validation
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -36,7 +56,35 @@ const updateUser = () => {
         password: Yup.string().required(),
       }),
       onSubmit: (values) => {
-        console.log(values);
+        axios
+          .put(
+            `http://localhost:3000/users/${id}`,
+            {
+              name: values.name,
+              salary: values.salary,
+              age: values.age,
+              exit_date: values.exit_date,
+              Job_title: values.Job_title,
+              gender: values.gender,
+              hire_date: values.hire_date,
+              department: values.department,
+              city: values.city,
+              email: values.email,
+              password: values.password,
+            },
+            {
+              headers: {
+                Authorization: `${local}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            navigate("/user_added_successfully");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
 

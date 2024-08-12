@@ -1,12 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 const user_detail = () => {
   const [data, setData] = useState({});
-  // const [user, setUser] = useState([]);
-  // const local = localStorage.getItem("user");
-  // const { id } = useParams();
-  // const navigate = useNavigate();
-  const handleDelete = () => {};
+  const [user, setUser] = useState([]);
+  const local = localStorage.getItem("user");
+  const { id } = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/users/${id}`, {
+        headers: {
+          Authorization: `${local}`,
+        },
+      })
+      .then((res) => {
+        const userData = res.data.data;
+        setData(userData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:3000/users/${id}`, {
+        headers: {
+          Authorization: `${local}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+
+        navigate("/user");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <section id="dashboard">

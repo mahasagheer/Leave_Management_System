@@ -1,10 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 
 const ApplyLeave = () => {
   const { data } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const local = localStorage.getItem("user");
+  let days = 0;
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -18,10 +23,10 @@ const ApplyLeave = () => {
         message: "",
       },
       validationSchema: Yup.object({
-        name: Yup.string().min(4).max(20).required(),
-        email: Yup.string().email().required(),
+        name: Yup.string().min(4).max(20),
+        email: Yup.string().email(),
         leave_type: Yup.string().required(),
-        to_date: Yup.date().required(),
+        to_date: Yup.date(),
         from_date: Yup.date().required(),
         leave_application: Yup.string().required(
           "Application must contain reason for leave"
@@ -29,6 +34,72 @@ const ApplyLeave = () => {
         employee_id: Yup.string().required(),
       }),
       onSubmit: (values) => {
+        const start = values.from_date
+          ? new Date(values.from_date)
+          : new Date();
+        const end = new Date(values.to_date);
+
+        if (start > end) {
+          days = 0;
+          alert("'To Date' cannot be before 'From Date'");
+          return;
+        }
+
+        const timeDiff = end.getTime() - start.getTime();
+        const dayDiff = timeDiff / (1000 * 3600 * 24);
+        days = dayDiff + 1;
+        console.log(days);
+        axios
+          .patch("http://localhost:3000/inbox_messages", {
+            employee_id: data._id,
+            message: {
+              name: values.name,
+              email: values.email,
+              leave_type: values.leave_type,
+              days: days,
+              to_date: values.to_date,
+              from_date: values.from_date,
+              leave_application: values.leave_application,
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            axios
+              .patch("http://localhost:3000/inbox_messages", {
+                employee_id: "66b8315770dd776dcef1b84e",
+                message: values,
+              })
+              .then(function (response) {
+                console.log(response);
+                axios
+                  .post(
+                    "http://localhost:3000/send_email",
+                    {
+                      name: values.name,
+                      email: values.email,
+                      leave_type: values.leave_type,
+                      days: days,
+                      to_date: values.to_date,
+                      from_date: values.from_date,
+                      leave_application: values.leave_application,
+                    },
+                    {
+                      headers: {
+                        Authorization: `${local}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    console.log(res);
+                    navigate("/send");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
         console.log(values);
       },
     });

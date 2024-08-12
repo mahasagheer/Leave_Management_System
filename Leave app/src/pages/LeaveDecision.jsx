@@ -1,11 +1,12 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const leaveDecision = () => {
   const { id } = useParams();
-  console.log(id);
+  const navigate = useNavigate();
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -23,7 +24,20 @@ const leaveDecision = () => {
         employee_id: Yup.string().required(),
       }),
       onSubmit: (values) => {
-        console.log(values);
+        axios
+          .post("http://localhost:3000/send_email/leave_reply", {
+            name: values.name,
+            email: values.email,
+            status: values.status,
+            comment: values.comment,
+            employee_id: values.employee_id,
+          })
+          .then((res) => {
+            navigate("/send");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
   return (

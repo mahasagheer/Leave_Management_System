@@ -38,7 +38,7 @@ const dashboard = () => {
             <div className="flex gap-8">
               <div className="card">
                 <a className="card1">
-                  <p className="small">{leaveDetail.rejected_leave} Days</p>
+                  <p className="small">{leaveDetail.rejected_leave} </p>
                   <p className="text-3xl ">Rejected Leave</p>
 
                   <div className="go-corner">
@@ -58,7 +58,7 @@ const dashboard = () => {
 
               <div className="card">
                 <a className="card1">
-                  <p className="small">{leaveDetail.pending_leave} Days</p>
+                  <p className="small">{leaveDetail.pending_leave} </p>
                   <p className="text-3xl ">Pending Leave</p>
                   <div className="go-corner">
                     <svg
@@ -76,7 +76,7 @@ const dashboard = () => {
               </div>
               <div className="card">
                 <a className="card1">
-                  <p className="small">{leaveDetail.remaining_leave} Days</p>
+                  <p className="small">{leaveDetail.remaining_leave}</p>
                   <p className="text-3xl ">Remaining Leave</p>
                   <div className="go-corner">
                     <svg
@@ -113,7 +113,7 @@ const dashboard = () => {
                   </div>
                 </a>
               </div>
-              <div className="card">
+              {/* <div className="card">
                 <a className="card1">
                   <p className="small">{leaveDetail.causal_leave} Days</p>
                   <p className="text-3xl ">Causal Leave</p>
@@ -131,7 +131,7 @@ const dashboard = () => {
                     <div className="go-arrow"></div>
                   </div>
                 </a>
-              </div>
+              </div> */}
               <div className="card">
                 <a className="card1">
                   <p className="small">{leaveDetail.sick_leave} Days</p>

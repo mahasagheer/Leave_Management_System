@@ -24,6 +24,7 @@ const leaveDecision = () => {
         employee_id: Yup.string().required(),
       }),
       onSubmit: (values) => {
+        console.log(values);
         axios
           .post("http://localhost:3000/send_email/leave_reply", {
             name: values.name,
@@ -33,7 +34,17 @@ const leaveDecision = () => {
             employee_id: values.employee_id,
           })
           .then((res) => {
-            navigate("/send");
+            console.log(res.data);
+            axios
+              .patch("http://localhost:3000/send_email/update_message_status", {
+                employee_id: values.employee_id,
+                status: values.status,
+              })
+              .then((res) => {
+                console.log(res);
+                navigate("/send");
+              })
+              .catch((err) => console.log(err));
           })
           .catch((error) => {
             console.log(error);
@@ -46,6 +57,7 @@ const leaveDecision = () => {
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
             <h1 className="text-3xl text-center ">Approve & Reject Leave </h1>
+
             <form className="mx-[15%] mb-[4%]" onSubmit={handleSubmit}>
               <div className="mb-5">
                 <label
@@ -101,7 +113,7 @@ const leaveDecision = () => {
                 <option>Approved</option>
                 <option>Declined</option>
               </select>
-              <div class="relative z-0 w-full mb-5 group">
+              <div className="relative z-0 w-full mb-5 group">
                 <label
                   htmlFor="base-input"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

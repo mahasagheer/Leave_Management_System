@@ -36,6 +36,7 @@ const AddUser = () => {
         annual_leave: "",
         sick_leave: "",
         employee_id: "",
+        remaining_leave: "",
       },
       validationSchema: Yup.object({
         name: Yup.string().min(4).max(20).required(),
@@ -53,6 +54,7 @@ const AddUser = () => {
         annual_leave: Yup.number().required(),
         sick_leave: Yup.number().required(),
         employee_id: Yup.number(),
+        remaining_leave: Yup.number(),
       }),
       onSubmit: (values) => {
         axios
@@ -86,6 +88,7 @@ const AddUser = () => {
                 employee_id: userId,
                 annual_leave: values.annual_leave,
                 sick_leave: values.sick_leave,
+                remaining_leave: values.remaining_leave,
               })
               .then(function (response) {
                 console.log(response);
@@ -136,9 +139,9 @@ const AddUser = () => {
               ensure all necessary details are recorded for onboarding.
             </p>
             <p></p>
-            <form class="mx-[15%]" onSubmit={handleSubmit}>
+            <form className="mx-[15%]" onSubmit={handleSubmit}>
               <div className="flex gap-4 justify-between">
-                <div class="mb-5">
+                <div className="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
@@ -152,16 +155,16 @@ const AddUser = () => {
                     name="name"
                     value={values.name}
                     id="base-input"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   {errors.name && touched.name ? (
                     <p className="text-red-600 text-sm">{errors.name}</p>
                   ) : null}
                 </div>
-                <div class="mb-5">
+                <div className="mb-5">
                   <label
                     htmlFor="base-input"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Salary
                   </label>
@@ -178,7 +181,7 @@ const AddUser = () => {
                     <p className="text-red-600 text-sm">{errors.salary}</p>
                   ) : null}
                 </div>{" "}
-                <div class="mb-5">
+                <div className="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -192,13 +195,13 @@ const AddUser = () => {
                     value={values.age}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   {errors.age && touched.age ? (
                     <p className="text-red-600 text-sm">{errors.age}</p>
                   ) : null}
                 </div>{" "}
-                <div class="mb-5">
+                <div className="mb-5">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -318,7 +321,7 @@ const AddUser = () => {
                 <p className="text-red-600 text-sm">{errors.gender}</p>
               ) : null}
 
-              <div class="mb-5">
+              <div className="mb-5">
                 <label
                   htmlFor="base-input"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -389,8 +392,8 @@ const AddUser = () => {
               {errors.city && touched.city ? (
                 <p className="text-red-600 text-sm">{errors.city}</p>
               ) : null}
-              <div class="grid md:grid-cols-2 md:gap-6">
-                <div class="relative z-0 w-full mb-5 group">
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="relative z-0 w-full mb-5 group">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -411,7 +414,7 @@ const AddUser = () => {
                     <p className="text-red-600 text-sm">{errors.email}</p>
                   ) : null}
                 </div>
-                <div class="relative z-0 w-full mb-5 group">
+                <div className="relative z-0 w-full mb-5 group">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -472,6 +475,25 @@ const AddUser = () => {
                 <option>5</option>
               </select>
 
+              <label
+                htmlFor="remaining_leave"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Remaining Leave
+              </label>
+              <select
+                id="remaining_leave"
+                value={values.remaining_leave}
+                name="remaining_leave"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option>45</option>
+                <option>35</option>
+                <option>25</option>
+                <option>12</option>
+              </select>
               <button
                 type="submit"
                 className="text-white ease-in-out duration-300 transition bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

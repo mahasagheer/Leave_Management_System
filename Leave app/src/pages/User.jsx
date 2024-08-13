@@ -35,7 +35,7 @@ const User = () => {
       <section id="user">
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
               <h1 className="text-3xl text-center py-6">Employee List</h1>
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
@@ -98,11 +98,9 @@ const User = () => {
                   return (
                     <tbody key={data._id}>
                       <tr className="border-b border-gray-200 dark:border-gray-700">
-                        <Link to={`/user/${data._id}`}>
-                          <td className="px-8 py-6 bg-gray-50 dark:bg-gray-800">
-                            {data._id}
-                          </td>
-                        </Link>
+                        <td className="px-7 py-7 bg-gray-50 font-bold underline text-sky-600 dark:bg-gray-800">
+                          <Link to={`/user/${data._id}`}>{data._id}</Link>
+                        </td>
                         <td className="px-6 py-4">{data.name}</td>
                         <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                           {data.Job_title}

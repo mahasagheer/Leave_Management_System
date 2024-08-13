@@ -7,6 +7,7 @@ import { AuthContext } from "../service/authentication";
 
 const view = () => {
   const [allMessages, setMessages] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const { data, isHR } = useContext(AuthContext);
   useEffect(() => {
     axios
@@ -18,16 +19,47 @@ const view = () => {
         console.error(error);
       });
   }, []);
+  const filteredMessages = allMessages.filter(
+    (message) => message.status === selectedStatus
+  );
   return (
     <>
       <section id="inbox">
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
             <h1 className="text-3xl text-center py-5">Inbox </h1>
-            {isHR
-              ? allMessages.map((data) => {
+            {isHR ? (
+              <div className="flex gap-5 justify-center">
+                <button
+                  onClick={() => setSelectedStatus("All")}
+                  className=" flex  text-white mt-4 bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  All
+                </button>
+                <button
+                  onClick={() => setSelectedStatus("Pending")}
+                  className=" flex  text-white mt-4 bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Pending
+                </button>
+                <button
+                  onClick={() => setSelectedStatus("Approved")}
+                  className=" flex  text-white  mt-4 bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Approved
+                </button>
+                <button
+                  onClick={() => setSelectedStatus("Declined")}
+                  className=" flex  text-white  mt-4 bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Declined
+                </button>
+              </div>
+            ) : null}
+            {isHR && filteredMessages.length > 0
+              ? filteredMessages.map((data) => {
                   return (
-                    <Link to={`/leave_Decision/${data.employee_id}`}>
+                    <Link to={`/leave_Decision/${data._id}`}>
                       <div
                         key={data.employee_id}
                         class="flex items-center gap-5 border-2 m-2 border-[#4a9dc9] rounded-lg p-2 "
@@ -86,7 +118,7 @@ const view = () => {
                         <p class="text-sm font-normal py-2 text-gray-900 dark:text-white">
                           {data.leave_application}
                         </p>
-                        <p>{data.status}</p>
+                        {/* <p>{data.employee_id}</p> */}
                       </div>
                     </div>
                   );

@@ -56,35 +56,35 @@ const updateUser = () => {
         password: Yup.string().required(),
       }),
       onSubmit: (values) => {
-        axios
-          .put(
-            `http://localhost:3000/users/${id}`,
-            {
-              name: values.name,
-              salary: values.salary,
-              age: values.age,
-              exit_date: values.exit_date,
-              Job_title: values.Job_title,
-              gender: values.gender,
-              hire_date: values.hire_date,
-              department: values.department,
-              city: values.city,
-              email: values.email,
-              password: values.password,
-            },
-            {
-              headers: {
-                Authorization: `${local}`,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            navigate("/user_added_successfully");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // axios
+        //   .put(
+        //     `http://localhost:3000/users/${id}`,
+        //     {
+        //       name: values.name,
+        //       salary: values.salary,
+        //       age: values.age,
+        //       exit_date: values.exit_date,
+        //       Job_title: values.Job_title,
+        //       gender: values.gender,
+        //       hire_date: values.hire_date,
+        //       department: values.department,
+        //       city: values.city,
+        //       email: values.email,
+        //       password: values.password,
+        //     },
+        //     {
+        //       headers: {
+        //         Authorization: `${local}`,
+        //       },
+        //     }
+        //   )
+        //   .then((res) => {
+        //     console.log(res);
+        //     navigate("/user_added_successfully");
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
       },
     });
 
@@ -114,7 +114,6 @@ const updateUser = () => {
                     onBlur={handleBlur}
                     name="name"
                     value={values.name}
-                    defaultValue={data.name}
                     id="base-input"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
@@ -133,7 +132,6 @@ const updateUser = () => {
                     name="salary"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    defaultValue={data.salary}
                     value={values.salary}
                     type="number"
                     id="base-input"

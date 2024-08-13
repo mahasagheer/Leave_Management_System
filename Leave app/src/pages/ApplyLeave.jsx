@@ -21,6 +21,7 @@ const ApplyLeave = () => {
         leave_application: "",
         employee_id: data._id || "",
         message: "",
+        status: "Pending",
       },
       validationSchema: Yup.object({
         name: Yup.string().min(4).max(20),
@@ -32,6 +33,7 @@ const ApplyLeave = () => {
           "Application must contain reason for leave"
         ),
         employee_id: Yup.string().required(),
+        status: Yup.string().required(),
       }),
       onSubmit: (values) => {
         const start = values.from_date
@@ -60,47 +62,38 @@ const ApplyLeave = () => {
               to_date: values.to_date,
               from_date: values.from_date,
               leave_application: values.leave_application,
+              status: values.status,
             },
           })
           .then(function (response) {
-            console.log(response);
+            console.log(response.data);
             axios
-              .patch("http://localhost:3000/inbox_messages", {
-                employee_id: "66b8315770dd776dcef1b84e",
-                message: values,
+              .post(
+                "http://localhost:3000/send_email",
+                {
+                  name: values.name,
+                  email: values.email,
+                  leave_type: values.leave_type,
+                  days: days,
+                  to_date: values.to_date,
+                  from_date: values.from_date,
+                  leave_application: values.leave_application,
+                },
+                {
+                  headers: {
+                    Authorization: `${local}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res);
+                navigate("/send");
               })
-              .then(function (response) {
-                console.log(response);
-                axios
-                  .post(
-                    "http://localhost:3000/send_email",
-                    {
-                      name: values.name,
-                      email: values.email,
-                      leave_type: values.leave_type,
-                      days: days,
-                      to_date: values.to_date,
-                      from_date: values.from_date,
-                      leave_application: values.leave_application,
-                    },
-                    {
-                      headers: {
-                        Authorization: `${local}`,
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    console.log(res);
-                    navigate("/send");
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              })
-              .catch((err) => console.log(err));
+              .catch((error) => {
+                console.log(error);
+              });
           })
           .catch((err) => console.log(err));
-        console.log(values);
       },
     });
 

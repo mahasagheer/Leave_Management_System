@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import Image from "../login.png";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Aos from "aos";
 import "aos/dist/aos.css";
 const Auth = () => {
   const { setEmail, setPassword, handleSubmit } = useContext(AuthContext);
+  const notify = () => toast("Wow so easy!");
 
   useEffect(() => {
     Aos.init({ duration: 2000 });
@@ -81,6 +84,7 @@ const Auth = () => {
             >
               Login
             </button>
+            <ToastContainer />
           </form>
         </div>
         <div className="w-[123%]">

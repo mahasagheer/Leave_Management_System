@@ -6,22 +6,23 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../service/authentication";
 
 const view = () => {
+ 
+ 
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const { data, isHR } = useContext(AuthContext);
+  const { data, isHR , isAdmin } = useContext(AuthContext);
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/inbox_messages/${data._id}`)
+      .get(isHR  ? `http://localhost:3000/inbox_messages/all_leaves/${selectedStatus}` : `http://localhost:3000/inbox_messages/${data._id}`)
       .then((response) => {
-        setMessages(response.data.messages);
+    
+        setMessages(isHR ? response.data  : response.data.messages);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-  const filteredMessages = allMessages.filter(
-    (message) => message.status === selectedStatus
-  );
+  }, [selectedStatus]);
+ 
   return (
     <>
       <section id="inbox">
@@ -56,8 +57,10 @@ const view = () => {
                 </button>
               </div>
             ) : null}
-            {isHR && filteredMessages.length > 0
-              ? filteredMessages.map((data) => {
+        {console.log("343434" ,allMessages )}
+            {isHR ? 
+            (allMessages?.map((data) => {
+              
                   return (
                     <Link to={`/leave_Decision/${data._id}`}>
                       <div
@@ -68,30 +71,30 @@ const view = () => {
                         <div class="flex flex-col w-full leading-1.5">
                           <div class="flex items-center  space-x-2 rtl:space-x-reverse">
                             <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                              {data.name}
+                              {data?.messages.name}
                             </span>
                             <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                              {data.email}
+                              {data?.messages.email}
                             </span>
                           </div>
                           <div class="flex items-center  space-x-2 rtl:space-x-reverse">
                             <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                              From {data.to_date}
+                              From {data?.messages.to_date}
                             </span>
                             <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                              To: {data.from_date}
+                              To: {data?.messages.from_date}
                             </span>
                           </div>
                           <p class="text-sm font-normal py-2 text-gray-900 dark:text-white">
-                            {data.leave_application}
+                            {data?.messages.leave_application}
                           </p>
-                          <p>{data.status}</p>
+                          <p>{data?.messages.status}</p>
                         </div>
                       </div>
                     </Link>
                   );
-                })
-              : allMessages.map((data) => {
+                }))
+              : (allMessages?.map((data) => {
                   return (
                     <div
                       key={data.employee_id}
@@ -122,7 +125,7 @@ const view = () => {
                       </div>
                     </div>
                   );
-                })}
+                }))}
           </div>
         </div>
       </section>

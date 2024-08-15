@@ -33,10 +33,10 @@ const AddUser = () => {
         department: "",
         city: "",
         password: "",
-        annual_leave: "",
-        sick_leave: "",
+        annual_leave: "25",
+        sick_leave: "15",
         employee_id: "",
-        remaining_leave: "",
+        remaining_leave: "45",
       },
       validationSchema: Yup.object({
         name: Yup.string().min(4).max(20).required(),
@@ -57,6 +57,7 @@ const AddUser = () => {
         remaining_leave: Yup.number(),
       }),
       onSubmit: (values) => {
+       
         axios
           .post(
             "http://localhost:3000/users",

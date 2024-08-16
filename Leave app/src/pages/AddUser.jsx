@@ -156,74 +156,74 @@ const AddUser = () => {
       onSubmit: (values) => {
         console.log(values);
 
-        // axios
-        //   .post(
-        //     `${apiURL}/users`,
-        //     {
-        //       name: values.name,
-        //       email: values.email,
-        //       salary: values.salary,
-        //       age: values.age,
-        //       exit_date: values.exit_date,
-        //       Job_title: values.Job_title,
-        //       gender: values.gender,
-        //       hire_date: values.hire_date,
-        //       department: values.department,
-        //       city: values.city,
-        //       password: values.password,
-        //       role: values.role,
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: `${local}`,
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log(res);
-        //     userId = res.data.user;
-        //     axios
-        //       .post(`${apiURL}/employee_leave_detail`, {
-        //         employee_id: userId,
-        //         annual_leave: values.annual_leave,
-        //         sick_leave: values.sick_leave,
-        //         remaining_leave: values.remaining_leave,
-        //       })
-        //       .then(function (response) {
-        //         console.log(response);
-        //         axios.post(
-        //           `${apiURL}/send_email/invite_employee`,
-        //           {
-        //             name: values.name,
-        //             email: values.email,
-        //             password: values.password,
-        //           },
-        //           {
-        //             headers: {
-        //               Authorization: `${local}`,
-        //             },
-        //           }
-        //         );
-        //       })
-        //       .catch(function (error) {
-        //         console.log(error);
-        //       });
-        //   })
-        //   .then(function (response) {
-        //     axios
-        //       .post(`${apiURL}/inbox_messages`, {
-        //         employee_id: userId,
-        //       })
-        //       .then((res) => console.log(res))
-        //       .catch((err) => console.log(err));
-        //     navigate("/user");
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        axios
+          .post(
+            `${apiURL}/users`,
+            {
+              name: values.name,
+              email: values.email,
+              salary: values.salary,
+              age: values.age,
+              exit_date: values.exit_date,
+              Job_title: values.Job_title,
+              gender: values.gender,
+              hire_date: values.hire_date,
+              department: values.department,
+              city: values.city,
+              password: values.password,
+              role: values.role,
+            },
+            {
+              headers: {
+                Authorization: `${local}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            userId = res.data.user;
+            axios
+              .post(`${apiURL}/employee_leave_detail`, {
+                employee_id: userId,
+                annual_leave: values.annual_leave,
+                sick_leave: values.sick_leave,
+                remaining_leave: values.remaining_leave,
+              })
+              .then(function (response) {
+                console.log(response);
+                axios.post(
+                  `${apiURL}/send_email/invite_employee`,
+                  {
+                    name: values.name,
+                    email: values.email,
+                    password: values.password,
+                  },
+                  {
+                    headers: {
+                      Authorization: `${local}`,
+                    },
+                  }
+                );
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .then(function (response) {
+            axios
+              .post(`${apiURL}/inbox_messages`, {
+                employee_id: userId,
+              })
+              .then((res) => console.log(res))
+              .catch((err) => console.log(err));
+            navigate("/user");
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
 

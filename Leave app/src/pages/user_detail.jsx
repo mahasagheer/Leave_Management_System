@@ -26,7 +26,7 @@ const user_detail = () => {
         console.log(err);
       }); 
   }, []);
-
+ 
   return (
     <>
       <section id="dashboard">

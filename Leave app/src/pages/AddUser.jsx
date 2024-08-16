@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
+import { addUserSchema } from "../validation/addUserValidate";
 
 const AddUser = () => {
   const local = localStorage.getItem("user");
   const { data } = useContext(AuthContext);
+  const apiURL = import.meta.env.VITE_API;
+
   const navigate = useNavigate();
   let role;
   let userId;
@@ -38,28 +40,11 @@ const AddUser = () => {
         employee_id: "",
         remaining_leave: "",
       },
-      validationSchema: Yup.object({
-        name: Yup.string().min(4).max(20).required(),
-        email: Yup.string().required(),
-        salary: Yup.number().required(),
-        age: Yup.number().required(),
-        exit_date: Yup.string().required(),
-        Job_title: Yup.string().required(),
-        gender: Yup.string().required(),
-        hire_date: Yup.date().required(),
-        department: Yup.string().required(),
-        city: Yup.string().required(),
-        password: Yup.string().required(),
-        role: Yup.string(),
-        annual_leave: Yup.number().required(),
-        sick_leave: Yup.number().required(),
-        employee_id: Yup.number(),
-        remaining_leave: Yup.number(),
-      }),
+      validationSchema: addUserSchema,
       onSubmit: (values) => {
         axios
           .post(
-            "http://localhost:3000/users",
+            `${apiURL}/users`,
             {
               name: values.name,
               email: values.email,
@@ -84,7 +69,7 @@ const AddUser = () => {
             console.log(res);
             userId = res.data.user;
             axios
-              .post("http://localhost:3000/employee_leave_detail", {
+              .post(`${apiURL}/employee_leave_detail`, {
                 employee_id: userId,
                 annual_leave: values.annual_leave,
                 sick_leave: values.sick_leave,
@@ -93,7 +78,7 @@ const AddUser = () => {
               .then(function (response) {
                 console.log(response);
                 axios.post(
-                  "http://localhost:3000/send_email/invite_employee",
+                  `${apiURL}/send_email/invite_employee`,
                   {
                     name: values.name,
                     email: values.email,
@@ -112,7 +97,7 @@ const AddUser = () => {
           })
           .then(function (response) {
             axios
-              .post("http://localhost:3000/inbox_messages", {
+              .post(`${apiURL}/inbox_messages`, {
                 employee_id: userId,
               })
               .then((res) => console.log(res))

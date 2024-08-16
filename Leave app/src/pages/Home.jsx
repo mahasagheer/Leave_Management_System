@@ -13,6 +13,7 @@ const home = () => {
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
+
   return (
     <>
       <nav className="bg-[#eaeeef] border-gray-200 dark:bg-gray-900  overflow-hidden">

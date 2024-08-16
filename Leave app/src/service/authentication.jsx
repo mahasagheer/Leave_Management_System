@@ -12,11 +12,11 @@ export const AuthProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const apiURL = import.meta.env.VITE_API;
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/login", {
+      .post(`${apiURL}/login`, {
         email: email,
         password: password,
       })
@@ -26,17 +26,18 @@ export const AuthProvider = ({ children }) => {
         setData(userData);
         if (userData.role === "admin") {
           setAdmin(true);
+          navigate("/user");
         } else if (userData.role === "HR") {
           setHR(true);
+          navigate("/dashboard");
         } else {
           setUser(true);
+          navigate("/dashboard");
         }
-        navigate("/dashboard");
         localStorage.setItem("user", token);
       })
       .catch((err) => {
         console.log(err);
-        alert("Invalid email or password");
       });
   };
 

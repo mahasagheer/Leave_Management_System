@@ -9,9 +9,11 @@ const view = () => {
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const { data, isHR } = useContext(AuthContext);
+  const apiURL = import.meta.env.VITE_API;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/inbox_messages/${data._id}`)
+      .get(`${apiURL}/inbox_messages/${data._id}`)
       .then((response) => {
         setMessages(response.data.messages);
       })

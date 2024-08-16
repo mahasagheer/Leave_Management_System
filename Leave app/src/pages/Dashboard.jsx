@@ -7,9 +7,11 @@ import axios from "axios";
 const dashboard = () => {
   const { data } = useContext(AuthContext);
   const [leaveDetail, setLeaveDetail] = useState({});
+  const apiURL = import.meta.env.VITE_API;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/employee_leave_detail/${data._id}`)
+      .get(`${apiURL}/employee_leave_detail/${data._id}`)
       .then((res) => {
         setLeaveDetail(res.data);
       })

@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 const user_detail = () => {
   const [data, setData] = useState({});
   const local = localStorage.getItem("user");
   const { id } = useParams();
+  const apiURL = import.meta.env.VITE_API;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/users/${id}`, {
+      .get(`${apiURL}/users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },
       })
       .then((res) => {
-        const userData = res.data.data;
-        setData(userData);
+        setData(res.data.data);
       })
       .catch((err) => {
         console.log(err);

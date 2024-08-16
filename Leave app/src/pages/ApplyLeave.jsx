@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
+import { leaveSchema } from "../validation/addUserValidate";
 
 const ApplyLeave = () => {
   const { data } = useContext(AuthContext);
   const navigate = useNavigate();
   const local = localStorage.getItem("user");
+  const apiURL = import.meta.env.VITE_API;
+
   let days = 0;
   console.log(data);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -24,18 +26,7 @@ const ApplyLeave = () => {
         message: "",
         status: "Pending",
       },
-      validationSchema: Yup.object({
-        name: Yup.string().min(4).max(20),
-        email: Yup.string().email(),
-        leave_type: Yup.string().required(),
-        to_date: Yup.date(),
-        from_date: Yup.date().required(),
-        leave_application: Yup.string().required(
-          "Application must contain reason for leave"
-        ),
-        employee_id: Yup.string().required(),
-        status: Yup.string().required(),
-      }),
+      validationSchema: leaveSchema,
       onSubmit: (values) => {
         const start = values.from_date
           ? new Date(values.from_date)
@@ -52,7 +43,7 @@ const ApplyLeave = () => {
         const dayDiff = timeDiff / (1000 * 3600 * 24);
         days = dayDiff + 1;
         axios
-          .patch("http://localhost:3000/inbox_messages", {
+          .patch(`${apiURL}/inbox_messages`, {
             employee_id: data._id,
             message: {
               name: values.name,
@@ -69,7 +60,7 @@ const ApplyLeave = () => {
             console.log(response.data);
             axios
               .post(
-                "http://localhost:3000/send_email",
+                `${apiURL}/send_email`,
                 {
                   name: values.name,
                   email: values.email,
@@ -101,7 +92,7 @@ const ApplyLeave = () => {
     <>
       <section id="applyLeave">
         <div className="p-4 sm:ml-64">
-          <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
+          <div className="p-2 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
             <h1 className="text-3xl text-center ">Apply For A Leave </h1>
             <p className="my-3 text-center ">
               If you have any issues or need assistance, please specify your

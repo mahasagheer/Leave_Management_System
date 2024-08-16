@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { updateUserSchema } from "../validation/addUserValidate";
 
 const updateUser = () => {
   const [data, setData] = useState([]);
   const local = localStorage.getItem("user");
+  const apiURL = import.meta.env.VITE_API;
+
   const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/users/${id}`, {
+      .get(`${apiURL}/users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },
@@ -42,23 +44,11 @@ const updateUser = () => {
         email: data.email || "",
         password: "",
       },
-      validationSchema: Yup.object({
-        name: Yup.string().min(4).max(20).required(),
-        salary: Yup.number().required(),
-        age: Yup.number().required(),
-        exit_date: Yup.string().required(),
-        Job_title: Yup.string().required(),
-        gender: Yup.string().required(),
-        hire_date: Yup.date().required(),
-        department: Yup.string().required(),
-        city: Yup.string().required(),
-        email: Yup.string().required(),
-        password: Yup.string().required(),
-      }),
+      validationSchema: updateUserSchema,
       onSubmit: (values) => {
         axios
           .put(
-            `http://localhost:3000/users/${id}`,
+            `${apiURL}/users/${id}`,
             {
               name: values.name,
               salary: values.salary,
@@ -79,7 +69,6 @@ const updateUser = () => {
             }
           )
           .then((res) => {
-            console.log(res);
             navigate("/user");
           })
           .catch((error) => {

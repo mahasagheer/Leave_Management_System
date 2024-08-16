@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 const user_detail = () => {
   const [data, setData] = useState({});
+  const [dataLeave, setDataLeave] = useState({});
   const local = localStorage.getItem("user");
   const { id } = useParams();
   const apiURL = import.meta.env.VITE_API;
@@ -15,7 +16,9 @@ const user_detail = () => {
         },
       })
       .then((res) => {
-        setData(res.data.data);
+        setData(res.data?.data);
+        setDataLeave(res.data?.leaves[0])
+      
       })
       .catch((err) => {
         console.log(err);
@@ -26,9 +29,13 @@ const user_detail = () => {
     <>
       <section id="dashboard">
         <div className="p-4 sm:ml-64 ">
+       
           <div className="p-4 border-2 border-[#4a9dc9] border-dashed  h-auto rounded-lg dark:border-gray-700 mt-16">
-            <h1 className="text-2xl text-center py-5"> Employee Detail</h1>{" "}
-            <p className="text-xl py-3">Personal Detail:</p>
+          <h1 className="text-3xl font-bold text-center py-5 "> Employee Detail</h1>{" "}
+           <div className="flex justify-between px-10">
+           <div>
+      
+      <p className="text-2xl py-3 font-semibold">Personal Detail:</p>
             <p className="text-lg ">
               <strong>Employee Name:</strong> {data.name}
             </p>
@@ -44,7 +51,9 @@ const user_detail = () => {
             <p className="text-lg ">
               <strong>Employee Name:</strong> {data.gender}
             </p>
-            <p className="text-xl py-3">Job Position:</p>
+      </div>
+        <div>
+        <p className="text-2xl py-3 font-semibold">Job Position:</p>
             <p className="text-lg ">
               <strong>Employee Salary:</strong> {data.salary}
             </p>
@@ -60,6 +69,69 @@ const user_detail = () => {
             <p className="text-lg ">
               <strong>Employee Exit Date:</strong> {data.exit_date}
             </p>
+        </div>
+           </div>
+           <h1 className="text-3xl font-bold text-center mt-4 "> Employee Leave History</h1>{" "}
+           <div className="overflow-x-auto w-full my-8 flex justify-center">
+                <table className=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
+                    <tr>
+                    
+                    
+                      <th scope="col" className="px-6 py-3">
+                      Leave Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        Leave Days
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        From 
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        To
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        Reason Or Message
+                      </th>
+                      <th scope="col" className="px-6 py-3 ">
+                        Status
+                      </th>
+                    
+                    
+                    </tr>
+                  </thead>
+                  {dataLeave?.messages?.map((data) => {
+                    return (
+                      <tbody key={data._id}>
+                        <tr className="border-b border-gray-200 dark:border-gray-700">
+                         
+                          <td className="px-6 py-4">{data.leave_type}</td>
+                          
+                        
+                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                            {data.days}
+                          </td>
+                          <td className="px-6 py-4">
+                            {data.from_date.substring(0, 10)}
+                          </td>
+                          <td className="px-6 py-4">
+                            {data.to_date.substring(0, 10)}
+                          </td>
+                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                            {data.leave_application}
+                          </td>
+                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                            {data.status}
+                          </td>
+                         
+                       
+                        </tr>
+                      </tbody>
+                    );
+                  })}
+                </table>
+              </div>
+
           </div>
         </div>
       </section>

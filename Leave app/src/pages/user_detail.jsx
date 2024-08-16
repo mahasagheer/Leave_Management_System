@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+
 import axios from "axios";
+import { leavehistorytable } from "../Utiles/TableHearer";
 const user_detail = () => {
   const [data, setData] = useState({});
   const [dataLeave, setDataLeave] = useState({});
@@ -10,9 +12,9 @@ const user_detail = () => {
 
   useEffect(() => {
     axios
-      .get(`${apiURL}users/${id}`, {
+      .get(`${apiURL}users/${id}`, { 
         headers: {
-          Authorization: `${local}`,
+          Authorization: `${local}`,   
         },
       })
       .then((res) => {
@@ -22,7 +24,7 @@ const user_detail = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      }); 
   }, []);
 
   return (
@@ -63,7 +65,7 @@ const user_detail = () => {
             <p className="text-lg ">
               <strong>Employee Department:</strong> {data.department}
             </p>
-            <p className="text-lg ">
+            <p className="text-lg "> 
               <strong>Employee Hiring Date:</strong> {data.hire_date}
             </p>
             <p className="text-lg ">
@@ -77,25 +79,12 @@ const user_detail = () => {
                   <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
                     <tr>
                     
+                    {leavehistorytable?.map((item , index)=>(
+                      <th scope="col" key={index} className="px-6 py-3">
+                      {item}
+                      </th>
+                    ))}
                     
-                      <th scope="col" className="px-6 py-3">
-                      Leave Type
-                      </th>
-                      <th scope="col" className="px-6 py-3 ">
-                        Leave Days
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        From 
-                      </th>
-                      <th scope="col" className="px-6 py-3 ">
-                        To
-                      </th>
-                      <th scope="col" className="px-6 py-3 ">
-                        Reason Or Message
-                      </th>
-                      <th scope="col" className="px-6 py-3 ">
-                        Status
-                      </th>
                     
                     
                     </tr>

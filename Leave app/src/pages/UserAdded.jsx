@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Send from "../send.png";
+import Send from "../public/send.png";
 import Aos from "aos";
 import "aos/dist/aos.css";
 

@@ -1,12 +1,14 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { leaveDecisionSchema } from "../validation/addUserValidate";
 
 const leaveDecision = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_API;
+
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -16,17 +18,11 @@ const leaveDecision = () => {
         comment: "",
         employee_id: id,
       },
-      validationSchema: Yup.object({
-        name: Yup.string().required(),
-        email: Yup.string().required(),
-        status: Yup.string().required(),
-        comment: Yup.string(),
-        employee_id: Yup.string().required(),
-      }),
+      validationSchema: leaveDecisionSchema,
       onSubmit: (values) => {
         console.log(values);
         axios
-          .post("http://localhost:3000/send_email/leave_reply", {
+          .post(`${apiURL}send_email/leave_reply`, {
             name: values.name,
             email: values.email,
             status: values.status,
@@ -36,7 +32,7 @@ const leaveDecision = () => {
           .then((res) => {
             console.log(res.data);
             axios
-              .patch("http://localhost:3000/send_email/update_message_status", {
+              .patch(`${apiURL}send_email/update_message_status`, {
                 employee_id: values.employee_id,
                 status: values.status,
               })

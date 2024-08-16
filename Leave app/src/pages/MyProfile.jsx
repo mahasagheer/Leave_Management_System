@@ -1,5 +1,5 @@
 import React from "react";
-import User from "../userImg-removebg-preview.png";
+import User from "../public/userImg-removebg-preview.png";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 

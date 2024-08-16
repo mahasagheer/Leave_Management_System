@@ -1,90 +1,83 @@
 import React, { useState, useEffect } from "react";
 
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { updateUserSchema } from "../validation/addUserValidate";
 
 const updateUser = () => {
   const [data, setData] = useState([]);
   const local = localStorage.getItem("user");
+  const apiURL = import.meta.env.VITE_API;
+
   const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/users/${id}`, {
+      .get(`${apiURL}users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },
       })
       .then((res) => {
         const userData = res.data.data;
+        if (userData.hire_date) {
+          userData.hire_date = new Date(userData.hire_date).toISOString().split("T")[0];
+        }
         setData(userData);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id, apiURL, local]);
   // Formik Validation
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        name: data.name,
-        salary: data.salary,
-        age: data.age,
-        exit_date: data.exit_date,
-        Job_title: data.Job_title,
-        gender: data.gender,
-        hire_date: data.hire_date,
-        department: data.department,
-        city: data.city,
-        email: data.email,
-        password: "",
+        name: data.name || "",
+        salary: data.salary || "",
+        age: data.age || "",
+        exit_date: data.exit_date || "",
+        Job_title: data.Job_title || "",
+        gender: data.gender || "",
+        hire_date: data.hire_date || "",
+        department: data.department || "",
+        city: data.city || "",
+        email: data.email || "",
+        password:"",
       },
-      validationSchema: Yup.object({
-        name: Yup.string().min(4).max(20).required(),
-        salary: Yup.number().required(),
-        age: Yup.number().required(),
-        exit_date: Yup.string().required(),
-        Job_title: Yup.string().required(),
-        gender: Yup.string().required(),
-        hire_date: Yup.date().required(),
-        department: Yup.string().required(),
-        city: Yup.string().required(),
-        email: Yup.string().required(),
-        password: Yup.string().required(),
-      }),
+      enableReinitialize: true,
+      validationSchema: updateUserSchema,
       onSubmit: (values) => {
-        // axios
-        //   .put(
-        //     `http://localhost:3000/users/${id}`,
-        //     {
-        //       name: values.name,
-        //       salary: values.salary,
-        //       age: values.age,
-        //       exit_date: values.exit_date,
-        //       Job_title: values.Job_title,
-        //       gender: values.gender,
-        //       hire_date: values.hire_date,
-        //       department: values.department,
-        //       city: values.city,
-        //       email: values.email,
-        //       password: values.password,
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: `${local}`,
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log(res);
-        //     navigate("/user_added_successfully");
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        axios
+          .put(
+            `${apiURL}users/${id}`,
+            {
+              name: values.name,
+              salary: values.salary,
+              age: values.age,
+              exit_date: values.exit_date,
+              Job_title: values.Job_title,
+              gender: values.gender,
+              hire_date: values.hire_date,
+              department: values.department,
+              city: values.city,
+              email: values.email,
+              password: values.password,
+            },
+            {
+              headers: {
+                Authorization: `${local}`,
+              },
+            }
+          )
+          .then((res) => {
+            navigate("/user");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
 
@@ -109,14 +102,14 @@ const updateUser = () => {
                     Full Name
                   </label>
                   <input
-                    type="text"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     name="name"
                     value={values.name}
-                    id="base-input"
+                    type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
+                  {data.name}
                   {errors.name && touched.name ? (
                     <p className="text-red-600 text-sm">{errors.name}</p>
                   ) : null}
@@ -237,6 +230,7 @@ const updateUser = () => {
                     type="radio"
                     name="gender"
                     value="Male"
+                    checked={values.gender === "Male"}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
@@ -253,6 +247,7 @@ const updateUser = () => {
                     id="Female"
                     type="radio"
                     name="gender"
+                    checked={values.gender === "Female"}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value="Female"
@@ -364,7 +359,7 @@ const updateUser = () => {
                     <p className="text-red-600 text-sm">{errors.email}</p>
                   ) : null}
                 </div>
-                <div className="relative z-0 w-full mb-5 group">
+                {/* <div className="relative z-0 w-full mb-5 group">
                   <label
                     htmlFor="base-input"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -384,7 +379,7 @@ const updateUser = () => {
                   {errors.password && touched.password ? (
                     <p className="text-red-600 text-sm">{errors.password}</p>
                   ) : null}
-                </div>
+                </div> */}
               </div>
               <button
                 type="submit"

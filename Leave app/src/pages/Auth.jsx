@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Image from "../login.png";
+import React, { useEffect } from "react";
+import Image from "../public/login.png";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +8,18 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 const Auth = () => {
   const { setEmail, setPassword, handleSubmit } = useContext(AuthContext);
-  const notify = () => toast("Wow so easy!");
+  const notify = () => {
+    toast.error("Invalid email or Password", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
   useEffect(() => {
     Aos.init({ duration: 2000 });
@@ -80,16 +91,17 @@ const Auth = () => {
             <br />
             <button
               type="submit"
+              onClick={notify}
               className=" text-white bg-[#f18620] hover:bg-[#c261ff]-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Login
             </button>
-            <ToastContainer />
           </form>
         </div>
         <div className="w-[123%]">
           <img src={Image} alt="" data-aos="fade-up" />
         </div>
+        <ToastContainer />
       </div>
     </>
   );

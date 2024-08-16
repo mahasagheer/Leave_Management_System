@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
-import About from "../about.png";
-import Approve from "../approve.png";
-import Track from "../track.png";
-import Policy from "../policy.png";
-import Contact from "../contact.png";
+import { Link } from "react-router-dom";
+import About from "../public/about.png";
+import Approve from "../public/approve.png";
+import Track from "../public/track.png";
+import Policy from "../public/policy.png";
+import Contact from "../public/contact.png";
 import "../index.css";
 import Aos from "aos";
 import "aos/dist/aos.css";
-
-import { Link } from "react-router-dom";
 
 const home = () => {
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
+
   return (
     <>
       <nav className="bg-[#eaeeef] border-gray-200 dark:bg-gray-900  overflow-hidden">
@@ -98,7 +98,7 @@ const home = () => {
         </div>
       </nav>
       <div className="bg-[#eaeeef]">
-        <section className="bg-center bg-no-repeat bg-[url('Image1.png')]  bg-blend-multiply">
+        <section className="bg-center bg-no-repeat bg-[url('')]  bg-blend-multiply">
           <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
             <h1 className="anim mb-4 text-3xl font-extrabold tracking-tight leading-none  md:text-4xl lg:text-6xl">
               Manage leaves effortlessly for your comfort

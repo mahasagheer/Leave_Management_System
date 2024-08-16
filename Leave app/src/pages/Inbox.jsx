@@ -1,4 +1,4 @@
-import User from "../userImg.png";
+import User from "../public/userImg.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
@@ -11,9 +11,10 @@ const view = () => {
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const { data, isHR , isAdmin } = useContext(AuthContext);
+  const apiURL = import.meta.env.VITE_API;
   useEffect(() => {
     axios
-      .get(isHR  ? `http://localhost:3000/inbox_messages/all_leaves/${selectedStatus}` : `http://localhost:3000/inbox_messages/${data._id}`)
+      .get(isHR  ? `${apiURL}inbox_messages/all_leaves/${selectedStatus}` : `${apiURL}inbox_messages/${data._id}`)
       .then((response) => {
     
         setMessages(isHR ? response.data  : response.data.messages);
@@ -29,7 +30,7 @@ const view = () => {
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
             <h1 className="text-3xl text-center py-5">Inbox </h1>
-            {isHR ? (
+             {isHR ? (
               <div className="flex gap-5 justify-center">
                 <button
                   onClick={() => setSelectedStatus("All")}
@@ -57,7 +58,7 @@ const view = () => {
                 </button>
               </div>
             ) : null}
-        {console.log("343434" ,allMessages )}
+  
             {isHR ? 
             (allMessages?.map((data) => {
               

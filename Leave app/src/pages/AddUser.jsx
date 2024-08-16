@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../service/authentication";
 import { addUserSchema } from "../validation/addUserValidate";
 
@@ -9,7 +9,119 @@ const AddUser = () => {
   const local = localStorage.getItem("user");
   const { data } = useContext(AuthContext);
   const apiURL = import.meta.env.VITE_API;
+  const [annual_leave, setAnnualLeave] = useState([
+    { value: 30, label: 30 },
+    { value: 25, label: 25 },
+    { value: 20, label: 20 },
+    { value: 15, label: 15 },
+    { value: 8, label: 8 },
+  ]);
 
+  const [sick_leave, setSickLeave] = useState([
+    {
+      value: 20,
+      label: 20,
+    },
+    { value: 15, label: 15 },
+    {
+      value: 10,
+      label: 10,
+    },
+    {
+      value: 5,
+      label: 5,
+    },
+  ]);
+
+  const [remaining_leave, setRemaining] = useState([
+    {
+      value: 45,
+      label: 45,
+    },
+    { value: 35, label: 35 },
+    {
+      value: 25,
+      label: 25,
+    },
+    {
+      value: 15,
+      label: 15,
+    },
+    {
+      value: 10,
+      label: 10,
+    },
+  ]);
+  const [HrRole, setHrRole] = useState([
+    { value: "Human Resources Manager", label: "Human Resources Manager" },
+    {
+      value: "Talent Acquisition Specialist",
+      label: "Talent Acquisition Specialist",
+    },
+    { value: "HR Generalist", label: "HR Generalist" },
+    { value: "HR Intern", label: "HR Intern" },
+  ]);
+  const [position, setPosition] = useState([
+    {
+      value: "Marketing Manager",
+      label: "Marketing Manager",
+    },
+    {
+      value: "Digital Marketing Specialist",
+      label: "Digital Marketing Specialist",
+    },
+    {
+      value: "Social Media Manager",
+      label: "Social Media Manager",
+    },
+    { value: "Brand Manager", label: "Brand Manager" },
+    { value: "Sales Manager", label: "Sales Manager" },
+    {
+      value: "Sales Representative",
+      label: "Sales Representative",
+    },
+    {
+      value: "Business Development Manager",
+      label: "Business Development Manager",
+    },
+    {
+      value: "Software Engineer",
+      label: "Software Engineer",
+    },
+    {
+      value: "Frontend Developer",
+      label: "Frontend Developer",
+    },
+    {
+      value: "Backend Developer",
+      label: "Backend Developer",
+    },
+    {
+      value: "IT Support Specialist",
+      label: "IT Support Specialist",
+    },
+    { value: "Data Scientist", label: "Data Scientist" },
+    {
+      value: "Financial Analyst",
+      label: "Financial Analyst",
+    },
+    { value: "Accountant", label: "Accountant" },
+    {
+      value: "Graphic Designer",
+      label: "Graphic Designer",
+    },
+
+    { value: "UX/UI Designer", label: "UX/UI Designer" },
+    { value: "Content Creator", label: "Content Creator" },
+    {
+      value: "Research Scientist",
+      label: "Research Scientist",
+    },
+    {
+      value: "Customer Service Manager",
+      label: "Customer Service Manager",
+    },
+  ]);
   const navigate = useNavigate();
   let role;
   let userId;
@@ -42,74 +154,76 @@ const AddUser = () => {
       },
       validationSchema: addUserSchema,
       onSubmit: (values) => {
-        axios
-          .post(
-            `${apiURL}/users`,
-            {
-              name: values.name,
-              email: values.email,
-              salary: values.salary,
-              age: values.age,
-              exit_date: values.exit_date,
-              Job_title: values.Job_title,
-              gender: values.gender,
-              hire_date: values.hire_date,
-              department: values.department,
-              city: values.city,
-              password: values.password,
-              role: values.role,
-            },
-            {
-              headers: {
-                Authorization: `${local}`,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            userId = res.data.user;
-            axios
-              .post(`${apiURL}/employee_leave_detail`, {
-                employee_id: userId,
-                annual_leave: values.annual_leave,
-                sick_leave: values.sick_leave,
-                remaining_leave: values.remaining_leave,
-              })
-              .then(function (response) {
-                console.log(response);
-                axios.post(
-                  `${apiURL}/send_email/invite_employee`,
-                  {
-                    name: values.name,
-                    email: values.email,
-                    password: values.password,
-                  },
-                  {
-                    headers: {
-                      Authorization: `${local}`,
-                    },
-                  }
-                );
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          })
-          .then(function (response) {
-            axios
-              .post(`${apiURL}/inbox_messages`, {
-                employee_id: userId,
-              })
-              .then((res) => console.log(res))
-              .catch((err) => console.log(err));
-            navigate("/user");
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        console.log(values);
+
+        // axios
+        //   .post(
+        //     `${apiURL}/users`,
+        //     {
+        //       name: values.name,
+        //       email: values.email,
+        //       salary: values.salary,
+        //       age: values.age,
+        //       exit_date: values.exit_date,
+        //       Job_title: values.Job_title,
+        //       gender: values.gender,
+        //       hire_date: values.hire_date,
+        //       department: values.department,
+        //       city: values.city,
+        //       password: values.password,
+        //       role: values.role,
+        //     },
+        //     {
+        //       headers: {
+        //         Authorization: `${local}`,
+        //       },
+        //     }
+        //   )
+        //   .then((res) => {
+        //     console.log(res);
+        //     userId = res.data.user;
+        //     axios
+        //       .post(`${apiURL}/employee_leave_detail`, {
+        //         employee_id: userId,
+        //         annual_leave: values.annual_leave,
+        //         sick_leave: values.sick_leave,
+        //         remaining_leave: values.remaining_leave,
+        //       })
+        //       .then(function (response) {
+        //         console.log(response);
+        //         axios.post(
+        //           `${apiURL}/send_email/invite_employee`,
+        //           {
+        //             name: values.name,
+        //             email: values.email,
+        //             password: values.password,
+        //           },
+        //           {
+        //             headers: {
+        //               Authorization: `${local}`,
+        //             },
+        //           }
+        //         );
+        //       })
+        //       .catch(function (error) {
+        //         console.log(error);
+        //       });
+        //   })
+        //   .then(function (response) {
+        //     axios
+        //       .post(`${apiURL}/inbox_messages`, {
+        //         employee_id: userId,
+        //       })
+        //       .then((res) => console.log(res))
+        //       .catch((err) => console.log(err));
+        //     navigate("/user");
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
       },
     });
 
@@ -225,33 +339,20 @@ const AddUser = () => {
                 {data.role === "admin" ? (
                   <>
                     {" "}
-                    <option>Human Resources Manager</option>
-                    <option>Talent Acquisition Specialist</option>
-                    <option>HR Generalist</option>
+                    {HrRole.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </>
                 ) : null}
                 {data.role === "HR" ? (
                   <>
-                    {" "}
-                    <option>Marketing Manager</option>
-                    <option>Digital Marketing Specialist</option>
-                    <option>Social Media Manager</option>
-                    <option>Brand Manager</option>
-                    <option>Sales Manager</option>
-                    <option>Sales Representative</option>
-                    <option>Business Development Manager</option>
-                    <option>Software Engineer</option>
-                    <option>Frontend Developer</option>
-                    <option>Backend Developer</option>
-                    <option>IT Support Specialist</option>
-                    <option>Data Scientist</option>
-                    <option>Financial Analyst</option>
-                    <option>Accountant</option>
-                    <option>Graphic Designer</option>
-                    <option>UX/UI Designer</option>
-                    <option>Content Creator</option>
-                    <option>Research Scientist</option>
-                    <option>Customer Service Manager</option>
+                    {position.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}{" "}
                   </>
                 ) : null}
               </select>
@@ -341,6 +442,7 @@ const AddUser = () => {
                 onBlur={handleBlur}
                 className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
+                {/* const [department] */}
                 <option>Management</option>
                 <option>Marketing</option>
                 <option>Sales</option>
@@ -427,18 +529,20 @@ const AddUser = () => {
               >
                 Annual Leave
               </label>
+
               <select
-                id="annual_leave"
                 value={values.annual_leave}
-                name="annual_leave"
                 onChange={handleChange}
+                id="annual_leave"
+                name="annual_leave"
                 onBlur={handleBlur}
                 className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option>25</option>
-                <option>20</option>
-                <option>15</option>
-                <option>8</option>
+                {annual_leave.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
               <label
                 htmlFor="sick_leave"
@@ -454,10 +558,11 @@ const AddUser = () => {
                 onBlur={handleBlur}
                 className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option>15</option>
-                <option>12</option>
-                <option>10</option>
-                <option>5</option>
+                {sick_leave.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
 
               <label
@@ -474,10 +579,11 @@ const AddUser = () => {
                 onBlur={handleBlur}
                 className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option>45</option>
-                <option>35</option>
-                <option>25</option>
-                <option>12</option>
+                {remaining_leave.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
               <button
                 type="submit"

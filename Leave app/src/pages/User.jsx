@@ -3,7 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import Deleteuser from "../components/deleteuser";
 const User = () => {
   const { data } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
@@ -30,6 +32,7 @@ const User = () => {
   if (data.role === "admin") {
     filter = users.filter((data) => data.role === "user" || data.role === "HR");
   }
+
   return (
     <>
       <section id="user">
@@ -91,6 +94,9 @@ const User = () => {
                     <th scope="col" className="px-6 py-3">
                       Email
                     </th>
+                    <th scope="col" className="px-6 py-3">
+                      Update/Delete
+                    </th>
                   </tr>
                 </thead>
 
@@ -123,6 +129,19 @@ const User = () => {
                           {data.exit_date}
                         </td>
                         <td className="px-6 py-4">{data.email}</td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          <span className="flex gap-10 justify-center flex-nowrap items-center">
+                            <Link to={`/update_user/${data._id}`}>
+                              <button className="flex items-center  gap-2 text-blue-700">
+                                <FontAwesomeIcon
+                                  icon={faPenToSquare}
+                                  size="lg"
+                                />
+                              </button>
+                            </Link>
+                            <Deleteuser />
+                          </span>
+                        </td>
                       </tr>
                     </tbody>
                   );

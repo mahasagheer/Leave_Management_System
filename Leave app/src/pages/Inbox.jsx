@@ -1,4 +1,4 @@
-import User from "../userImg.png";
+import User from "../public/userImg.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
@@ -28,7 +28,7 @@ const view = () => {
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16 ">
             <h1 className="text-3xl text-center py-5">Inbox </h1>
-            {isHR ? (
+            {/* {isHR ? (
               <div className="flex gap-5 justify-center">
                 <button
                   onClick={() => setSelectedStatus("All")}
@@ -55,9 +55,9 @@ const view = () => {
                   Declined
                 </button>
               </div>
-            ) : null}
-            {isHR && filteredMessages.length > 0
-              ? filteredMessages.map((data) => {
+            ) : null} */}
+            {isHR
+              ? allMessages.map((data) => {
                   return (
                     <Link to={`/leave_Decision/${data._id}`}>
                       <div
@@ -85,6 +85,7 @@ const view = () => {
                           <p class="text-sm font-normal py-2 text-gray-900 dark:text-white">
                             {data.leave_application}
                           </p>
+                          <p>{data.days}</p>
                           <p>{data.status}</p>
                         </div>
                       </div>

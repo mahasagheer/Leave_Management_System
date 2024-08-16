@@ -117,7 +117,7 @@ const AddUser = () => {
               })
               .then((res) => console.log(res))
               .catch((err) => console.log(err));
-            navigate("/user_added_successfully");
+            navigate("/user");
           })
           .catch(function (error) {
             console.log(error);

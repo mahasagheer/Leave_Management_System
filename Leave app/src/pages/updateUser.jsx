@@ -30,16 +30,16 @@ const updateUser = () => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        name: data.name,
-        salary: data.salary,
-        age: data.age,
-        exit_date: data.exit_date,
-        Job_title: data.Job_title,
-        gender: data.gender,
-        hire_date: data.hire_date,
-        department: data.department,
-        city: data.city,
-        email: data.email,
+        name: data.name || "",
+        salary: data.salary || "",
+        age: data.age || "",
+        exit_date: data.exit_date || "",
+        Job_title: data.Job_title || "",
+        gender: data.gender || "",
+        hire_date: data.hire_date || "",
+        department: data.department || "",
+        city: data.city || "",
+        email: data.email || "",
         password: "",
       },
       validationSchema: Yup.object({
@@ -56,35 +56,35 @@ const updateUser = () => {
         password: Yup.string().required(),
       }),
       onSubmit: (values) => {
-        // axios
-        //   .put(
-        //     `http://localhost:3000/users/${id}`,
-        //     {
-        //       name: values.name,
-        //       salary: values.salary,
-        //       age: values.age,
-        //       exit_date: values.exit_date,
-        //       Job_title: values.Job_title,
-        //       gender: values.gender,
-        //       hire_date: values.hire_date,
-        //       department: values.department,
-        //       city: values.city,
-        //       email: values.email,
-        //       password: values.password,
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: `${local}`,
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log(res);
-        //     navigate("/user_added_successfully");
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        axios
+          .put(
+            `http://localhost:3000/users/${id}`,
+            {
+              name: values.name,
+              salary: values.salary,
+              age: values.age,
+              exit_date: values.exit_date,
+              Job_title: values.Job_title,
+              gender: values.gender,
+              hire_date: values.hire_date,
+              department: values.department,
+              city: values.city,
+              email: values.email,
+              password: values.password,
+            },
+            {
+              headers: {
+                Authorization: `${local}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            navigate("/user");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     });
 
@@ -109,14 +109,14 @@ const updateUser = () => {
                     Full Name
                   </label>
                   <input
-                    type="text"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     name="name"
                     value={values.name}
-                    id="base-input"
+                    type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
+                  {data.name}
                   {errors.name && touched.name ? (
                     <p className="text-red-600 text-sm">{errors.name}</p>
                   ) : null}

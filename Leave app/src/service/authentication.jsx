@@ -26,13 +26,10 @@ export const AuthProvider = ({ children }) => {
         setData(userData);
         if (userData.role === "admin") {
           setAdmin(true);
-          alert("Admin logged in");
         } else if (userData.role === "HR") {
           setHR(true);
-          alert("HR logged in");
         } else {
           setUser(true);
-          alert("User logged in");
         }
         navigate("/dashboard");
         localStorage.setItem("user", token);

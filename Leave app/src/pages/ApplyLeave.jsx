@@ -10,6 +10,7 @@ const ApplyLeave = () => {
   const navigate = useNavigate();
   const local = localStorage.getItem("user");
   let days = 0;
+  console.log(data);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -50,7 +51,6 @@ const ApplyLeave = () => {
         const timeDiff = end.getTime() - start.getTime();
         const dayDiff = timeDiff / (1000 * 3600 * 24);
         days = dayDiff + 1;
-        console.log(days);
         axios
           .patch("http://localhost:3000/inbox_messages", {
             employee_id: data._id,
@@ -87,7 +87,7 @@ const ApplyLeave = () => {
               )
               .then((res) => {
                 console.log(res);
-                navigate("/send");
+                navigate("/inbox");
               })
               .catch((error) => {
                 console.log(error);

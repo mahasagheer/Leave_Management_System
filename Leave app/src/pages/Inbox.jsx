@@ -216,19 +216,7 @@ const View = () => {
                               ></textarea>
                               <div className="flex justify-between mt-2">
                                 <div className="flex space-x-2">
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      setFieldValue("status", "Pending")
-                                    }
-                                    className={`px-3 py-1 rounded-md ${
-                                      values.status === "Pending"
-                                        ? "bg-yellow-600 border border-black text-white"
-                                        : "bg-yellow-500 text-white"
-                                    }`}
-                                  >
-                                    Pending
-                                  </button>
+                              
                                   <button
                                     type="button"
                                     onClick={() =>

@@ -1,25 +1,29 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const deleteuser = () => {
+const deleteuser = (id) => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState([]);
+  const local = localStorage.getItem("user");
+  const navigate = useNavigate();
 
+  const apiURL = import.meta.env.VITE_API;
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
   const handleDelete = () => {
     axios
-      .delete(`http://localhost:3000/users/${id}`, {
+      .delete(`${apiURL}/users/${id?.id}`, {
         headers: {
           Authorization: `${local}`,
         },
       })
       .then((res) => {
         setUser(res.data);
-
+        setIsOpen(false);
         navigate("/user");
       })
       .catch((err) => {

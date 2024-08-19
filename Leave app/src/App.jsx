@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // Components
 import Layout from "./components/Layout";
-import Loader from "./components/loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 //Pages
-import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import ApplyLeave from "./pages/ApplyLeave";
@@ -20,16 +17,10 @@ import MyProfile from "./pages/MyProfile";
 import UserDetail from "./pages/user_detail";
 import LeaveDecision from "./pages/LeaveDecision";
 import UpdateUser from "./pages/updateUser";
+import Home from "./pages/Board";
+import Sidebar from "./components/DashboardLayout";
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
   return (
     <>
       <Routes>
@@ -42,6 +33,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/" element={<Home />} />
         <Route
           path="/user_added_successfully"
           element={
@@ -52,33 +45,22 @@ function App() {
           }
         />
 
-        <Route path="/" element={<Home />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute roles={["admin", "user", "HR"]}>
-              <Layout />
+              <Sidebar />
               <Dashboard />
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={loading ? <Loader /> : <Auth />} />
+        <Route path="/login" element={<Auth />} />
         <Route
           path="/Leave"
           element={
-            <ProtectedRoute roles={["user"]}>
-              <Layout />
+            <ProtectedRoute roles={["user", "HR"]}>
+              <Sidebar />
               <ApplyLeave />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/leave_Decision/:id"
-          element={
-            <ProtectedRoute roles={["HR", "admin"]}>
-              <Layout />
-              <LeaveDecision />
             </ProtectedRoute>
           }
         />
@@ -86,7 +68,7 @@ function App() {
           path="/my_profile"
           element={
             <ProtectedRoute roles={["user"]}>
-              <Layout />
+              <Sidebar />
               <MyProfile />
             </ProtectedRoute>
           }
@@ -95,7 +77,7 @@ function App() {
           path="/user"
           element={
             <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
+              <Sidebar />
               <User />
             </ProtectedRoute>
           }
@@ -104,7 +86,7 @@ function App() {
           path="/user/:id"
           element={
             <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
+              <Sidebar />
               <UserDetail />
             </ProtectedRoute>
           }
@@ -113,7 +95,7 @@ function App() {
           path="/new_user/:id"
           element={
             <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
+              <Sidebar />
               <AddUser />
             </ProtectedRoute>
           }
@@ -123,7 +105,7 @@ function App() {
           path="/update_user/:id"
           element={
             <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
+              <Sidebar />
               <UpdateUser />
             </ProtectedRoute>
           }
@@ -132,7 +114,7 @@ function App() {
           path="/new_user"
           element={
             <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
+              <Sidebar />
               <AddUser />
             </ProtectedRoute>
           }
@@ -141,7 +123,7 @@ function App() {
           path="/inbox"
           element={
             <ProtectedRoute roles={["admin", "user", "HR"]}>
-              <Layout />
+              <Sidebar />
               <Inbox />
             </ProtectedRoute>
           }

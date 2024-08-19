@@ -50,5 +50,5 @@ export const updateUserSchema = Yup.object({
   department: Yup.string().required(),
   city: Yup.string().required(),
   email: Yup.string().required(),
-  password: Yup.string().required(),
+  password: Yup.string().nullable(),
 });

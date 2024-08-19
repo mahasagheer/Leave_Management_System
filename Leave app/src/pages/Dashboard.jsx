@@ -3,140 +3,139 @@ import "../index.css";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import { leavehistorytable } from "../Utiles/TableHearer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+  faHourglassHalf,
+  faBell,
+  faVirus,
+  faHouse,
+} from "@fortawesome/free-solid-svg-icons";
 
 const dashboard = () => {
   const { data } = useContext(AuthContext);
-  const [leaveDetail, setLeaveDetail] = useState({});
+  const [leaveDetail, setLeaveDetail] = useState([]);
   const apiURL = import.meta.env.VITE_API;
-
+  const [Data, setData] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dataLeave, setDataLeave] = useState({});
+  const local = localStorage.getItem("user");
+  const { id } = useParams();
+  const [Loading, setLoading] = useState(false);
+  console.log(data._id);
   useEffect(() => {
+    setLoading(true);
     axios
-      .get(`${apiURL}/employee_leave_detail/${data._id}`)
-      .then((res) => {
-        setLeaveDetail(res.data);
+      .get(`${apiURL}/users/${data._id}`, {
+        headers: {
+          Authorization: `${local}`,
+        },
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res.data);
+        axios
+          .get(`${apiURL}/employee_leave_detail/${data._id}`)
+          .then((res) => {
+            console.log(res);
+            setLeaveDetail(res.data);
+          })
+          .catch((err) => console.log(err));
+        setData(res.data?.data);
+        setLoading(false);
+        setDataLeave(res.data?.leaves[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+  console.log(leaveDetail);
   return (
     <>
-      <section id="dashboard">
-        <div className="p-4 sm:ml-64 ">
-          <div className="p-4 border-2 border-gray-200 border-dashed  h-auto rounded-lg dark:border-gray-700 mt-16">
-            <div className="flex gap-8 ">
-              <div className="flex pl-10 mb-4 items-center flex-row h-30 w-full rounded  bg-[#eaeeef]">
-                <div className="p-8">
-                  <p className="text-3xl text-left "> Welcome back! </p>
-                  <p className="text-lg pr-4">
-                    Effortlessly manage your leave requests and stay on top of
-                    your time off with our intuitive system
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <h1 className="text-center text-2xl  my-5">
-              Leave Status Overview
-            </h1>
-            <div className="flex gap-8">
-              <div className="card">
-                <a className="card1">
-                  <p className="small">{leaveDetail.rejected_leave} </p>
-                  <p className="text-3xl ">Rejected Leave</p>
-
-                  <div className="go-corner">
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 14 20"
-                    >
-                      <path d="M13 20a1 1 0 0 1-.64-.231L7 15.3l-5.36 4.469A1 1 0 0 1 0 19V2a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v17a1 1 0 0 1-1 1Z" />
-                    </svg>
-                    <div className="go-arrow"></div>
-                  </div>
-                </a>
-              </div>
-
-              <div className="card">
-                <a className="card1">
-                  <p className="small">{leaveDetail.pending_leave} </p>
-                  <p className="text-3xl ">Pending Leave</p>
-                  <div className="go-corner">
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
-                    >
-                      <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3.546l3.2 3.659a1 1 0 0 0 1.506 0L13.454 14H18a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-8 10H5a1 1 0 0 1 0-2h5a1 1 0 1 1 0 2Zm5-4H5a1 1 0 0 1 0-2h10a1 1 0 1 1 0 2Z" />
-                    </svg>
-                    <div className="go-arrow"></div>
-                  </div>
-                </a>
-              </div>
-              <div className="card">
-                <a className="card1">
-                  <p className="small">{leaveDetail.remaining_leave}</p>
-                  <p className="text-3xl ">Remaining Leave</p>
-                  <div className="go-corner">
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 16 20"
-                    >
-                      <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z" />
-                    </svg>
-                    <div className="go-arrow"></div>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <h1 className="text-center text-2xl my-5">Leave Entitlements</h1>
-            <div className="grid grid-cols-3 gap-4 mb-4 ">
-              <div className="card">
-                <a className="card1">
-                  <p className="small">{leaveDetail.annual_leave} Days</p>
-                  <p className="text-3xl ">Annual Leave</p>
-                  <div className="go-corner">
-                    <svg
-                      className="w-8 h-8 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 16"
-                    >
-                      <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                    </svg>
-                    <div className="go-arrow"></div>
-                  </div>
-                </a>
-              </div>
-              <div className="card">
-                <a className="card1">
-                  <p className="small">{leaveDetail.sick_leave} Days</p>
-                  <p className="text-3xl ">Sick Leave</p>
-                  <div className="go-corner">
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                    <div className="go-arrow"></div>
-                  </div>
-                </a>
-              </div>
+      <div className="p-4 sm:ml-64">
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-16">
+          <div className="flex items-center h-25 mb-4 rounded ">
+            <div className="py-8 pl-4">
+              <FontAwesomeIcon icon={faHouse} size="xl" className="pb-2" />
+              <p className="text-3xl "> Welcome back! </p>
+              <p className="text-lg">
+                Effortlessly manage your leave requests and stay on top of your
+                time off with our intuitive system
+              </p>
             </div>
           </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4 mb-4 px-3">
+            <button className="relative group cursor-pointer  text-xl  overflow-hidden h-28 w-full sm:max-w-xl md:max-w-2xl lg:max-w-2xl xl:max-w-2xl rounded-md bg-[#e54d3e] text-white p-2 flex justify-center items-center  hover:scale-95 duration-300">
+              <p className="z-10 flex items-center md:gap-2  md:text-lg">
+                <FontAwesomeIcon icon={faCircleXmark} size="xl" />
+                Rejected {leaveDetail?.rejected_leave}
+              </p>
+            </button>
+            <button className="relative group cursor-pointer  text-xl text-white overflow-hidden h-28 w-full sm:max-w-xl md:max-w-2xl lg:max-w-2xl xl:max-w-2xl rounded-md bg-[#f1b146] p-2 flex justify-center items-center  hover:scale-95 duration-300">
+              <p className="z-10 flex items-center  md:gap-2 md:text-lg">
+                <FontAwesomeIcon icon={faHourglassHalf} size="xl" />
+                Pending {leaveDetail?.pending_leave}
+              </p>
+            </button>
+            <button className="relative group cursor-pointer text-xl text-white overflow-hidden h-28 w-full sm:max-w-xl md:max-w-2xl lg:max-w-2xl xl:max-w-2xl rounded-md bg-[#0fbfa5] p-2 flex justify-center items-center hover:scale-95 duration-300">
+              <p className="z-10 flex items-center  md:gap-2  md:text-lg">
+                <FontAwesomeIcon icon={faBell} size="xl" />
+                Remaining {leaveDetail?.remaining_leave}
+              </p>
+            </button>
+            <button className="relative group cursor-pointer  text-xl text-white overflow-hidden h-28 w-full sm:max-w-xl md:max-w-2xl lg:max-w-2xl xl:max-w-2xl rounded-md bg-[#656df0] p-2 flex justify-center items-center hover:scale-95 duration-300">
+              <p className="z-10 flex items-center  md:gap-2  md:text-lg">
+                <FontAwesomeIcon icon={faVirus} size="xl" />
+                Sick {leaveDetail?.sick_leave}
+              </p>
+            </button>
+          </div>
+          <div className="overflow-x-auto w-full my-8 flex justify-center px-3">
+            <table className="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-black uppercase dark:text-gray-400 bg-[#7cc5fa]">
+                <tr>
+                  {leavehistorytable?.map((item, index) => (
+                    <th
+                      scope="col"
+                      key={index}
+                      className="px-6 py-3 whitespace-nowrap"
+                    >
+                      {item}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              {dataLeave?.messages?.map((data) => {
+                return (
+                  <tbody key={data._id}>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data.leave_type}
+                      </td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
+                        {data.days}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data.from_date.substring(0, 10)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data.to_date.substring(0, 10)}
+                      </td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
+                        {data.leave_application}
+                      </td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
+                        {data.status}
+                      </td>
+                    </tr>
+                  </tbody>
+                );
+              })}
+            </table>
+          </div>
         </div>
-      </section>
+      </div>
     </>
   );
 };

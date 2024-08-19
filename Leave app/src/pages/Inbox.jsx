@@ -6,6 +6,7 @@ import { AuthContext } from "../service/authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { leaveDecisionSchema } from "../validation/addUserValidate";
+import { useFormik } from "formik";
 
 const view = () => {
   const [allMessages, setMessages] = useState([]);
@@ -37,8 +38,6 @@ const view = () => {
     setOpenedMessageId(openedMessageId === messageId ? null : messageId);
   };
 
-  const navigate = useNavigate();
-
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -68,7 +67,6 @@ const view = () => {
               })
               .then((res) => {
                 console.log(res);
-                navigate("/send");
               })
               .catch((err) => console.log(err));
           })

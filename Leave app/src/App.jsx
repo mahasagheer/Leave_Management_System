@@ -6,7 +6,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 //Pages
 import Dashboard from "./pages/Dashboard";
-import Auth from "./pages/Auth";
 import ApplyLeave from "./pages/ApplyLeave";
 import User from "./pages/User";
 import AddUser from "./pages/AddUser";
@@ -15,7 +14,6 @@ import LeaveSend from "./pages/LeaveSend";
 import UserAdded from "./pages/UserAdded";
 import MyProfile from "./pages/MyProfile";
 import UserDetail from "./pages/user_detail";
-import LeaveDecision from "./pages/LeaveDecision";
 import UpdateUser from "./pages/updateUser";
 import Home from "./pages/Board";
 import Sidebar from "./components/DashboardLayout";
@@ -54,7 +52,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Auth />} />
         <Route
           path="/Leave"
           element={

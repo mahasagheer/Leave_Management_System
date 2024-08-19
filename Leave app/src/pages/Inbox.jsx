@@ -65,6 +65,7 @@ const view = () => {
               .patch(`${apiURL}/send_email/update_message_status`, {
                 employee_id: values.employee_id,
                 status: values.status,
+                leave_id: values?.messages?.leave_id
               })
               .then((res) => {
                 console.log(res);

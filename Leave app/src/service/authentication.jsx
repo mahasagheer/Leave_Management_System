@@ -1,7 +1,7 @@
 import { useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const AuthContext = createContext();
@@ -42,7 +42,10 @@ export const AuthProvider = ({ children }) => {
           setUser(true);
           navigate("/dashboard");
         }
-        localStorage.setItem("user", token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ token: token, data: userData })
+        );
       })
       .catch((err) => {
         toast.error("Failed to log in");

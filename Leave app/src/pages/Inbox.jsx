@@ -15,7 +15,7 @@ const View = () => {
   const apiURL = import.meta.env.VITE_API;
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchMessages = () => {
     setLoading(true);
     axios
       .get(
@@ -31,6 +31,10 @@ const View = () => {
         console.error(error);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchMessages();
   }, [selectedStatus, isHR, isAdmin, data._id, apiURL]);
 
   const [openedIndex, setOpenedIndex] = useState(null);
@@ -56,6 +60,7 @@ const View = () => {
     handleSubmit,
     setFieldValue,
     setValues,
+    resetForm,  // Add resetForm from Formik
   } = useFormik({
     initialValues: {
       name: "",
@@ -67,7 +72,6 @@ const View = () => {
     },
     validationSchema: leaveDecisionSchema,
     onSubmit: (values) => {
-    
       setLoading(true);
       axios
         .post(`${apiURL}/send_email/leave_reply`, {
@@ -88,6 +92,9 @@ const View = () => {
             .then((res) => {
               console.log(res);
               setLoading(false);
+              fetchMessages(); // Re-fetch messages after update
+              resetForm(); // Reset form fields after submission
+              setOpenedIndex(null);
             })
             .catch((err) => {
               console.log(err);
@@ -197,7 +204,6 @@ const View = () => {
                               handleSubmit(); // Call handleSubmit from Formik
                             }}
                           >
-                        
                             <div className="mt-2">
                               <textarea
                                 className="w-full p-2 rounded-md border border-gray-300"
@@ -251,9 +257,9 @@ const View = () => {
                                 </div>
                                 <button
                                   type="submit"
-                                  className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                                  className="bg-blue-500 text-white px-4 py-1 rounded-md"
                                 >
-                                  Send
+                                  Submit
                                 </button>
                               </div>
                             </div>
@@ -262,9 +268,11 @@ const View = () => {
                       </div>
                     </div>
                   ))
-                : isUser
-                ? allMessages?.map((data, index) => (
-                    <div className="flex flex-col sm:flex-row items-start gap-2.5 mb-3" key={index}>
+                : allMessages?.map((data) => (
+                    <div
+                      key={data?.messages._id}
+                      className="flex flex-col sm:flex-row items-start gap-2.5 mb-3"
+                    >
                       <img
                         className="w-8 h-8 rounded-full"
                         src={User}
@@ -273,27 +281,26 @@ const View = () => {
                       <div className="flex flex-col gap-1 w-full ">
                         <div className="flex flex-wrap items-center space-x-2 rtl:space-x-reverse">
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {data?.name}
+                            {data?.messages.name} |
                           </span>
                           <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            {data.email} | 11:49
+                            {data?.messages.email} | 11:49
                           </span>
                         </div>
                         <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                          <p> From {data?.to_date}</p>
-                          <p> To: {data?.from_date}</p>
-                          <p> Days: {data?.days}</p>
+                          <p> From {data?.messages.to_date}</p>
+                          <p> To: {data?.messages.from_date}</p>
+                          <p> Days: {data?.messages.days}</p>
                           <p className="text-sm font-normal text-gray-900 dark:text-white">
-                            {data?.leave_application + "...."}
+                            {data?.messages.leave_application}
                           </p>
+                          <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                            {data?.messages.status}
+                          </div>
                         </div>
-                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                          {data?.status}
-                        </span>
                       </div>
                     </div>
-                  ))
-                : ""}
+                  ))}
             </div>
           )}
         </div>

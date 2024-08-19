@@ -25,6 +25,7 @@ const View = () => {
       )
       .then((response) => {
         setLoading(false);
+      
         setMessages(isHR || isAdmin ? response?.data : response?.data);
       })
       .catch((error) => {
@@ -268,9 +269,9 @@ const View = () => {
                       </div>
                     </div>
                   ))
-                : allMessages?.map((data) => (
+                : (allMessages?.messages || []).map((data) => (
                     <div
-                      key={data?.messages._id}
+                      key={data?._id}
                       className="flex flex-col sm:flex-row items-start gap-2.5 mb-3"
                     >
                       <img
@@ -281,21 +282,21 @@ const View = () => {
                       <div className="flex flex-col gap-1 w-full ">
                         <div className="flex flex-wrap items-center space-x-2 rtl:space-x-reverse">
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {data?.messages.name} |
+                            {data?.name} |
                           </span>
                           <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            {data?.messages.email} | 11:49
+                            {data?.email} | 11:49
                           </span>
                         </div>
                         <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                          <p> From {data?.messages.to_date}</p>
-                          <p> To: {data?.messages.from_date}</p>
-                          <p> Days: {data?.messages.days}</p>
+                          <p> From {data?.to_date}</p>
+                          <p> To: {data?.from_date}</p>
+                          <p> Days: {data?.days}</p>
                           <p className="text-sm font-normal text-gray-900 dark:text-white">
-                            {data?.messages.leave_application}
+                            {data?.leave_application}
                           </p>
-                          <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            {data?.messages.status}
+                          <div className="text-sm font-normal text-gray-500 dark:text-gray-400 border w-28 text-center p-2 rounded-lg mt-3 border-lime-300">
+                          {data?.status}
                           </div>
                         </div>
                       </div>

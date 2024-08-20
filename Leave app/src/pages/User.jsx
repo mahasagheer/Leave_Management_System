@@ -36,7 +36,7 @@ const User = () => {
 
   const handleUserDelete = (id) => {
     // Delete the user locally
-    setUsers(users.filter(user => user._id !== id));
+    setUsers(users.filter((user) => user._id !== id));
   };
   let filter;
   if (data.role === "HR") {

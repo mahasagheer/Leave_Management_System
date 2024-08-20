@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import axios from "axios";
 import { leavehistorytable } from "../Utiles/TableHearer";
+import { useReactToPrint } from "react-to-print";
+import { ToastContainer, toast } from "react-toastify";
 const user_detail = () => {
+  const component = useRef();
   const [data, setData] = useState({});
   const [dataLeave, setDataLeave] = useState({});
   const local = localStorage.getItem("user");
   const { id } = useParams();
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
-
+  const notify = () => {
+    toast.success("Report generated");
+  };
   useEffect(() => {
     setLoading(true);
     axios
@@ -28,7 +33,11 @@ const user_detail = () => {
         console.log(err);
       });
   }, []);
-
+  const handleGeneratePdf = useReactToPrint({
+    content: () => component.current,
+    documentTitle: "leaveDetail",
+    onAfterPrint: () => notify(),
+  });
   return (
     <>
       <section id="dashboard">
@@ -84,47 +93,61 @@ const user_detail = () => {
                 {" "}
                 Employee Leave History
               </h1>{" "}
-              <div className="overflow-x-auto w-full my-8 flex justify-center">
-                <table className=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
-                    <tr>
-                      {leavehistorytable?.map((item, index) => (
-                        <th scope="col" key={index} className="px-6 py-3">
-                          {item}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  {dataLeave?.messages?.map((data) => {
-                    return (
-                      <tbody key={data._id}>
-                        <tr className="border-b border-gray-200 dark:border-gray-700">
-                          <td className="px-6 py-4">{data.leave_type}</td>
+              <div className="text-center text-xl" ref={component}>
+                {data.name}
 
-                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                            {data.days}
-                          </td>
-                          <td className="px-6 py-4">
-                            {data.from_date.substring(0, 10)}
-                          </td>
-                          <td className="px-6 py-4">
-                            {data.to_date.substring(0, 10)}
-                          </td>
-                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                            {data.leave_application}
-                          </td>
-                          <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                            {data.status}
-                          </td>
-                        </tr>
-                      </tbody>
-                    );
-                  })}
-                </table>
+                <div className="overflow-x-auto w-full my-8 flex justify-center">
+                  <table className=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
+                      <tr>
+                        {leavehistorytable?.map((item, index) => (
+                          <th scope="col" key={index} className="px-6 py-3">
+                            {item}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    {dataLeave?.messages?.map((data) => {
+                      return (
+                        <tbody key={data._id}>
+                          <tr className="border-b border-gray-200 dark:border-gray-700">
+                            <td className="px-6 py-4">{data.leave_type}</td>
+
+                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                              {data.days}
+                            </td>
+                            <td className="px-6 py-4">
+                              {data.from_date.substring(0, 10)}
+                            </td>
+                            <td className="px-6 py-4">
+                              {data.to_date.substring(0, 10)}
+                            </td>
+                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                              {data.leave_application}
+                            </td>
+                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                              {data.status}
+                            </td>
+                          </tr>
+                        </tbody>
+                      );
+                    })}
+                  </table>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                {" "}
+                <button
+                  className=" items-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  onClick={handleGeneratePdf}
+                >
+                  Generate PDF
+                </button>
               </div>
             </div>
           )}
         </div>
+        <ToastContainer limit="1" />
       </section>
     </>
   );

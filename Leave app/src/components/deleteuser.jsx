@@ -2,38 +2,37 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const deleteuser = (id) => {
+const Deleteuser = ({ id, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState([]);
   const local = localStorage.getItem("user");
-  const navigate = useNavigate();
 
   const apiURL = import.meta.env.VITE_API;
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
+ 
   const handleDelete = () => {
     axios
-      .delete(`${apiURL}/users/${id?.id}`, {
+      .delete(`${apiURL}/users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },
       })
-      .then((res) => {
-        setUser(res.data);
-        setIsOpen(false);
-        navigate("/user");
+      .then(() => {
+        onDelete(); // Notify parent component about the delete
+        setIsOpen(false); // Close modal
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <>
       <button onClick={toggleModal} className="block text-white" type="button">
-        <FontAwesomeIcon icon={faTrash} className="text-red-600" size="lg" />{" "}
+        <FontAwesomeIcon icon={faTrash} className="text-red-600" size="lg" />
       </button>
 
       {isOpen && (
@@ -108,4 +107,4 @@ const deleteuser = (id) => {
   );
 };
 
-export default deleteuser;
+export default Deleteuser;

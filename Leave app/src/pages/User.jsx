@@ -13,7 +13,7 @@ const User = () => {
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchUsers = () => {
     setLoading(true);
     axios
       .get(`${apiURL}/users`, {
@@ -28,7 +28,16 @@ const User = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchUsers();
   }, []);
+
+  const handleUserDelete = (id) => {
+    // Delete the user locally
+    setUsers(users.filter(user => user._id !== id));
+  };
   let filter;
   if (data.role === "HR") {
     filter = users.filter((data) => data.role === "user");
@@ -147,7 +156,7 @@ const User = () => {
                                 </Link>
                                 <Deleteuser
                                   id={data._id}
-                                  onDelete={() => handleDelete(data._id)}
+                                  onDelete={() => handleUserDelete(data._id)}
                                 />
                               </span>
                             </td>

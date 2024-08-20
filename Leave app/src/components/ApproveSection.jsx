@@ -10,7 +10,7 @@ const ApproveSection = () => {
   }, []);
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-between gap-10 p-6 md:p-[8%] bg-[#90d7f5]">
+      <div className="flex flex-col lg:flex-row justify-between gap-10 p-6 md:p-[8%] bg-[#90d7f5] overflow-hidden">
         <div className="w-full lg:w-[50%] lg:ml-[8%] mb-6 lg:mb-0">
           <img
             src={Approve}

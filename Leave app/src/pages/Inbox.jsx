@@ -25,7 +25,7 @@ const View = () => {
       )
       .then((response) => {
         setLoading(false);
-      
+
         setMessages(isHR || isAdmin ? response?.data : response?.data);
       })
       .catch((error) => {
@@ -61,7 +61,7 @@ const View = () => {
     handleSubmit,
     setFieldValue,
     setValues,
-    resetForm,  // Add resetForm from Formik
+    resetForm, // Add resetForm from Formik
   } = useFormik({
     initialValues: {
       name: "",
@@ -74,6 +74,7 @@ const View = () => {
     validationSchema: leaveDecisionSchema,
     onSubmit: (values) => {
       setLoading(true);
+      console.log(values.leave_id);
       axios
         .post(`${apiURL}/send_email/leave_reply`, {
           name: values.name,
@@ -81,6 +82,7 @@ const View = () => {
           status: values.status,
           comment: values.comment,
           employee_id: values.employee_id,
+          leave_id: values.leave_id,
         })
         .then((res) => {
           console.log(res.data);
@@ -114,7 +116,7 @@ const View = () => {
       <section id="inbox">
         <div className="p-4 sm:ml-64">
           {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
-   
+
           {!loading && (
             <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed md:p-2 rounded-lg dark:border-gray-700 mt-16">
               {isHR || isAdmin ? (
@@ -132,7 +134,9 @@ const View = () => {
                   <button
                     onClick={() => setSelectedStatus("Pending")}
                     className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
-                      selectedStatus === "Pending" ? "bg-lime-400 text-white" : ""
+                      selectedStatus === "Pending"
+                        ? "bg-lime-400 text-white"
+                        : ""
                     }`}
                   >
                     Pending
@@ -140,7 +144,9 @@ const View = () => {
                   <button
                     onClick={() => setSelectedStatus("Approved")}
                     className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
-                      selectedStatus === "Approved" ? "bg-lime-400 text-white" : ""
+                      selectedStatus === "Approved"
+                        ? "bg-lime-400 text-white"
+                        : ""
                     }`}
                   >
                     Approved
@@ -148,7 +154,9 @@ const View = () => {
                   <button
                     onClick={() => setSelectedStatus("Declined")}
                     className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
-                      selectedStatus === "Declined" ? "bg-lime-400 text-white" : ""
+                      selectedStatus === "Declined"
+                        ? "bg-lime-400 text-white"
+                        : ""
                     }`}
                   >
                     Declined
@@ -219,19 +227,6 @@ const View = () => {
                                   <button
                                     type="button"
                                     onClick={() =>
-                                      setFieldValue("status", "Pending")
-                                    }
-                                    className={`px-3 py-1 rounded-md ${
-                                      values.status === "Pending"
-                                        ? "bg-yellow-600 border border-black text-white"
-                                        : "bg-yellow-500 text-white"
-                                    }`}
-                                  >
-                                    Pending
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
                                       setFieldValue("status", "Declined")
                                     }
                                     className={`px-3 py-1 rounded-md ${
@@ -296,7 +291,7 @@ const View = () => {
                             {data?.leave_application}
                           </p>
                           <div className="text-sm font-normal text-gray-500 dark:text-gray-400 border w-28 text-center p-2 rounded-lg mt-3 border-lime-300">
-                          {data?.status}
+                            {data?.status}
                           </div>
                         </div>
                       </div>

@@ -9,7 +9,7 @@ import {
 const Features = () => {
   return (
     <>
-      <section className=" mx-[5%] text-center my-[5%]">
+      <section className=" mx-[5%] text-center my-[5%] overflow-hidden">
         <h1 className="text-3xl sm:text-4xl md:text-5xl text-center">
           Online leave management.{" "}
           <span className="text-lime-500">Now made more efficient</span>

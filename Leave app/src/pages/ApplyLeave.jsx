@@ -45,7 +45,7 @@ const ApplyLeave = () => {
         days = dayDiff + 1;
         setLoading(true);
         axios
-          .patch(`${apiURL}/inbox_messages`, {
+          .patch(`${apiURL}inbox_messages`, {
             employee_id: data._id,
             message: {
               name: values.name,
@@ -62,7 +62,7 @@ const ApplyLeave = () => {
             console.log(response.data);
             axios
               .post(
-                `${apiURL}/send_email`,
+                `${apiURL}send_email`,
                 {
                   name: values.name,
                   email: values.email,

@@ -28,7 +28,7 @@ const dashboard = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${apiURL}/users/${data._id}`, {
+      .get(`${apiURL}users/${data._id}`, {
         headers: {
           Authorization: `${local}`,
         },
@@ -36,7 +36,7 @@ const dashboard = () => {
       .then((res) => {
         console.log(res.data);
         axios
-          .get(`${apiURL}/employee_leave_detail/${data._id}`)
+          .get(`${apiURL}employee_leave_detail/${data._id}`)
           .then((res) => {
             console.log(res);
             setLeaveDetail(res.data);

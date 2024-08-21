@@ -17,7 +17,7 @@ const updateUser = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${apiURL}/users/${id}`, {
+      .get(`${apiURL}users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },
@@ -58,7 +58,7 @@ const updateUser = () => {
         setLoading(true);
         axios
           .put(
-            `${apiURL}/users/${id}`,
+            `${apiURL}users/${id}`,
             {
               name: values.name,
               salary: values.salary,

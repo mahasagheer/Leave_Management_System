@@ -201,7 +201,7 @@ const AddUser = () => {
         setLoading(true);
         axios
           .post(
-            `${apiURL}/users`,
+            `${apiURL}users`,
             {
               name: values.name,
               email: values.email,
@@ -226,7 +226,7 @@ const AddUser = () => {
             console.log(res);
             userId = res.data.user;
             axios
-              .post(`${apiURL}/employee_leave_detail`, {
+              .post(`${apiURL}employee_leave_detail`, {
                 employee_id: userId,
                 annual_leave: values.annual_leave,
                 sick_leave: values.sick_leave,
@@ -235,7 +235,7 @@ const AddUser = () => {
               .then(function (response) {
                 console.log(response);
                 axios.post(
-                  `${apiURL}/send_email/invite_employee`,
+                  `${apiURL}send_email/invite_employee`,
                   {
                     name: values.name,
                     email: values.email,
@@ -254,7 +254,7 @@ const AddUser = () => {
           })
           .then(function (response) {
             axios
-              .post(`${apiURL}/inbox_messages`, {
+              .post(`${apiURL}inbox_messages`, {
                 employee_id: userId,
               })
               .then((res) => console.log(res))

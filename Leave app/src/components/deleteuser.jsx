@@ -12,10 +12,10 @@ const Deleteuser = ({ id, onDelete }) => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
- 
+
   const handleDelete = () => {
     axios
-      .delete(`${apiURL}/users/${id}`, {
+      .delete(`${apiURL}users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },

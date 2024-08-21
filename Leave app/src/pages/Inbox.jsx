@@ -20,8 +20,8 @@ const View = () => {
     axios
       .get(
         isHR || isAdmin
-          ? `${apiURL}/inbox_messages/all_leaves/${selectedStatus}`
-          : `${apiURL}/inbox_messages/${data._id}`
+          ? `${apiURL}inbox_messages/all_leaves/${selectedStatus}`
+          : `${apiURL}inbox_messages/${data._id}`
       )
       .then((response) => {
         setLoading(false);
@@ -76,7 +76,7 @@ const View = () => {
       setLoading(true);
       console.log(values.leave_id);
       axios
-        .post(`${apiURL}/send_email/leave_reply`, {
+        .post(`${apiURL}send_email/leave_reply`, {
           name: values.name,
           email: values.email,
           status: values.status,
@@ -87,7 +87,7 @@ const View = () => {
         .then((res) => {
           console.log(res.data);
           axios
-            .patch(`${apiURL}/send_email/update_message_status`, {
+            .patch(`${apiURL}send_email/update_message_status`, {
               employee_id: values.employee_id,
               status: values.status,
               leave_id: values.leave_id,

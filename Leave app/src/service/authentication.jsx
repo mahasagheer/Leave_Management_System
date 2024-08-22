@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -15,6 +15,25 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API;
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const { data: userData } = JSON.parse(storedUser);
+      setData(userData);
+      if (userData.role === "admin") {
+        setAdmin(true);
+        navigate("/user");
+      } else if (userData.role === "HR") {
+        setHR(true);
+        navigate("/dashboard");
+      } else {
+        setUser(true);
+        navigate("/dashboard");
+      }
+    }
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -28,17 +47,20 @@ export const AuthProvider = ({ children }) => {
         setData(userData);
         if (userData.role === "admin") {
           toast.success("Admin logged in successfully!");
-
           setAdmin(true);
+          setHR(false);
+          setUser(false);
           navigate("/user");
         } else if (userData.role === "HR") {
           toast.success("HR logged in successfully!");
-
+          setAdmin(false);
           setHR(true);
+          setUser(false);
           navigate("/dashboard");
         } else {
           toast.success("User logged in successfully!");
-
+          setAdmin(false);
+          setHR(false);
           setUser(true);
           navigate("/dashboard");
         }
@@ -51,6 +73,15 @@ export const AuthProvider = ({ children }) => {
         toast.error("Failed to log in");
         console.log(err);
       });
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setData([]);
+    setAdmin(false);
+    setHR(false);
+    setUser(false);
+    navigate("/login");
   };
 
   return (
@@ -69,6 +100,7 @@ export const AuthProvider = ({ children }) => {
         password,
         setPassword,
         handleSubmit,
+        logout,
       }}
     >
       {children}

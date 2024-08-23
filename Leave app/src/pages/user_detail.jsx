@@ -19,7 +19,7 @@ const user_detail = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${apiURL}users/${id}`, {
+      .get(`${apiURL}/users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },

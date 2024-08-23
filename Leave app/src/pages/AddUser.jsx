@@ -190,6 +190,7 @@ const AddUser = () => {
         hire_date: "",
         department: "",
         city: "",
+        phone: "",
         password: "",
         annual_leave: "25",
         sick_leave: "15",
@@ -215,6 +216,7 @@ const AddUser = () => {
               city: values.city,
               password: values.password,
               role: values.role,
+              phone: values.phone,
             },
             {
               headers: {
@@ -226,7 +228,7 @@ const AddUser = () => {
             console.log(res);
             userId = res.data.user;
             axios
-              .post(`${apiURL}employee_leave_detail`, {
+              .post(`${apiURL}/employee_leave_detail`, {
                 employee_id: userId,
                 annual_leave: values.annual_leave,
                 sick_leave: values.sick_leave,
@@ -235,7 +237,7 @@ const AddUser = () => {
               .then(function (response) {
                 console.log(response);
                 axios.post(
-                  `${apiURL}send_email/invite_employee`,
+                  `${apiURL}/send_email/invite_employee`,
                   {
                     name: values.name,
                     email: values.email,
@@ -254,7 +256,7 @@ const AddUser = () => {
           })
           .then(function (response) {
             axios
-              .post(`${apiURL}inbox_messages`, {
+              .post(`${apiURL}/inbox_messages`, {
                 employee_id: userId,
               })
               .then((res) => console.log(res))
@@ -500,29 +502,55 @@ const AddUser = () => {
                 {errors.department && touched.department ? (
                   <p className="text-red-600 text-sm">{errors.department}</p>
                 ) : null}
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  City
-                </label>
-                <select
-                  id="countries"
-                  name="city"
-                  value={values.city}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  {city.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}{" "}
-                </select>
-                {errors.city && touched.city ? (
-                  <p className="text-red-600 text-sm">{errors.city}</p>
-                ) : null}
+
+                <div className="grid md:grid-cols-2 md:gap-6">
+                  <div className="relative z-0 w-full mb-5 group">
+                    <label
+                      htmlFor="countries"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      City
+                    </label>
+                    <select
+                      id="countries"
+                      name="city"
+                      value={values.city}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      {city.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}{" "}
+                    </select>
+                    {errors.city && touched.city ? (
+                      <p className="text-red-600 text-sm">{errors.city}</p>
+                    ) : null}
+                  </div>
+                  <div className="relative z-0 w-full mb-5 group">
+                    <label
+                      htmlFor="base-input"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Phone No:
+                    </label>
+                    <input
+                      type="tel"
+                      id="base-input"
+                      name="phone"
+                      value={values.phone}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="+923XXXXXXXX"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                    {errors.phone && touched.phone ? (
+                      <p className="text-red-600 text-sm">{errors.phone}</p>
+                    ) : null}
+                  </div>
+                </div>
                 <div className="grid md:grid-cols-2 md:gap-6">
                   <div className="relative z-0 w-full mb-5 group">
                     <label

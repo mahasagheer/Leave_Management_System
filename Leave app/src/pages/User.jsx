@@ -21,7 +21,7 @@ const User = () => {
   const fetchUsers = () => {
     setLoading(true);
     axios
-      .get(`${apiURL}users`, {
+      .get(`${apiURL}/users`, {
         headers: {
           Authorization: `${local}`,
         },

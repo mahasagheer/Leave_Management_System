@@ -33,7 +33,7 @@ function DashboardLayout() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${apiURL}users/${data._id}`, {
+      .get(`${apiURL}/users/${data._id}`, {
         headers: {
           Authorization: `${local}`,
         },

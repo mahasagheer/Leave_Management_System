@@ -15,7 +15,7 @@ const Deleteuser = ({ id, onDelete }) => {
 
   const handleDelete = () => {
     axios
-      .delete(`${apiURL}users/${id}`, {
+      .delete(`${apiURL}/users/${id}`, {
         headers: {
           Authorization: `${local}`,
         },

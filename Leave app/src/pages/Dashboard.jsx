@@ -24,7 +24,7 @@ const dashboard = () => {
   const local = localStorage.getItem("user");
   const { id } = useParams();
   const [Loading, setLoading] = useState(false);
-  console.log(data._id);
+  console.log("12121212",data._id);
   useEffect(() => {
     setLoading(true);
     axios
@@ -49,7 +49,7 @@ const dashboard = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [data]);
   console.log(leaveDetail);
   return (
     <>

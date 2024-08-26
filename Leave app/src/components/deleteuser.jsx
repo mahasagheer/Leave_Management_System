@@ -12,7 +12,7 @@ const Deleteuser = ({ id, onDelete }) => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
- 
+
   const handleDelete = () => {
     axios
       .delete(`${apiURL}/users/${id}`, {

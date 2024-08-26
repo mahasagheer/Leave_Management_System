@@ -12,6 +12,7 @@ export const addUserSchema = Yup.object({
   city: Yup.string().required(),
   password: Yup.string().required(),
   role: Yup.string(),
+  phone: Yup.number().required("Phone no should be valid"),
   annual_leave: Yup.number().required(),
   sick_leave: Yup.number().required(),
   employee_id: Yup.number(),

@@ -5,6 +5,7 @@ import { AuthContext } from "../service/authentication";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { leavehistorytable } from "../Utiles/TableHearer";
+import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleXmark,
@@ -14,6 +15,7 @@ import {
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 const dashboard = () => {
   const { data } = useContext(AuthContext);
   const [leaveDetail, setLeaveDetail] = useState([]);
@@ -22,9 +24,12 @@ const dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dataLeave, setDataLeave] = useState({});
   const local = localStorage.getItem("user");
+  const userdata = JSON.parse(local)?.data
+  const [datahandler , setDatahandler] = useState(false)
+  
   const { id } = useParams();
   const [Loading, setLoading] = useState(false);
-  console.log("12121212",data._id);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -49,10 +54,37 @@ const dashboard = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [data]);
-  console.log(leaveDetail);
+  }, [data , datahandler]);
+
+  const sendLeaveReminder =  () => {
+    axios
+    .post(
+      `${apiURL}/send_email/leave/reminder`,
+      {
+        name: userdata?.name,
+        email: userdata?.email,
+    
+      },
+      {
+        headers: {
+          Authorization: `${local}`,
+        },
+      }
+    )
+    .then((res) => {
+      setDatahandler(!datahandler)
+      toast.success("Reminder Mail sent Successfully");
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+ 
+
   return (
     <>
+    <ToastContainer/>
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-16">
           <div className="flex items-center h-25 mb-4 rounded ">
@@ -91,8 +123,8 @@ const dashboard = () => {
               </p>
             </button>
           </div>
-          <div className="overflow-x-auto w-full my-8 flex justify-center px-3">
-            <table className="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <div className="overflow-x-auto w-full my-8 flex justify-center px-6  ">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-black uppercase dark:text-gray-400 bg-[#7cc5fa]">
                 <tr>
                   {leavehistorytable?.map((item, index) => (
@@ -109,7 +141,7 @@ const dashboard = () => {
               {dataLeave?.messages?.map((data) => {
                 return (
                   <tbody key={data._id}>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <tr className="border-b border-gray-200 dark:border-gray-700 px-3 ">
                       <td className="px-6 py-4 whitespace-nowrap">
                         {data.leave_type}
                       </td>
@@ -123,11 +155,25 @@ const dashboard = () => {
                         {data.to_date.substring(0, 10)}
                       </td>
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
-                        {data.leave_application}
+                        {data.leave_application
+                          ? data.leave_application.split(' ').slice(0, 3).join(' ') + '...'
+                          : ''}
                       </td>
+
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
                         {data.status}
                       </td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800 whitespace-nowrap">
+                    <button
+                      onClick={sendLeaveReminder}
+                    disabled={ data.status==="Approved" || data.status==="Declined" || !data?.reminder}
+                      className={`px-4 py-2 text-white ${
+                        data.status==="Approved" || data.status==="Declined" || !data.reminder ? 'bg-gray-400' : 'bg-blue-500'
+                      } rounded`}
+                    >
+                      {data.status==="Approved" || data.status==="Declined"  ? 'Actioned' : 'Notify'}
+                    </button>
+                  </td>
                     </tr>
                   </tbody>
                 );

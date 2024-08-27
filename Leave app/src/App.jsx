@@ -1,17 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 
 // Components
-import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Setting from "./pages/Setting";
 //Pages
 import Dashboard from "./pages/Dashboard";
 import ApplyLeave from "./pages/ApplyLeave";
 import User from "./pages/User";
 import AddUser from "./pages/AddUser";
 import Inbox from "./pages/Inbox";
-import LeaveSend from "./pages/LeaveSend";
-import UserAdded from "./pages/UserAdded";
 import MyProfile from "./pages/MyProfile";
 import UserDetail from "./pages/user_detail";
 import UpdateUser from "./pages/updateUser";
@@ -22,33 +19,22 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/send"
-          element={
-            <ProtectedRoute roles={["admin", "user", "HR"]}>
-              <Layout />
-              <LeaveSend />
-            </ProtectedRoute>
-          }
-        />
-
         <Route path="/" element={<Home />} />
-        <Route
-          path="/user_added_successfully"
-          element={
-            <ProtectedRoute roles={["admin", "HR"]}>
-              <Layout />
-              <UserAdded />
-            </ProtectedRoute>
-          }
-        />
-
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute roles={["admin", "user", "HR"]}>
               <Sidebar />
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/setting"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <Sidebar />
+              <Setting />
             </ProtectedRoute>
           }
         />

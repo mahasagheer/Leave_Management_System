@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { AuthContext } from "../service/authentication";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import Logo from "../public/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGauge,
@@ -15,12 +16,12 @@ import {
   faRightFromBracket,
   faInbox,
   faBars,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
-import { leavehistorytable } from "../Utiles/TableHearer";
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data, isUser, isHR, isAdmin, setAdmin, setUser, setHR } =
+  const { data, isUser, isHR, isAdmin, setAdmin, setUser, setHR, themeColor } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const [dataLeave, setDataLeave] = useState({});
@@ -58,9 +59,13 @@ function DashboardLayout() {
     }
     navigate("/");
   };
+  console.log(themeColor);
   return (
     <div>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav
+        style={{ backgroundColor: themeColor }}
+        className={`fixed top-0 z-50 w-full transition-colors  duration-500 ease-in-out border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 `}
+      >
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -75,7 +80,7 @@ function DashboardLayout() {
               </button>
               <a href="#" className="flex ms-2 md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  WORK PAUSE
+                  <img src={Logo} alt="logo_picture" className="w-[65%]" />
                 </span>
               </a>
             </div>
@@ -109,16 +114,20 @@ function DashboardLayout() {
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
+        }  border-r  sm:translate-x-0 dark:bg-gray-800 `}
         aria-label="Sidebar"
+        style={{ backgroundColor: themeColor }}
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <div
+          className={`h-full px-3 pb-4 overflow-y-auto bg-white  `}
+          style={{ backgroundColor: themeColor }}
+        >
           <ul className="space-y-2 font-medium">
             {isUser && (
               <li>
                 <Link
                   to="/dashboard"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#4a9dc9] dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faGauge} />
                   <span className="ms-3">Dashboard</span>
@@ -130,7 +139,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/dashboard"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                   >
                     <FontAwesomeIcon icon={faGauge} />
                     <span className="ms-3">Dashboard</span>
@@ -139,7 +148,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5]  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -152,7 +161,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/my_profile"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span className="flex-1 ms-3 whitespace-nowrap">
@@ -163,7 +172,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5]  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -172,7 +181,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/inbox"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                   >
                     <FontAwesomeIcon icon={faEnvelopesBulk} />
                     <span className="ms-3">View Leave</span>
@@ -184,7 +193,7 @@ function DashboardLayout() {
               <li>
                 <Link
                   to="/inbox"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faInbox} />
                   <span className="flex-1 ms-3 whitespace-nowrap">Inbox</span>
@@ -198,7 +207,7 @@ function DashboardLayout() {
               <li>
                 <Link
                   to="/user"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faUsers} />
                   <span className="flex-1 ms-3 whitespace-nowrap">
@@ -210,11 +219,20 @@ function DashboardLayout() {
             <li>
               <a
                 onClick={handleLogout}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-[#90d7f5] dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 <span className="flex-1 ms-3 whitespace-nowrap">Log Out</span>
               </a>
+            </li>
+            <li>
+              <Link
+                to="/setting"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+              >
+                <FontAwesomeIcon icon={faGear} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
+              </Link>
             </li>
           </ul>
         </div>

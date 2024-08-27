@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API;
+  const [themeColor, setThemeColor] = useState("");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -83,7 +84,6 @@ export const AuthProvider = ({ children }) => {
     setUser(false);
     navigate("/login");
   };
-
   return (
     <AuthContext.Provider
       value={{
@@ -101,6 +101,8 @@ export const AuthProvider = ({ children }) => {
         setPassword,
         handleSubmit,
         logout,
+        setThemeColor,
+        themeColor,
       }}
     >
       {children}

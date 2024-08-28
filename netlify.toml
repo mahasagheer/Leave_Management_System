@@ -1,6 +1,7 @@
 [build]
-  publish = "build"  # or "dist" or wherever your build output goes
-  command = "npm run build"  # or the appropriate build command
+  publish = "dist"  # Or whatever your actual output directory is
+  command = "npm run build"
+
 
 
 [[redirects]]

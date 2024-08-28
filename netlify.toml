@@ -1,8 +1,9 @@
 [build]
-  command = "CI='' npm run build"
-  publish = "/build"
-  base ="/"
+  publish = "dist"  # Or whatever your actual output directory is
+  command = "npm run build"
 
+
+  
 [[redirects]]
   from = "/*"
   to = "/index.html"

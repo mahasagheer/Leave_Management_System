@@ -21,7 +21,7 @@ const Setting = () => {
   const [bgColor, setBgColor] = useState("");
   const [orgLogo, setOrgLogo] = useState();
   const { themeColor, setThemeColor } = useContext(AuthContext);
-
+  const apiURL = import.meta.env.VITE_API;
   const handleFileChange = (e) => {
     setOrgLogo(e.target.files[0]);
   };
@@ -34,7 +34,7 @@ const Setting = () => {
     const formData = new FormData();
     formData.append("logo", orgLogo);
     formData.append("color", bgColor);
-    await axios.post("http://localhost:5000/system_setting", formData, {
+    await axios.post(`${apiURL}/system_setting`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };

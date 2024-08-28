@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/login`, {
+      .post(`${apiURL}/login`, {
         email: email,
         password: password,
       })

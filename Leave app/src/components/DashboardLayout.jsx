@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { AuthContext } from "../service/authentication";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Logo from "../public/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGauge,
@@ -21,8 +20,17 @@ import {
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data, isUser, isHR, isAdmin, setAdmin, setUser, setHR, themeColor } =
-    useContext(AuthContext);
+  const {
+    data,
+    isUser,
+    isHR,
+    isAdmin,
+    setAdmin,
+    setUser,
+    setHR,
+    themeColor,
+    logo,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
   const [dataLeave, setDataLeave] = useState({});
   const [Data, setData] = useState([]);
@@ -59,7 +67,6 @@ function DashboardLayout() {
     }
     navigate("/");
   };
-  console.log(themeColor);
   return (
     <div>
       <nav
@@ -80,7 +87,11 @@ function DashboardLayout() {
               </button>
               <a href="#" className="flex ms-2 md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  <img src={Logo} alt="logo_picture" className="w-[65%]" />
+                  <img
+                    src={`http://localhost:5000/uploads/${logo}`}
+                    alt="logo_picture"
+                    className="w-[65%]"
+                  />
                 </span>
               </a>
             </div>
@@ -225,15 +236,17 @@ function DashboardLayout() {
                 <span className="flex-1 ms-3 whitespace-nowrap">Log Out</span>
               </a>
             </li>
-            <li>
-              <Link
-                to="/setting"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
-              >
-                <FontAwesomeIcon icon={faGear} />
-                <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
-              </Link>
-            </li>
+            {isAdmin && (
+              <li>
+                <Link
+                  to="/setting"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                >
+                  <FontAwesomeIcon icon={faGear} />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </aside>

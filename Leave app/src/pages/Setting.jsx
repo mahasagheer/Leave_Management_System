@@ -25,7 +25,10 @@ const Setting = () => {
   const handleFileChange = (e) => {
     setOrgLogo(e.target.files[0]);
   };
-  console.log(bgColor);
+  const handleColorChange = (e) => {
+    setBgColor(e.target.value);
+    setThemeColor(bgColor);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -84,6 +87,24 @@ const Setting = () => {
                       &nbsp;
                     </div>
                   ))}
+                  <div className="flex flex-col sm:flex-row items-center gap-4 p-4">
+                    <label
+                      htmlFor="favcolor"
+                      className="text-lg font-semibold text-gray-700 sm:text-left text-center"
+                    >
+                      Select your favorite color:
+                    </label>
+                    <input
+                      type="color"
+                      value={bgColor}
+                      onClick={() => {
+                        setBgColor(bgColor);
+                        setThemeColor(bgColor);
+                      }}
+                      onChange={handleColorChange}
+                      className="w-10 h-10 rounded-lg border-2 border-gray-300 cursor-pointer transition-transform duration-200 hover:scale-110"
+                    />
+                  </div>
                 </div>
               </div>
               <hr />

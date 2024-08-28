@@ -88,7 +88,7 @@ function DashboardLayout() {
               <a href="#" className="flex ms-2 md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   <img
-                    src={`http://localhost:5000/uploads/${logo}`}
+                    src={`${apiURL}/uploads/${logo}`}
                     alt="logo_picture"
                     className="w-[65%]"
                   />

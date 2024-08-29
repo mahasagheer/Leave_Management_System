@@ -202,7 +202,7 @@ const AddUser = () => {
         setLoading(true);
         axios
           .post(
-            `${apiURL}users`,
+            `${apiURL}/users`,
             {
               name: values.name,
               email: values.email,

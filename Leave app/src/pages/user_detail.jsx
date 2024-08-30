@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
+import Calender from "../components/Calender";
+import PieChart from "../components/PieChart";
 
 import axios from "axios";
 import { leavehistorytable } from "../Utiles/TableHearer";
@@ -13,6 +15,7 @@ const user_detail = () => {
   const { id } = useParams();
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
+  const [leave, setLeave] = useState({});
   const notify = () => {
     toast.success("Report generated");
   };
@@ -32,7 +35,57 @@ const user_detail = () => {
       .catch((err) => {
         console.log(err);
       });
+    axios
+      .get(`${apiURL}/employee_leave_detail/${id}`, {
+        headers: {
+          Authorization: `${local}`,
+        },
+      })
+      .then((res) => {
+        setLeave(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+  const remaining_leave = leave.remaining_leave || 35;
+  const sick_leave = leave.sick_leave || 15;
+  const pending_leave = leave.pending_leave || 0;
+  const annual_leave = leave.annual_leave || 0;
+  const [leaveDetail, setLeaveDetail] = useState({
+    labels: ["Remaining Leave", "Sick Leave", "Pending Leave", "Annual Leave"],
+    datasets: [
+      {
+        label: "Leave Detail",
+        data: [remaining_leave, sick_leave, pending_leave, annual_leave],
+        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0"],
+      },
+    ],
+  });
+  useEffect(() => {
+    if (leave) {
+      const remaining_leave = leave.remaining_leave || 0;
+      const sick_leave = leave.sick_leave || 0;
+      const pending_leave = leave.pending_leave || 0;
+      const annual_leave = leave.annual_leave || 0;
+      setLeaveDetail({
+        labels: [
+          "Remaining Leave",
+          "Sick Leave",
+          "Pending Leave",
+          "Annual Leave",
+        ],
+        datasets: [
+          {
+            label: "Leave Detail",
+            data: [remaining_leave, sick_leave, pending_leave, annual_leave],
+            backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0"],
+          },
+        ],
+      });
+    }
+  }, [leave]);
+
   const handleGeneratePdf = useReactToPrint({
     content: () => component.current,
     documentTitle: "leaveDetail",
@@ -40,113 +93,112 @@ const user_detail = () => {
   });
   return (
     <>
-      <section id="dashboard">
-        <div className="p-4 sm:ml-64 ">
-          {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
-          {!Loading && (
-            <div className="p-4 border-2 border-[#4a9dc9] border-dashed  h-auto rounded-lg dark:border-gray-700 mt-16">
-              <h1 className="text-3xl font-bold text-center py-5 ">
-                {" "}
-                Employee Detail
-              </h1>{" "}
-              <div className="flex justify-between px-10">
-                <div>
-                  <p className="text-2xl py-3 font-semibold">
-                    Personal Detail:
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Name:</strong> {data.name}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Email:</strong> {data.email}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Age:</strong> {data.age}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Name:</strong> {data.city}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Name:</strong> {data.gender}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-2xl py-3 font-semibold">Job Position:</p>
-                  <p className="text-lg ">
-                    <strong>Employee Salary:</strong> {data.salary}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Job Title:</strong> {data.Job_title}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Department:</strong> {data.department}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Hiring Date:</strong> {data.hire_date}
-                  </p>
-                  <p className="text-lg ">
-                    <strong>Employee Exit Date:</strong> {data.exit_date}
-                  </p>
-                </div>
-              </div>
-              <h1 className="text-3xl font-bold text-center mt-4 ">
-                {" "}
-                Employee Leave History
-              </h1>{" "}
-              <div className="text-center text-xl" ref={component}>
-                {data.name}
+      <section id="dashboard" className="p-4 sm:ml-64">
+        {Loading && <div className="loader mx-auto mt-32"></div>}
+        {!Loading && (
+          <div className="p-4 border-2 border-[#4a9dc9] border-dashed rounded-lg dark:border-gray-700 mt-16">
+            <h1 className="text-3xl font-bold text-center py-5">
+              Employee Detail
+            </h1>
 
-                <div className="overflow-x-auto w-full my-8 flex justify-center">
-                  <table className=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
-                      <tr>
-                        {leavehistorytable?.map((item, index) => (
-                          <th scope="col" key={index} className="px-6 py-3">
-                            {item}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    {dataLeave?.messages?.map((data) => {
-                      return (
-                        <tbody key={data._id}>
-                          <tr className="border-b border-gray-200 dark:border-gray-700">
-                            <td className="px-6 py-4">{data.leave_type}</td>
-
-                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                              {data.days}
-                            </td>
-                            <td className="px-6 py-4">
-                              {data.from_date.substring(0, 10)}
-                            </td>
-                            <td className="px-6 py-4">
-                              {data.to_date.substring(0, 10)}
-                            </td>
-                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                              {data.leave_application}
-                            </td>
-                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                              {data.status}
-                            </td>
-                          </tr>
-                        </tbody>
-                      );
-                    })}
-                  </table>
-                </div>
+            <div className="flex flex-col md:flex-row justify-between px-4 md:px-10 gap-8">
+              <div>
+                <p className="text-2xl py-3 font-semibold">Personal Detail:</p>
+                <p className="text-lg">
+                  <strong>Employee Name:</strong> {data.name}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Email:</strong> {data.email}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Age:</strong> {data.age}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee City:</strong> {data.city}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Gender:</strong> {data.gender}
+                </p>
               </div>
-              <div className="flex justify-center">
-                {" "}
-                <button
-                  className=" items-center text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={handleGeneratePdf}
-                >
-                  Generate PDF
-                </button>
+              <div>
+                <p className="text-2xl py-3 font-semibold">Job Position:</p>
+                <p className="text-lg">
+                  <strong>Employee Salary:</strong> {data.salary}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Job Title:</strong> {data.Job_title}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Department:</strong> {data.department}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Hiring Date:</strong> {data.hire_date}
+                </p>
+                <p className="text-lg">
+                  <strong>Employee Exit Date:</strong> {data.exit_date}
+                </p>
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="flex flex-col lg:flex-row justify-evenly mt-8 mx-[6%] ">
+              <Calender />
+              <PieChart chartData={leaveDetail} />
+            </div>
+
+            <h1 className="text-3xl font-bold text-center mt-8">
+              Employee Leave History
+            </h1>
+
+            <div className="text-center text-xl" ref={component}>
+              {data.name}
+              <div className="overflow-x-auto w-full my-8">
+                <table className="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 bg-blue-200">
+                    <tr>
+                      {leavehistorytable?.map((item, index) => (
+                        <th scope="col" key={index} className="px-6 py-3">
+                          {item}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  {dataLeave?.messages?.map((data) => (
+                    <tbody key={data._id}>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <td className="px-6 py-4">{data.leave_type}</td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.days}
+                        </td>
+                        <td className="px-6 py-4">
+                          {data.from_date.substring(0, 10)}
+                        </td>
+                        <td className="px-6 py-4">
+                          {data.to_date.substring(0, 10)}
+                        </td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.leave_application}
+                        </td>
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                          {data.status}
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={handleGeneratePdf}
+              >
+                Generate PDF
+              </button>
+            </div>
+          </div>
+        )}
+
         <ToastContainer limit="1" />
       </section>
     </>

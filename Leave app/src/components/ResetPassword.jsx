@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const apiURL = import.meta.env.VITE_API;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email, password);
     axios
-      .post(`http://localhost:5000/users/update`, {
+      .post(`${apiURL}/users/update`, {
         email: email,
         password: password,
       })

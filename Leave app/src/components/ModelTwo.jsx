@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import { ToastContainer } from "react-toastify";
+import ResetPassword from "./ResetPassword";
 
 const ModelTwo = () => {
   const { setEmail, setPassword, handleSubmit } = useContext(AuthContext);
@@ -35,7 +36,7 @@ const ModelTwo = () => {
             <div className="relative p-4 w-full max-w-md max-h-full">
               <div className="relative bg-white rounded-lg shadow p-[5%] dark:bg-gray-700">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
                     Sign in to our platform
                   </h3>
                   <button
@@ -97,13 +98,13 @@ const ModelTwo = () => {
                         required
                       />
                     </div>
-
                     <button
                       type="submit"
                       className="w-full text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Login to your account
                     </button>
+                    <ResetPassword />
                   </form>
                 </div>
               </div>

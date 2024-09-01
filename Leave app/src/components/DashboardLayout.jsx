@@ -67,6 +67,11 @@ function DashboardLayout() {
     }
     navigate("/");
   };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
   return (
     <div>
       <nav
@@ -80,41 +85,75 @@ function DashboardLayout() {
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 aria-controls="logo-sidebar"
                 type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                className="inline-flex items-center p-2 text-sm text-black rounded-lg sm:hidden  dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               >
-                <FontAwesomeIcon icon={faBars} />
+                <FontAwesomeIcon icon={faBars} size="xl" />
                 <span className="sr-only">Open sidebar</span>
               </button>
               <a href="#" className="flex ms-2 md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  <img
+                  {/* <img
                     src={`${apiURL}/uploads/${logo}`}
                     alt="logo_picture"
                     className="w-[65%]"
-                  />
+                  /> */}
+                  <span className="self-center sm:text-3xl font-semibold whitespace-nowrap dark:text-white xs:text-2xl">
+                    WORK PAUSE
+                  </span>
                 </span>
               </a>
             </div>
-            <div className="flex items-center ">
+            <div className="flex items-center relative">
               <div className="flex items-center justify-center ms-3">
                 {data && (
-                  <div className="text-right mr-4">
-                    <p>{data.name}</p>
-                    <p>{data.email}</p>
+                  <div className="text-right mr-4 hidden sm:block">
+                    <p className="text-sm sm:text-base invisible">
+                      {data.name}
+                    </p>
+                    <p className="text-xs sm:text-sm invisible text-gray-500">
+                      {data.email}
+                    </p>
                   </div>
                 )}
                 <button
                   type="button"
-                  className="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  onClick={toggleDropdown}
+                  className="flex text-xs sm:text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 >
                   <span className="sr-only">Open user menu</span>
-
                   <img
-                    className="w-10 h-10 rounded-full"
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                     src={User}
                     alt="user photo"
                   />
                 </button>
+
+                {dropdownOpen && (
+                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw]  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200">
+                    <div className="flex items-center px-3 sm:px-4 py-2">
+                      <p className="ml-2 text-xs sm:text-sm text-gray-700">
+                        <span className="block text-sm sm:text-base">
+                          {data.name}
+                        </span>
+                        <span className="block text-xs sm:text-sm text-gray-500">
+                          {data.email}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="border-t border-gray-200"></div>
+                    <div className="flex items-center px-3 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <a
+                        onClick={handleLogout}
+                        className="flex items-center p-2 w-full text-xs sm:text-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                      >
+                        <FontAwesomeIcon icon={faRightFromBracket} />
+                        <span className="flex-1 ml-2 sm:ml-3 whitespace-nowrap">
+                          Log Out
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -227,15 +266,6 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
-            <li>
-              <a
-                onClick={handleLogout}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
-              >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-                <span className="flex-1 ms-3 whitespace-nowrap">Log Out</span>
-              </a>
-            </li>
             {isAdmin && (
               <li>
                 <Link

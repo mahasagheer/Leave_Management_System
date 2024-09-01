@@ -19,7 +19,7 @@ const ModalComponent = () => {
     <div>
       <button
         onClick={toggleModal}
-        className="block relative px-8 py-2 rounded-3xl bg-white isolation-auto z-10 border-2 border-lime-500 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-lime-500 before:-z-10 before:aspect-square before:hover:scale-150 overflow-hidden before:hover:duration-700"
+        className="block relative sm:px-8 sm:py-2 xs:px-6 xs:py-1 rounded-3xl bg-white isolation-auto z-10 border-2 border-lime-500 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-lime-500 before:-z-10 before:aspect-square before:hover:scale-150 overflow-hidden before:hover:duration-700"
         type="button"
       >
         Login
@@ -34,7 +34,7 @@ const ModalComponent = () => {
           <div className="relative p-4 w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow p-[5%] dark:bg-gray-700">
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
                   Sign in to our platform
                 </h3>
                 <button

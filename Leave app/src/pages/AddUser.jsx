@@ -202,7 +202,7 @@ const AddUser = () => {
         setLoading(true);
         axios
           .post(
-            `${apiURL}users`,
+            `${apiURL}/users`,
             {
               name: values.name,
               email: values.email,
@@ -296,7 +296,7 @@ const AddUser = () => {
                       htmlFor="base-input"
                       className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                     >
-                      Full Name
+                      Name
                     </label>
                     <input
                       type="text"

@@ -3,7 +3,6 @@ import "../index.css";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import { leavehistorytable } from "../Utiles/TableHearer";
 import { ToastContainer, toast } from "react-toastify";
 import PieChart from "../components/PieChart";

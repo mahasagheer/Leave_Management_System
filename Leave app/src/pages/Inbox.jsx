@@ -115,15 +115,15 @@ const View = () => {
     <>
       <section id="inbox">
         <div className="p-4 sm:ml-64">
-          {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
+          {loading && <div className="loader mx-auto mt-20"></div>}
 
           {!loading && (
-            <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed md:p-2 rounded-lg dark:border-gray-700 mt-16">
+            <div className="p-4 border-2 border-[#4a9dc9] border-dashed rounded-lg dark:border-gray-700 mt-16">
               {isHR || isAdmin ? (
                 <div className="flex flex-wrap gap-2 mb-6 justify-center md:justify-start">
                   <button
                     onClick={() => setSelectedStatus("All")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
+                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
                       selectedStatus === "All" ? "bg-lime-400 text-white" : ""
                     }`}
                   >
@@ -133,7 +133,7 @@ const View = () => {
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Pending")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
+                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
                       selectedStatus === "Pending"
                         ? "bg-lime-400 text-white"
                         : ""
@@ -143,7 +143,7 @@ const View = () => {
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Approved")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
+                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
                       selectedStatus === "Approved"
                         ? "bg-lime-400 text-white"
                         : ""
@@ -153,7 +153,7 @@ const View = () => {
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Declined")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-20 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-sm md:text-base ${
+                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
                       selectedStatus === "Declined"
                         ? "bg-lime-400 text-white"
                         : ""
@@ -163,6 +163,7 @@ const View = () => {
                   </button>
                 </div>
               ) : null}
+
               {isHR || isAdmin
                 ? allMessages?.map((data, index) => (
                     <div
@@ -174,7 +175,7 @@ const View = () => {
                         src={User}
                         alt="User"
                       />
-                      <div className="flex flex-col gap-1 w-full ">
+                      <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-wrap items-center space-x-2 rtl:space-x-reverse">
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {data?.messages.name} |
@@ -183,10 +184,10 @@ const View = () => {
                             {data?.messages.email} | 11:49
                           </span>
                         </div>
-                        <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                          <p> From {data?.messages.to_date}</p>
-                          <p> To: {data?.messages.from_date}</p>
-                          <p> Days: {data?.messages.days}</p>
+                        <div className="flex flex-col p-4 border-gray-200 bg-gray-100 rounded-e-xl dark:bg-gray-700">
+                          <p>From: {data?.messages.to_date}</p>
+                          <p>To: {data?.messages.from_date}</p>
+                          <p>Days: {data?.messages.days}</p>
                           <p className="text-sm font-normal text-gray-900 dark:text-white">
                             {data?.messages.leave_application}
                           </p>
@@ -209,8 +210,8 @@ const View = () => {
                         {openedIndex === index && (
                           <form
                             onSubmit={(e) => {
-                              e.preventDefault(); // Prevent default form submission
-                              handleSubmit(); // Call handleSubmit from Formik
+                              e.preventDefault();
+                              handleSubmit();
                             }}
                           >
                             <div className="mt-2">
@@ -231,8 +232,8 @@ const View = () => {
                                     }
                                     className={`px-3 py-1 rounded-md ${
                                       values.status === "Declined"
-                                        ? "bg-red-600 border border-black text-white"
-                                        : "bg-red-500 text-white"
+                                        ? "bg-[#3b8fc2] border border-black text-white"
+                                        : "bg-[#3b8fc2] text-black"
                                     }`}
                                   >
                                     Declined
@@ -244,8 +245,8 @@ const View = () => {
                                     }
                                     className={`px-3 py-1 rounded-md ${
                                       values.status === "Approved"
-                                        ? "bg-green-600 border border-black text-white"
-                                        : "bg-green-500 text-white"
+                                        ? "bg-lime-300 border border-black text-white"
+                                        : "bg-lime-300 text-black"
                                     }`}
                                   >
                                     Approved
@@ -274,7 +275,7 @@ const View = () => {
                         src={User}
                         alt="User"
                       />
-                      <div className="flex flex-col gap-1 w-full ">
+                      <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-wrap items-center space-x-2 rtl:space-x-reverse">
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {data?.name} |
@@ -283,10 +284,10 @@ const View = () => {
                             {data?.email} | 11:49
                           </span>
                         </div>
-                        <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                          <p> From {data?.to_date}</p>
-                          <p> To: {data?.from_date}</p>
-                          <p> Days: {data?.days}</p>
+                        <div className="flex flex-col p-4 border-gray-200 bg-gray-100 rounded-e-xl dark:bg-gray-700">
+                          <p>From: {data?.to_date}</p>
+                          <p>To: {data?.from_date}</p>
+                          <p>Days: {data?.days}</p>
                           <p className="text-sm font-normal text-gray-900 dark:text-white">
                             {data?.leave_application}
                           </p>

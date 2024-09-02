@@ -41,7 +41,6 @@ const User = () => {
   }, []);
 
   const handleUserDelete = (id) => {
-    // Delete the user locally
     setUsers(users.filter((user) => user._id !== id));
   };
   let filter;
@@ -103,101 +102,62 @@ const User = () => {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 my-10 bg-blue-200">
+                  <table className="min-w-full bg-white text-sm text-left rtl:text-right dark:text-gray-400">
+                    <thead className="bg-[#90d7f5] text-xs uppercase  dark:text-black">
                       <tr>
-                        <th className="px-7 py-7">Employee ID </th>
-                        <th scope="col" className="px-6 py-3">
-                          Full Name
-                        </th>
-                        <th scope="col" className="px-6 py-3 ">
-                          Job Title{" "}
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                          Gender
-                        </th>
-                        <th scope="col" className="px-6 py-3 ">
-                          Age
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                          Hire Date
-                        </th>
-                        <th scope="col" className="px-6 py-3 ">
-                          Salary (USD)
-                        </th>
-                        <th scope="col" className="px-6 py-3 ">
-                          Department
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                          City
-                        </th>
-                        <th scope="col" className="px-6 py-3 ">
-                          Exit Date
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                          Email
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                          Update/Delete
-                        </th>
+                        <th className="px-4 py-3">Employee ID</th>
+                        <th className="px-4 py-3">Name</th>
+                        <th className="px-4 py-3">Job Title</th>
+                        <th className="px-4 py-3">Hire Date</th>
+                        <th className="px-4 py-3">Salary</th>
+                        <th className="px-4 py-3">Department</th>
+                        <th className="px-4 py-3">Email</th>
+                        <th className="px-4 py-3">Update/Delete</th>
                       </tr>
                     </thead>
+                    <tbody>
+                      {filter
+                        .filter((item) => {
+                          return search.toLowerCase() === ""
+                            ? item
+                            : item.name.toLowerCase().includes(search);
+                        })
+                        .map((data) => (
+                          <tr
+                            key={data._id}
+                            className="border-b hover:bg-blue-50 transition-colors  "
+                          >
+                            <td className="px-4 py-4 font-bold underline text-sky-600">
+                              <Link to={`/user/${data._id}`}>{data._id}</Link>
+                            </td>
+                            <td className="px-4 py-4">{data.name}</td>
+                            <td className="px-4 py-4 ">{data.Job_title}</td>
 
-                    {filter
-                      .filter((item) => {
-                        return search.toLowerCase() === ""
-                          ? item
-                          : item.name.toLowerCase().includes(search);
-                      })
-                      .map((data) => {
-                        return (
-                          <tbody key={data._id}>
-                            <tr className="border-b border-gray-200 dark:border-gray-700">
-                              <td className="px-7 py-7 bg-gray-50 font-bold underline text-sky-600 dark:bg-gray-800">
-                                <Link to={`/user/${data._id}`}>{data._id}</Link>
-                              </td>
-                              <td className="px-6 py-4">{data.name}</td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                {data.Job_title}
-                              </td>
-                              <td className="px-6 py-4">{data.gender}</td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                {data.age}
-                              </td>
-                              <td className="px-6 py-4">
-                                {data.hire_date.substring(0, 10)}
-                              </td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                {data.salary}
-                              </td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                {data.department}
-                              </td>
-                              <td className="px-6 py-4">{data.city}</td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                {data.exit_date}
-                              </td>
-                              <td className="px-6 py-4">{data.email}</td>
-                              <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                                <span className="flex gap-10 justify-center flex-nowrap items-center">
-                                  <Link to={`/update_user/${data._id}`}>
-                                    <button className="flex items-center  gap-2 text-blue-700">
-                                      <FontAwesomeIcon
-                                        icon={faPenToSquare}
-                                        size="lg"
-                                      />
-                                    </button>
-                                  </Link>
-                                  <Deleteuser
-                                    id={data._id}
-                                    onDelete={() => handleUserDelete(data._id)}
-                                  />
-                                </span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        );
-                      })}
+                            <td className="px-4 py-4">
+                              {data.hire_date.substring(0, 10)}
+                            </td>
+                            <td className="px-4 py-4 ">{data.salary}$</td>
+                            <td className="px-4 py-4 ">{data.department}</td>
+                            <td className="px-4 py-4">{data.email}</td>
+                            <td className="px-4 py-4  dark:bg-gray-800">
+                              <div className="flex justify-center gap-4">
+                                <Link to={`/update_user/${data._id}`}>
+                                  <button className="text-blue-700 hover:text-blue-900">
+                                    <FontAwesomeIcon
+                                      icon={faPenToSquare}
+                                      size="lg"
+                                    />
+                                  </button>
+                                </Link>
+                                <Deleteuser
+                                  id={data._id}
+                                  onDelete={() => handleUserDelete(data._id)}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
                   </table>
                 </div>
               </div>

@@ -101,14 +101,17 @@ const updateUser = () => {
                 ensure all necessary details are recorded for onboarding.
               </p>
               <p></p>
-              <form className="mx-[15%]" onSubmit={handleSubmit}>
+              <form
+                className="md:mx-[15%]  lg:mx-[25%]"
+                onSubmit={handleSubmit}
+              >
                 <div className="flex gap-4 justify-between">
                   <div className="mb-5">
                     <label
                       htmlFor="base-input"
                       className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                     >
-                      Full Name
+                      Name
                     </label>
                     <input
                       onChange={handleChange}
@@ -370,9 +373,9 @@ const updateUser = () => {
                 </div>
                 <button
                   type="submit"
-                  className="text-white ease-in-out duration-300 transition bg-[#f18620] hover:bg-[#f18620] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-black h-10 ease-in-out duration-300 transition bg-[#90d7f5] hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-4 sm:px-5 py-2.5 text-center flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  Submit
+                  Update
                 </button>
               </form>
             </div>

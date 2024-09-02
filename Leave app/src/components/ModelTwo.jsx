@@ -36,7 +36,7 @@ const ModelTwo = () => {
             <div className="relative p-4 w-full max-w-md max-h-full">
               <div className="relative bg-white rounded-lg shadow p-[5%] dark:bg-gray-700">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
                     Sign in to our platform
                   </h3>
                   <button
@@ -104,9 +104,9 @@ const ModelTwo = () => {
                     >
                       Login to your account
                     </button>
+                    <ResetPassword />
                   </form>
                 </div>
-                <ResetPassword />
               </div>
             </div>
           </div>

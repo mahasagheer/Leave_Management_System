@@ -21,12 +21,12 @@ const Board = () => {
     <>
       {" "}
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
           <a
             href="https://flowbite.com/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <span className="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center sm:text-3xl font-semibold whitespace-nowrap dark:text-white xs:text-2xl">
               WORK PAUSE
             </span>
           </a>
@@ -127,17 +127,17 @@ const Board = () => {
             <p className="text-4xl mb-4 lg:text-5xl xl:text-6xl font-bold">
               For Modern Teams
             </p>
-            <p className="lg:text-xl font-semibold mb-8 w-full md:w-3/4 lg:w-4/5 md:text-lg">
+            <p className="lg:text-xl font-semibold mb-8 w-full md:w-3/4 lg:w-4/5 md:text-lg ">
               Work Pause is an easy-to-use online leave management system for
               tracking absence in organizations of any size.
             </p>
             <ModelTwo />
           </div>
 
-          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-20 h-20 rounded-full group-hover:scale-125 duration-[1000ms] right-[38%] top-[79%] bg-yellow-500 lg:visible sm:invisible "></div>
-          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-12 h-12 rounded-full group-hover:scale-125 duration-[1000ms] right-[45%] top-[5%] bg-orange-500  lg:visible sm:invisible"></div>
-          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-10 h-10 rounded-full group-hover:scale-125 duration-[1000ms] right-[55%] top-[60%] bg-pink-500  lg:visible sm:invisible"></div>
-          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-10 h-10 rounded-full group-hover:scale-125 duration-[1000ms] right-[5%] top-[85%] bg-red-600  lg:visible sm:invisible"></div>
+          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-20 h-20 rounded-full group-hover:scale-125 duration-[1000ms] right-[38%] top-[79%] bg-yellow-500 lg:visible xs:invisible "></div>
+          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-12 h-12 rounded-full group-hover:scale-125 duration-[1000ms] right-[45%] top-[5%] bg-orange-500  lg:visible xs:invisible"></div>
+          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-10 h-10 rounded-full group-hover:scale-125 duration-[1000ms] right-[55%] top-[60%] bg-pink-500  lg:visible xs:invisible"></div>
+          <div className="absolute group-hover:top-[random%] group-hover:left-[random%] z-10 w-10 h-10 rounded-full group-hover:scale-125 duration-[1000ms] right-[5%] top-[85%] bg-red-600  lg:visible xs:invisible"></div>
         </div>
       </section>
       <Features id="features" />

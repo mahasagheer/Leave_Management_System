@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const Calender = () => {
+const Calender = ({ id }) => {
   const [Loading, setLoading] = useState(false);
   const [dataLeave, setDataLeave] = useState({});
   const [data, setData] = useState({});
   const local = localStorage.getItem("user");
   const apiURL = import.meta.env.VITE_API;
-  const { id } = useParams();
-
   useEffect(() => {
     setLoading(true);
     axios
@@ -46,7 +43,7 @@ const Calender = () => {
 
   return (
     <>
-      <div className="w-[30%]">
+      <div>
         <DayPicker modifiers={modifiers} modifiersStyles={modifiersStyles} />
       </div>
     </>

@@ -100,49 +100,47 @@ const user_detail = () => {
             <h1 className="text-3xl font-bold text-center py-5">
               Employee Detail
             </h1>
-
             <div className="flex flex-col md:flex-row justify-between px-4 md:px-10 gap-8">
               <div>
                 <p className="text-2xl py-3 font-semibold">Personal Detail:</p>
                 <p className="text-lg">
-                  <strong>Employee Name:</strong> {data.name}
+                  <strong>Name:</strong> {data.name}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Email:</strong> {data.email}
+                  <strong>Email:</strong> {data.email}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Age:</strong> {data.age}
+                  <strong>Age:</strong> {data.age}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee City:</strong> {data.city}
+                  <strong>City:</strong> {data.city}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Gender:</strong> {data.gender}
+                  <strong>Gender:</strong> {data.gender}
                 </p>
               </div>
               <div>
                 <p className="text-2xl py-3 font-semibold">Job Position:</p>
                 <p className="text-lg">
-                  <strong>Employee Salary:</strong> {data.salary}
+                  <strong>Salary:</strong> {data.salary}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Job Title:</strong> {data.Job_title}
+                  <strong>Job Title:</strong> {data.Job_title}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Department:</strong> {data.department}
+                  <strong>Department:</strong> {data.department}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Hiring Date:</strong> {data.hire_date}
+                  <strong>Hiring Date:</strong> {data.hire_date}
                 </p>
                 <p className="text-lg">
-                  <strong>Employee Exit Date:</strong> {data.exit_date}
+                  <strong>Exit Date:</strong> {data.exit_date}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-col lg:flex-row justify-evenly mt-8 mx-[6%] ">
-              <Calender />
-              <PieChart chartData={leaveDetail} />
+              <Calender id={id} />
             </div>
 
             <h1 className="text-3xl font-bold text-center mt-8">
@@ -152,8 +150,8 @@ const user_detail = () => {
             <div className="text-center text-xl" ref={component}>
               {data.name}
               <div className="overflow-x-auto w-full my-8">
-                <table className="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 bg-blue-200">
+                <table className="min-w-full text-sm text-left rtl:text-right text-black dark:text-gray-400">
+                  <thead className="text-xs text-black uppercase dark:text-gray-400 bg-[#90d7f5]">
                     <tr>
                       {leavehistorytable?.map((item, index) => (
                         <th scope="col" key={index} className="px-6 py-3">

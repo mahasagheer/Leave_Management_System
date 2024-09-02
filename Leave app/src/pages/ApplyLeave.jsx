@@ -102,7 +102,10 @@ const ApplyLeave = () => {
                 If you have any issues or need assistance, please specify your
                 reason for requesting leave below.
               </p>
-              <form className="mx-[15%] mb-[4%]" onSubmit={handleSubmit}>
+              <form
+                className="md:mx-[15%]  lg:mx-[25%] mb-[4%]"
+                onSubmit={handleSubmit}
+              >
                 <div className="mb-5">
                   <label
                     htmlFor="base-input"

@@ -34,20 +34,24 @@ const ResetPassword = () => {
   return (
     <>
       <div>
-        <button onClick={toggleModal} className=" text-blue-600 " type="button">
-          Forgot Password
+        <button
+          onClick={toggleModal}
+          className=" text-blue-600 text-sm"
+          type="button"
+        >
+          Forgot Password ?
         </button>
         {isModalOpen && (
           <div
             id="authentication-modal"
             tabIndex="-1"
             aria-hidden="true"
-            className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-[calc(100%)] max-h-full bg-black bg-opacity-50"
+            className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-[calc(100%)] max-h-full bg-black bg-opacity-0"
           >
             <div className="relative p-4 w-full max-w-md max-h-full">
               <div className="relative bg-white rounded-lg shadow p-[5%] dark:bg-gray-700">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
                     Reset Password
                   </h3>
                   <button
@@ -92,7 +96,7 @@ const ResetPassword = () => {
                         required
                       />
                     </div>
-                    {/* <div>
+                    <div>
                       <label
                         htmlFor="password"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -107,7 +111,7 @@ const ResetPassword = () => {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-lime-500 outline-none block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         required
                       />
-                    </div> */}
+                    </div>
                     <div>
                       <label
                         htmlFor="password"

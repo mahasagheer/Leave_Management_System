@@ -51,13 +51,13 @@ const MyProfile = () => {
                   </div>
                 </div>
                 <div className="w-full lg:w-[48%] flex flex-col gap-[5%] sm:gap-4 py-4">
-                  <div className="border-2 bg-[#0fbfa5] text-white rounded-2xl p-6 text-center">
+                  <div className="border-2 bg-[#36A2EB] text-white rounded-2xl p-6 text-center">
                     <p className="text-xl sm:text-2xl md:text-3xl ">
                       DEPARTMENT
                     </p>
                     <p className="mt-2 text-lg ">{data.department}</p>
                   </div>
-                  <div className="text-white bg-[#f1b146] rounded-2xl p-4 text-center">
+                  <div className="text-white bg-[#FF6384] rounded-2xl p-4 text-center">
                     <p className="text-xl sm:text-2xl md:text-3xl">
                       JOB DETAIL
                     </p>
@@ -74,7 +74,7 @@ const MyProfile = () => {
                       <div>{data.hire_date.substring(0, 10)}</div>
                     </div>
                   </div>
-                  <div className="text-white  rounded-2xl p-6 text-center bg-[#656df0]">
+                  <div className="text-white  rounded-2xl p-6 text-center bg-[#FFCE56]">
                     <p className="text-xl sm:text-2xl md:text-3xl">SALARY</p>
                     <p className="mt-2 text-lg">{data.salary} $</p>
                   </div>

@@ -93,7 +93,7 @@ function DashboardLayout() {
                     className="w-[65%]"
                   />
                 </span>
-              </a> 
+              </a>
             </div>
             <div className="flex items-center ">
               <div className="flex items-center justify-center ms-3">

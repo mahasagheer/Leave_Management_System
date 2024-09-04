@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const apiURL = import.meta.env.VITE_API;
+  const apiURL = process.env.VITE_API;
   const [themeColor, setThemeColor] = useState("");
   const [logo, setLogo] = useState("");
 

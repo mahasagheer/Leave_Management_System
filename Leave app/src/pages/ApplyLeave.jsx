@@ -13,7 +13,6 @@ const ApplyLeave = () => {
   const [Loading, setLoading] = useState(false);
 
   let days = 0;
-  console.log(data);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -59,7 +58,6 @@ const ApplyLeave = () => {
             },
           })
           .then(function (response) {
-            console.log(response.data);
             axios
               .post(
                 `${apiURL}/send_email`,

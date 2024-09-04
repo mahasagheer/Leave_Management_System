@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Calender from "../components/Calender";
-import PieChart from "../components/PieChart";
 
 import axios from "axios";
 import { leavehistorytable } from "../Utiles/TableHearer";
@@ -94,7 +93,7 @@ const user_detail = () => {
   return (
     <>
       <section id="dashboard" className="p-4 sm:ml-64">
-        {Loading && <div className="loader mx-auto mt-32"></div>}
+        {Loading && <div className="loader  ml-[50%] mt-[25%]"></div>}
         {!Loading && (
           <div className="p-4 border-2 border-[#4a9dc9] border-dashed rounded-lg dark:border-gray-700 mt-16">
             <h1 className="text-3xl font-bold text-center py-5">

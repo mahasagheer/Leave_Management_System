@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
-import Calender from "../components/Calender";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserPlus,
@@ -12,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Deleteuser from "../components/deleteuser";
 const User = () => {
-  const { data, isAdmin, isHR } = useContext(AuthContext);
+  const { data, isAdmin } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const local = localStorage.getItem("user");
   const apiURL = import.meta.env.VITE_API;

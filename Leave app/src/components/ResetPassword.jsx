@@ -9,14 +9,13 @@ const ResetPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
     axios
       .post(`${apiURL}/users/update`, {
         email: email,
         password: password,
       })
       .then((res) => {
-        console.log(res.data);
+        res.data;
       })
       .catch((err) => {
         console.log(err);

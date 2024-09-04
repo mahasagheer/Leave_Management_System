@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import { ToastContainer } from "react-toastify";
+import ResetPassword from "./ResetPassword";
 
 const ModalComponent = () => {
   const { setEmail, setPassword, handleSubmit } = useContext(AuthContext);
@@ -106,6 +107,7 @@ const ModalComponent = () => {
                   >
                     Login to your account
                   </button>
+                  <ResetPassword />
                 </form>
               </div>
             </div>

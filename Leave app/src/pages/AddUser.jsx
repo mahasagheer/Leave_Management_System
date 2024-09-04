@@ -225,7 +225,6 @@ const AddUser = () => {
             }
           )
           .then((res) => {
-            console.log(res);
             userId = res.data.user;
             axios
               .post(`${apiURL}/employee_leave_detail`, {
@@ -235,7 +234,6 @@ const AddUser = () => {
                 remaining_leave: values.remaining_leave,
               })
               .then(function (response) {
-                console.log(response);
                 axios.post(
                   `${apiURL}/send_email/invite_employee`,
                   {
@@ -259,7 +257,7 @@ const AddUser = () => {
               .post(`${apiURL}/inbox_messages`, {
                 employee_id: userId,
               })
-              .then((res) => console.log(res))
+              .then((res) => res)
               .catch((err) => console.log(err));
             setLoading(false);
             navigate("/user");

@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 const View = () => {
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const { data, isHR, isAdmin, isUser } = useContext(AuthContext);
+  const { data, isHR, isAdmin } = useContext(AuthContext);
   const apiURL = import.meta.env.VITE_API;
   const [loading, setLoading] = useState(false);
 
@@ -112,7 +112,7 @@ const View = () => {
     <>
       <section id="inbox">
         <div className="p-4 sm:ml-64">
-          {loading && <div className="loader  ml-[50%] mt-[25%]"></div>}
+          {loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
 
           {!loading && (
             <div className="p-4 border-2 border-[#4a9dc9] border-dashed rounded-lg dark:border-gray-700 mt-16">

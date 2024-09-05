@@ -9,7 +9,6 @@ const Calender = ({ id }) => {
   const [data, setData] = useState({});
   const local = localStorage.getItem("user");
   const apiURL = import.meta.env.VITE_API;
-  console.log(id);
   useEffect(() => {
     setLoading(true);
     axios
@@ -31,7 +30,6 @@ const Calender = ({ id }) => {
   const selectedDates = dataLeave?.messages?.map(
     (date) => new Date(date.from_date)
   );
-  console.log(selectedDates);
   const modifiers = {
     highlighted: selectedDates,
   };

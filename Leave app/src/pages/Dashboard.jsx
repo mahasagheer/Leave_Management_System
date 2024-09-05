@@ -37,7 +37,6 @@ const dashboard = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         axios
           .get(`${apiURL}/employee_leave_detail/${data._id}`)
           .then((res) => {

@@ -74,7 +74,6 @@ const View = () => {
     validationSchema: leaveDecisionSchema,
     onSubmit: (values) => {
       setLoading(true);
-      console.log(values.leave_id);
       axios
         .post(`${apiURL}/send_email/leave_reply`, {
           name: values.name,
@@ -85,7 +84,6 @@ const View = () => {
           leave_id: values.leave_id,
         })
         .then((res) => {
-          console.log(res.data);
           axios
             .patch(`${apiURL}/send_email/update_message_status`, {
               employee_id: values.employee_id,
@@ -93,7 +91,6 @@ const View = () => {
               leave_id: values.leave_id,
             })
             .then((res) => {
-              console.log(res);
               setLoading(false);
               fetchMessages(); // Re-fetch messages after update
               resetForm(); // Reset form fields after submission
@@ -115,7 +112,7 @@ const View = () => {
     <>
       <section id="inbox">
         <div className="p-4 sm:ml-64">
-          {loading && <div className="loader mx-auto mt-20"></div>}
+          {loading && <div className="loader  ml-[50%] mt-[25%]"></div>}
 
           {!loading && (
             <div className="p-4 border-2 border-[#4a9dc9] border-dashed rounded-lg dark:border-gray-700 mt-16">
@@ -123,8 +120,8 @@ const View = () => {
                 <div className="flex flex-wrap gap-2 mb-6 justify-center md:justify-start">
                   <button
                     onClick={() => setSelectedStatus("All")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "All" ? "bg-lime-400 text-white" : ""
+                    className={`flex justify-center items-center bg-[#f3f4f6] p-2 gap-2 h-10 w-24 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "All" ? "bg-[#dbdcdd]" : ""
                     }`}
                   >
                     <span className="mt-[1px] text-black font-sans tracking-wider">
@@ -133,30 +130,24 @@ const View = () => {
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Pending")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Pending"
-                        ? "bg-lime-400 text-white"
-                        : ""
+                    className={`flex justify-center items-center bg-[#f3f4f6] p-2 gap-2 h-10 w-24  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Pending" ? "bg-[#dbdcdd] " : ""
                     }`}
                   >
                     Pending
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Approved")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Approved"
-                        ? "bg-lime-400 text-white"
-                        : ""
+                    className={`flex justify-center items-center bg-[#f3f4f6] p-2 gap-2 h-10 w-24  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Approved" ? "bg-[#dbdcdd] " : ""
                     }`}
                   >
                     Approved
                   </button>
                   <button
                     onClick={() => setSelectedStatus("Declined")}
-                    className={`flex justify-center items-center p-2 gap-2 h-10 w-24 bg-lime-300 rounded-full cursor-pointer hover:bg-lime-400 transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Declined"
-                        ? "bg-lime-400 text-white"
-                        : ""
+                    className={`flex justify-center items-center bg-[#f3f4f6] p-2 gap-2 h-10 w-24  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Declined" ? "bg-[#dbdcdd] " : ""
                     }`}
                   >
                     Declined

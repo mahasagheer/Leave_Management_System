@@ -223,7 +223,7 @@
 .loader {
   width: 50px;
   aspect-ratio: 1;
-  --_c: no-repeat radial-gradient(farthest-side, #25b09b 92%, #0000);
+  --_c: no-repeat radial-gradient(farthest-side, #84cc16 92%, #0000);
   background: var(--_c) top, var(--_c) left, var(--_c) right, var(--_c) bottom;
   background-size: 12px 12px;
   animation: l7 1s infinite;
@@ -232,28 +232,4 @@
   to {
     transform: rotate(0.5turn);
   }
-}
-@layer base {
-  :root {
-    --color-primary: hsl(0, 0%, 0%);
-    --color-secondary: hsl(0, 0%, 50%);
-    --color-text-base: hsl(0, 0%, 100%);
-    --color-bg-primary: hsl(0, 0%, 100%);
-  }
-}
-.theme-black {
-  --color-primary: hsl(0, 0%, 0%);
-  --color-secondary: hsl(0, 0%, 50%);
-}
-.theme-orange {
-  --color-primary: hsl(25, 100%, 50%);
-  --color-secondary: hsl(25, 100%, 65%);
-}
-.theme-purple {
-  --color-primary: hsl(270, 100%, 50%);
-  --color-secondary: hsl(270, 100%, 75%);
-}
-.theme-green {
-  --color-primary: hsl(120, 100%, 35%);
-  --color-secondary: hsl(120, 100%, 45%);
 }

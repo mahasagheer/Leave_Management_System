@@ -24,6 +24,7 @@
     "react-router-dom": "^6.26.0",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.7.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

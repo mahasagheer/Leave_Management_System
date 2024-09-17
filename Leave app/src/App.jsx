@@ -14,6 +14,7 @@ import UserDetail from "./pages/user_detail";
 import UpdateUser from "./pages/updateUser";
 import Home from "./pages/Board";
 import Sidebar from "./components/DashboardLayout";
+import Chat from "../src/components/Chat";
 
 function App() {
   return (
@@ -35,6 +36,15 @@ function App() {
             <ProtectedRoute roles={["admin"]}>
               <Sidebar />
               <Setting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute roles={["admin", "user", "HR"]}>
+              <Sidebar />
+              <Chat />
             </ProtectedRoute>
           }
         />

@@ -16,6 +16,7 @@ import {
   faInbox,
   faBars,
   faGear,
+  faChartArea,
 } from "@fortawesome/free-solid-svg-icons";
 
 function DashboardLayout() {
@@ -274,6 +275,15 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
+            <li>
+              <Link
+                to="/chat"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+              >
+                <FontAwesomeIcon icon={faChartArea} />
+                <span className="flex-1 ms-3 whitespace-nowrap">Chat</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </aside>

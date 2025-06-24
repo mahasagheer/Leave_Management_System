@@ -43,11 +43,11 @@ const User = () => {
     setUsers(users.filter((user) => user._id !== id));
   };
   let filter;
-  if (data.role === "HR") {
+  if (data.role === "Manager") {
     filter = users.filter((data) => data.role === "user");
   }
-  if (data.role === "admin") {
-    filter = users.filter((data) => data.role === "user" || data.role === "HR");
+  if (data.role === "admin" ||  data.role === "HR") {
+    filter = users.filter((data) => data.role === "user" || data.role === "HR" || data.role === "Manager");
   }
   return (
     <>

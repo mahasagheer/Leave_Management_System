@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         const logoPath = res.data.logoPath;
         const color = res.data.color;
         setData(userData);
-        if (userData.role === "admin") {
+        if (userData.role === "admin" || userData.role === "HR") {
           toast.success("Admin logged in successfully!");
           setAdmin(true);
           setHR(false);
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
           setLogo(logoPath);
           setUser(false);
           navigate("/user");
-        } else if (userData.role === "HR") {
+        } else if (userData.role === "Manager") {
           toast.success("HR logged in successfully!");
           setAdmin(false);
           setHR(true);

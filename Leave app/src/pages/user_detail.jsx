@@ -138,8 +138,37 @@ const user_detail = () => {
               </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row justify-evenly mt-8 mx-[6%] ">
+            {/* Leave Balances and Requests Summary */}
+            <div className="flex flex-col md:flex-row gap-6 justify-evenly my-8">
+              {/* Leave Balances */}
               <Calender id={id} />
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 w-full md:w-1/3 shadow">
+                <h2 className="text-xl font-bold mb-4 text-blue-700">Leave Balances</h2>
+                <ul className="space-y-2 text-lg">
+                  <li><strong>Remaining Leave:</strong> {leave.remaining_leave ?? 0}</li>
+                  <li><strong>Sick Leave:</strong> {leave.sick_leave ?? 0}</li>
+                  <li><strong>Pending Leave:</strong> {leave.pending_leave ?? 0}</li>
+                  <li><strong>Annual Leave:</strong> {leave.annual_leave ?? 0}</li>
+                </ul>
+              </div>
+              {/* Leave Requests Summary */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 w-full md:w-1/3 shadow">
+                <h2 className="text-xl font-bold mb-4 text-green-700">Leave Requests</h2>
+                {Array.isArray(dataLeave?.messages) ? (
+                  <ul className="space-y-2 text-lg">
+                    <li><strong>Total Requests:</strong> {dataLeave.messages.length}</li>
+                    <li><strong>Pending:</strong> {dataLeave.messages.filter(l => l.status === 'Pending').length}</li>
+                    <li><strong>Approved:</strong> {dataLeave.messages.filter(l => l.status === 'Approved').length}</li>
+                    <li><strong>Declined:</strong> {dataLeave.messages.filter(l => l.status === 'Declined').length}</li>
+                  </ul>
+                ) : (
+                  <p>No leave requests found.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row justify-evenly mt-8 mx-[6%] ">
             </div>
 
             <h1 className="text-3xl font-bold text-center mt-8">

@@ -88,10 +88,10 @@ const dashboard = () => {
         console.log(err);
       });
   };
-  const remaining_leave = leaveDetail.remaining_leave || 35;
-  const sick_leave = leaveDetail.sick_leave || 15;
-  const pending_leave = leaveDetail.pending_leave || 0;
-  const annual_leave = leaveDetail.annual_leave || 0;
+  const remaining_leave = leaveDetail?.remaining_leave ?? 35;
+  const sick_leave = leaveDetail?.sick_leave ?? 15;
+  const pending_leave = leaveDetail?.pending_leave ?? 0;
+  const annual_leave = leaveDetail?.annual_leave ?? 0;
   const [leave, setLeave] = useState({
     labels: ["Remaining Leave", "Sick Leave", "Pending Leave", "Annual Leave"],
     datasets: [
@@ -165,7 +165,7 @@ const dashboard = () => {
                     <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
                       <FontAwesomeIcon icon={faBell} size="lg" />
                       <span className="text-sm sm:text-base">
-                        Remaining {leaveDetail?.remaining_leave}
+                        Remaining {leaveDetail?.remaining_leave ?? 35}
                       </span>
                     </p>
                   </div>
@@ -175,7 +175,7 @@ const dashboard = () => {
                   <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
                     <FontAwesomeIcon icon={faVirus} size="lg" />
                     <span className="text-sm sm:text-base">
-                      Sick {leaveDetail?.sick_leave}
+                      Sick {leaveDetail?.sick_leave ?? 15}
                     </span>
                   </p>
                 </button>
@@ -187,7 +187,7 @@ const dashboard = () => {
                     <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
                       <FontAwesomeIcon icon={faHourglassHalf} size="lg" />
                       <span className="text-sm sm:text-base">
-                        Pending {leaveDetail?.pending_leave}
+                        Pending {leaveDetail?.pending_leave ?? 0}
                       </span>
                     </p>
                   </div>
@@ -197,7 +197,7 @@ const dashboard = () => {
                   <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
                     <FontAwesomeIcon icon={faCircleXmark} size="lg" />
                     <span className="text-sm sm:text-base">
-                      Annual {leaveDetail?.annual_leave}
+                      Annual {leaveDetail?.annual_leave ?? 0}
                     </span>
                   </p>
                 </button>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../service/authentication";
 import { addUserSchema } from "../validation/addUserValidate";
 
@@ -167,21 +167,50 @@ const AddUser = () => {
     { value: "Karachi", label: "Karachi" },
   ]);
   const navigate = useNavigate();
-  let role;
-  let userId;
-  // Formik Validation
-  if (data.role === "admin") {
-    role = "HR";
-  }
-  if (data.role === "HR") {
-    role = "user";
-  }
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+
+  // Add role options based on current user's role
+  const roleOptions = data.role === "admin"
+    ? [
+        { value: "HR", label: "HR" },
+        { value: "Manager", label: "Manager" },
+        { value: "user", label: "User" },
+      ]
+    : data.role === "HR" || data.role === "Manager"
+    ? [
+        { value: "user", label: "User" },
+      ]
+    : [];
+
+  const staffTypeOptions = [
+    { value: "permanent", label: "Permanent" },
+    { value: "intern", label: "Intern" },
+    { value: "probation", label: "Probation" },
+  ];
+
+  // Define technical positions for manager
+  const managerPositions = [
+    { value: "Software Engineer", label: "Software Engineer" },
+    { value: "Senior Software Engineer", label: "Senior Software Engineer" },
+    { value: "Associate Software Engineer", label: "Associate Software Engineer" },
+    { value: "Intern", label: "Intern" },
+    { value: "Frontend Developer", label: "Frontend Developer" },
+    { value: "Backend Developer", label: "Backend Developer" },
+    { value: "Full Stack Developer", label: "Full Stack Developer" },
+    { value: "QA Engineer", label: "QA Engineer" },
+    { value: "DevOps Engineer", label: "DevOps Engineer" },
+    { value: "UI/UX Designer", label: "UI/UX Designer" },
+    { value: "Mobile App Developer", label: "Mobile App Developer" },
+    { value: "Data Engineer", label: "Data Engineer" },
+    { value: "Data Scientist", label: "Data Scientist" },
+  ];
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
     useFormik({
       initialValues: {
         name: "",
         email: "",
-        role: role,
+        role: roleOptions.length > 0 ? roleOptions[0].value : "",
+        staff_type: "permanent",
         salary: "",
         age: "",
         exit_date: "",
@@ -192,10 +221,8 @@ const AddUser = () => {
         city: "",
         phone: "",
         password: "",
-        annual_leave: "25",
-        sick_leave: "15",
-        employee_id: "",
-        remaining_leave: "45",
+        annual_leave: 18,
+        sick_leave: 8,
       },
       validationSchema: addUserSchema,
       onSubmit: (values) => {
@@ -206,8 +233,8 @@ const AddUser = () => {
             {
               name: values.name,
               email: values.email,
-              salary: values.salary,
-              age: values.age,
+              salary: Number(values.salary),
+              age: Number(values.age),
               exit_date: values.exit_date,
               Job_title: values.Job_title,
               gender: values.gender,
@@ -216,7 +243,8 @@ const AddUser = () => {
               city: values.city,
               password: values.password,
               role: values.role,
-              phone: values.phone,
+              phone: Number(values.phone),
+              staff_type: values.staff_type,
             },
             {
               headers: {
@@ -225,51 +253,39 @@ const AddUser = () => {
             }
           )
           .then((res) => {
-            userId = res.data.user;
-            axios
-              .post(`${apiURL}/employee_leave_detail`, {
-                employee_id: userId,
-                annual_leave: values.annual_leave,
-                sick_leave: values.sick_leave,
-                remaining_leave: values.remaining_leave,
-              })
-              .then(function (response) {
-                axios.post(
-                  `${apiURL}/send_email/invite_employee`,
-                  {
-                    name: values.name,
-                    email: values.email,
-                    password: values.password,
-                  },
-                  {
-                    headers: {
-                      Authorization: `${local}`,
-                    },
-                  }
-                );
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+            const userId = res.data.user;
+            return axios.post(`${apiURL}/employee_leave_detail`, {
+              employee_id: userId,
+              annual_leave: values.annual_leave,
+              sick_leave: values.sick_leave,
+            }).then(() => userId);
           })
-          .then(function (response) {
-            axios
-              .post(`${apiURL}/inbox_messages`, {
-                employee_id: userId,
-              })
-              .then((res) => res)
-              .catch((err) => console.log(err));
+          .then((userId) => {
+            return axios.post(`${apiURL}/inbox_messages`, {
+              employee_id: userId,
+            });
+          })
+          .then(() => {
             setLoading(false);
             navigate("/user");
           })
-          .catch(function (error) {
-            console.log(error);
-          })
           .catch((error) => {
+            setLoading(false);
             console.log(error);
           });
       },
     });
+
+  // Auto-set annual leave and sick leave based on staff type
+  useEffect(() => {
+    if (values.staff_type === "permanent") {
+      setFieldValue("annual_leave", 18);
+      setFieldValue("sick_leave", 8);
+    } else if (values.staff_type === "intern" || values.staff_type === "probation") {
+      setFieldValue("annual_leave", 3);
+      setFieldValue("sick_leave", 3);
+    }
+  }, [values.staff_type, setFieldValue]);
 
   return (
     <>
@@ -387,9 +403,8 @@ const AddUser = () => {
                 >
                   {data.role === "admin" ? (
                     <>
-                      {" "}
-                      {HrRole.map((option) => (
-                        <option key={option.value} value={option.value}>
+                      {HrRole.map((option, idx) => (
+                        <option key={option.value + '-' + idx} value={option.value}>
                           {option.label}
                         </option>
                       ))}
@@ -397,11 +412,20 @@ const AddUser = () => {
                   ) : null}
                   {data.role === "HR" ? (
                     <>
-                      {position.map((option) => (
-                        <option key={option.value} value={option.value}>
+                      {position.map((option, idx) => (
+                        <option key={option.value + '-' + idx} value={option.value}>
                           {option.label}
                         </option>
-                      ))}{" "}
+                      ))}
+                    </>
+                  ) : null}
+                  {data.role === "Manager" ? (
+                    <>
+                      {managerPositions.map((option, idx) => (
+                        <option key={option.value + '-' + idx} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </>
                   ) : null}
                 </select>
@@ -594,67 +618,52 @@ const AddUser = () => {
                   </div>
                 </div>
                 <label
-                  htmlFor="annual_leave"
+                  htmlFor="staff_type"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Annual Leave
+                  Staff Type
                 </label>
-
                 <select
-                  value={values.annual_leave}
+                  id="staff_type"
+                  name="staff_type"
+                  value={values.staff_type}
                   onChange={handleChange}
-                  id="annual_leave"
-                  name="annual_leave"
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
-                  {annual_leave.map((option) => (
-                    <option key={option.value} value={option.value}>
+                  {staffTypeOptions.map((option, idx) => (
+                    <option key={option.value + '-' + idx} value={option.value}>
                       {option.label}
                     </option>
                   ))}
                 </select>
+                {errors.staff_type && touched.staff_type ? (
+                  <p className="text-red-600 text-sm">{errors.staff_type}</p>
+                ) : null}
                 <label
-                  htmlFor="sick_leave"
+                  htmlFor="role"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Sick Leave
+                  Select Role
                 </label>
                 <select
-                  id="sick_leave"
-                  value={values.sick_leave}
-                  name="sick_leave"
+                  id="role"
+                  name="role"
+                  value={values.role}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  disabled={roleOptions.length === 1}
                 >
-                  {sick_leave.map((option) => (
-                    <option key={option.value} value={option.value}>
+                  {roleOptions.map((option, idx) => (
+                    <option key={option.value + '-' + idx} value={option.value}>
                       {option.label}
                     </option>
                   ))}
                 </select>
-
-                <label
-                  htmlFor="remaining_leave"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Remaining Leave
-                </label>
-                <select
-                  id="remaining_leave"
-                  value={values.remaining_leave}
-                  name="remaining_leave"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  {remaining_leave.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                {errors.role && touched.role ? (
+                  <p className="text-red-600 text-sm">{errors.role}</p>
+                ) : null}
                 <button
                   type="submit"
                   className="mt-4  sm:mt-0 text-black h-10 ease-in-out duration-300 transition bg-[#90d7f5] hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-4 sm:px-5 py-2.5 text-center flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

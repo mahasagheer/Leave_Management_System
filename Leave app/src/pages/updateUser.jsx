@@ -89,117 +89,72 @@ const updateUser = () => {
     });
 
   return (
-    <>
-      <section id="addUser">
-        <div className="p-4 sm:ml-64">
-          {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
-          {!Loading && (
-            <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
-              <h1 className="text-3xl text-center my-4">Update Employee</h1>
-              <p className="my-6 text-center ">
-                Please fill out this form to add a new employee to the team and
-                ensure all necessary details are recorded for onboarding.
-              </p>
-              <p></p>
-              <form
-                className="md:mx-[15%]  lg:mx-[25%]"
-                onSubmit={handleSubmit}
-              >
-                <div className="flex gap-4 justify-between">
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                    >
-                      Name
-                    </label>
+    <section id="updateUser" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+      <div className="w-full mt-20 max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10 mx-2 animate-fadeIn">
+        {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
+        {!Loading && (
+          <>
+            <h1 className="text-3xl text-center mb-2 text-gray-900 dark:text-white">Update Employee</h1>
+            <p className="mb-6 text-center text-gray-500 dark:text-gray-300">Update the employee details below. All fields are required.</p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Name</label>
                     <input
                       onChange={handleChange}
                       onBlur={handleBlur}
                       name="name"
                       value={values.name}
                       type="text"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                     />
-                    {errors.name && touched.name ? (
-                      <p className="text-red-600 text-sm">{errors.name}</p>
-                    ) : null}
+                  {errors.name && touched.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
                   </div>
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Salary
-                    </label>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Salary</label>
                     <input
                       name="salary"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.salary}
                       type="number"
-                      id="base-input"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                     />
-                    {errors.salary && touched.salary ? (
-                      <p className="text-red-600 text-sm">{errors.salary}</p>
-                    ) : null}
-                  </div>{" "}
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Age
-                    </label>
+                  {errors.salary && touched.salary && <p className="text-red-600 text-xs mt-1">{errors.salary}</p>}
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Age</label>
                     <input
                       type="number"
-                      id="base-input"
                       name="age"
                       value={values.age}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                     />
-                    {errors.age && touched.age ? (
-                      <p className="text-red-600 text-sm">{errors.age}</p>
-                    ) : null}
-                  </div>{" "}
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Exit Date
-                    </label>
+                  {errors.age && touched.age && <p className="text-red-600 text-xs mt-1">{errors.age}</p>}
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Exit Date</label>
                     <input
                       type="text"
-                      id="base-input"
                       name="exit_date"
                       value={values.exit_date}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                     />
-                    {errors.exit_date && touched.exit_date ? (
-                      <p className="text-red-600 text-sm">{errors.exit_date}</p>
-                    ) : null}
-                  </div>
+                  {errors.exit_date && touched.exit_date && <p className="text-red-600 text-xs mt-1">{errors.exit_date}</p>}
                 </div>
-
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Select Job Title
-                </label>
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Job Title</label>
                 <select
-                  id="countries"
                   value={values.Job_title}
                   name="Job_title"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                 >
                   <option>Marketing Manager</option>
                   <option>Digital Marketing Specialist</option>
@@ -224,18 +179,13 @@ const updateUser = () => {
                   <option>Research Scientist</option>
                   <option>Customer Service Manager</option>
                 </select>
-                {errors.Job_title && touched.Job_title ? (
-                  <p className="text-red-600 text-sm">{errors.Job_title}</p>
-                ) : null}
-                <fieldset className="flex items-center gap-6">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Gender
-                  </label>
+                {errors.Job_title && touched.Job_title && <p className="text-red-600 text-xs mt-1">{errors.Job_title}</p>}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-6">
+                <fieldset className="flex items-center gap-4">
                   <legend className="sr-only">Gender</legend>
-                  <div className="flex ">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Gender:</label>
+                  <div className="flex items-center gap-2">
                     <input
                       id="male"
                       type="radio"
@@ -244,73 +194,47 @@ const updateUser = () => {
                       checked={values.gender === "Male"}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600"
                     />
-                    <label
-                      htmlFor="male"
-                      className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Male
-                    </label>
+                    <label htmlFor="male" className="text-sm text-gray-700 dark:text-gray-300">Male</label>
                   </div>
-                  <div className="flex ">
+                  <div className="flex items-center gap-2">
                     <input
-                      id="Female"
+                      id="female"
                       type="radio"
                       name="gender"
+                      value="Female"
                       checked={values.gender === "Female"}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value="Female"
-                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600"
                     />
-
-                    <label
-                      htmlFor="country-option-2"
-                      className="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Female
-                    </label>
+                    <label htmlFor="female" className="text-sm text-gray-700 dark:text-gray-300">Female</label>
                   </div>
                 </fieldset>
-                {errors.gender && touched.gender ? (
-                  <p className="text-red-600 text-sm">{errors.gender}</p>
-                ) : null}
-
-                <div className="mb-5">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Hire Date
-                  </label>
+                {errors.gender && touched.gender && <p className="text-red-600 text-xs mt-1">{errors.gender}</p>}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Hire Date</label>
                   <input
                     type="date"
-                    id="base-input"
-                    value={values.hire_date}
                     name="hire_date"
+                    value={values.hire_date}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                   />
-                  {errors.hire_date && touched.hire_date ? (
-                    <p className="text-red-600 text-sm">{errors.hire_date}</p>
-                  ) : null}
+                  {errors.hire_date && touched.hire_date && <p className="text-red-600 text-xs mt-1">{errors.hire_date}</p>}
                 </div>
-
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Department
-                </label>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Department</label>
                 <select
-                  id="countries"
+                    name="department"
                   value={values.department}
-                  name="department"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                 >
                   <option>Management</option>
                   <option>Marketing</option>
@@ -323,66 +247,62 @@ const updateUser = () => {
                   <option>Creative</option>
                   <option>Research and Development</option>
                 </select>
-                {errors.department && touched.department ? (
-                  <p className="text-red-600 text-sm">{errors.department}</p>
-                ) : null}
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  City
-                </label>
+                  {errors.department && touched.department && <p className="text-red-600 text-xs mt-1">{errors.department}</p>}
+                </div>
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">City</label>
                 <select
-                  id="countries"
                   name="city"
                   value={values.city}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                 >
                   <option>Islamabad</option>
                   <option>Karachi</option>
                   <option>Lahore</option>
                   <option>Fasialabad</option>
                 </select>
-                {errors.city && touched.city ? (
-                  <p className="text-red-600 text-sm">{errors.city}</p>
-                ) : null}
-                <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Email
-                    </label>
+                {errors.city && touched.city && <p className="text-red-600 text-xs mt-1">{errors.city}</p>}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
                     <input
                       type="email"
-                      id="base-input"
                       name="email"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.email}
                       placeholder="name@gmail.com"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                     />
-                    {errors.email && touched.email ? (
-                      <p className="text-red-600 text-sm">{errors.email}</p>
-                    ) : null}
+                {errors.email && touched.email && <p className="text-red-600 text-xs mt-1">{errors.email}</p>}
                   </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  placeholder="Enter new password"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                />
+                {errors.password && touched.password && <p className="text-red-600 text-xs mt-1">{errors.password}</p>}
                 </div>
                 <button
                   type="submit"
-                  className="text-black h-10 ease-in-out duration-300 transition bg-[#90d7f5] hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-4 sm:px-5 py-2.5 text-center flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="w-full py-3 mt-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   Update
                 </button>
               </form>
-            </div>
+          </>
           )}
         </div>
       </section>
-    </>
   );
 };
 

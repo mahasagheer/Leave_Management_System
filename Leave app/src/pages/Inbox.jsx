@@ -86,12 +86,27 @@ const View = () => {
   // Select the correct message list
   const messageList = data.role === "user" ? userMessages : filteredMessages;
 
+  // Sort messages by most recent date (descending), invalid/missing dates at the end
+  const getMessageDate = (msg) => {
+    const m = data.role === "user" ? msg : msg.messages || msg;
+    const date = new Date(m.createdAt);
+    return isNaN(date.getTime()) ? null : date.getTime();
+  };
+  const sortedMessageList = [...messageList].sort((a, b) => {
+    const dateA = getMessageDate(a);
+    const dateB = getMessageDate(b);
+    if (dateA === null && dateB === null) return 0;
+    if (dateA === null) return 1; // a is invalid, goes after b
+    if (dateB === null) return -1; // b is invalid, goes after a
+    return dateB - dateA; // most recent first
+  });
+
   // Select the message to show in detail
   const selectedMessage =
-    selectedMsgIndex !== null && messageList[selectedMsgIndex]
+    selectedMsgIndex !== null && sortedMessageList[selectedMsgIndex]
       ? data.role === "user"
-        ? messageList[selectedMsgIndex]
-        : messageList[selectedMsgIndex]?.messages || messageList[selectedMsgIndex]
+        ? sortedMessageList[selectedMsgIndex]
+        : sortedMessageList[selectedMsgIndex]?.messages || sortedMessageList[selectedMsgIndex]
       : null;
 
   // Formik for approve/decline
@@ -250,11 +265,31 @@ const View = () => {
 
   // Status badge color
   const statusBadge = (status) => {
+    if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+    if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
+    if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
     if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
     if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
     if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
     return "bg-gray-100 text-gray-700 border-gray-300";
   };
+
+  // Statuses for filtering (matching badges)
+  const statusFilters = [
+    { label: "All", value: "All" },
+    { label: "Pending", value: "Pending" },
+    { label: "HR Approved", value: "HR Approved" },
+    { label: "Manager Approved", value: "Manager Approved" },
+    { label: "Rejected by Manager", value: "Rejected by Manager" },
+  ];
+
+  // Filter sortedMessageList by selectedStatus
+  const filteredSortedMessageList = selectedStatus === "All"
+    ? sortedMessageList
+    : sortedMessageList.filter((msgObj) => {
+        const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
+        return msg.status === selectedStatus;
+      });
 
   return (
     <section id="inbox" className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900">
@@ -268,44 +303,30 @@ const View = () => {
         <div className="flex flex-col md:flex-row gap-4 h-[87vh] mt-16">
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
+            {/* Filter Buttons */}
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-              {isHR || isAdmin || isManager ? (
+              {(isHR || isAdmin || isManager) && (
                 <>
-                  <button
-                    onClick={() => setSelectedStatus("All")}
-                    className={`flex justify-center text-sm items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === "All" ? "bg-[#dbdcdd]" : ""}`}
-                  >
-                    <span className="mt-[1px] text-black font-sans tracking-wider">
-                      All ({filteredMessages?.length || 0})
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setSelectedStatus("Pending")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === "Pending" ? "bg-[#dbdcdd] " : ""}`}
-                  >
-                    Pending
-                  </button>
-                  <button
-                    onClick={() => setSelectedStatus("Approved")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === "Approved" ? "bg-[#dbdcdd] " : ""}`}
-                  >
-                    Approved
-                  </button>
-                  <button
-                    onClick={() => setSelectedStatus("Declined")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === "Declined" ? "bg-[#dbdcdd] " : ""}`}
-                  >
-                    Declined
-                  </button>
+                  {statusFilters.map((filter) => (
+                    <button
+                      key={filter.value}
+                      onClick={() => setSelectedStatus(filter.value)}
+                      className={`flex justify-center text-sm items-center bg-[#f3f4f6] p-1 gap-2 h-8 w-auto px-3 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === filter.value ? "bg-[#dbdcdd]" : ""}`}
+                    >
+                      <span className="mt-[1px] text-black text-xs font-sans tracking-wider">
+                        {filter.label}
+                      </span>
+                    </button>
+                  ))}
                 </>
-              ) : null}
+              )}
             </div>
             {/* Message List */}
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {messageList.length === 0 && (
+              {filteredSortedMessageList.length === 0 && (
                 <div className="text-center text-gray-400 py-8">No messages found.</div>
               )}
-              {messageList.map((msgObj, idx) => {
+              {filteredSortedMessageList.map((msgObj, idx) => {
                 const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
                 return (
                   <div

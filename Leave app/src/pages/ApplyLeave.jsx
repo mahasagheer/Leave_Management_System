@@ -89,76 +89,50 @@ const ApplyLeave = () => {
     });
 
   return (
-    <>
-      <section id="applyLeave">
-        <div className="p-4 sm:ml-64">
-          {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
-          {!Loading && (
-            <div className="p-2 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700 mt-16  py-[5%]">
-              <h1 className="text-3xl text-center my-4 ">Apply For A Leave </h1>
-              <p className="my-6 text-center lg:mx-[25%] md:mx-[15%]">
-                If you have any issues or need assistance, please specify your
-                reason for requesting leave below.
-              </p>
-              <form
-                className="md:mx-[15%]  lg:mx-[25%] mb-[4%]"
-                onSubmit={handleSubmit}
-              >
-                <div className="mb-5">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Full Name
-                  </label>
+    <section id="applyLeave" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10 mx-2 animate-fadeIn mt-20">
+        {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
+        {!Loading && (
+          <>
+            <h1 className="text-3xl text-center mb-2 text-gray-900 dark:text-white">Apply For A Leave</h1>
+            <p className="mb-6 text-center text-gray-500 dark:text-gray-300">If you have any issues or need assistance, please specify your reason for requesting leave below.</p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Full Name</label>
                   <input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     name="name"
                     value={values.name}
                     type="text"
-                    id="base-input"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                   />
-                  {errors.name && touched.name ? (
-                    <p className="text-red-600 text-sm">{errors.name}</p>
-                  ) : null}
+                  {errors.name && touched.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
                 </div>
-
-                <div className="relative z-0 w-full mb-5 group">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
                   <input
                     type="email"
-                    id="base-input"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     name="email"
                     value={values.email}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                   />
-                  {errors.email && touched.email ? (
-                    <p className="text-red-600 text-sm">{errors.email}</p>
-                  ) : null}
+                  {errors.email && touched.email && <p className="text-red-600 text-xs mt-1">{errors.email}</p>}
                 </div>
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Leave Type
-                </label>
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Leave Type</label>
                 <select
-                  id="countries"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   name="leave_type"
                   value={values.leave_type}
-                  className=" mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                 >
+                  <option value="">Select Leave Type</option>
                   <option>Causal Leave</option>
                   <option>Annual Leave</option>
                   <option>Sick Leave</option>
@@ -166,102 +140,73 @@ const ApplyLeave = () => {
                   <option>Paternity Leave</option>
                   <option>Special Leave</option>
                 </select>
-                {errors.leave_type && touched.leave_type ? (
-                  <p className="text-red-600 text-sm">{errors.leave_type}</p>
-                ) : null}
-                <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      From:
-                    </label>
-                    <input
-                      type="date"
-                      id="base-input"
-                      name="from_date"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.from_date}
-                      placeholder="name@gmail.com"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.from_date && touched.from_date ? (
-                      <p className="text-red-600 text-sm">{errors.from_date}</p>
-                    ) : null}
-                  </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      To:
-                    </label>
-                    <input
-                      type="date"
-                      id="base-input"
-                      name="to_date"
-                      value={values.to_date}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.to_date && touched.to_date ? (
-                      <p className="text-red-600 text-sm">{errors.to_date}</p>
-                    ) : null}
-                  </div>
+                {errors.leave_type && touched.leave_type && <p className="text-red-600 text-xs mt-1">{errors.leave_type}</p>}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">From</label>
+                  <input
+                    type="date"
+                    name="from_date"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.from_date}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.from_date && touched.from_date && <p className="text-red-600 text-xs mt-1">{errors.from_date}</p>}
                 </div>
-
-                <label
-                  htmlFor="message"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Leave Application
-                </label>
-
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">To</label>
+                  <input
+                    type="date"
+                    name="to_date"
+                    value={values.to_date}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.to_date && touched.to_date && <p className="text-red-600 text-xs mt-1">{errors.to_date}</p>}
+                </div>
+              </div>
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Leave Application</label>
                 <textarea
-                  id="message"
                   rows="4"
-                  className="block  p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                   placeholder="Leave a Reason..."
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.leave_application}
                   name="leave_application"
                 ></textarea>
-                {errors.leave_application && touched.leave_application ? (
-                  <p className="text-red-600 text-sm">
-                    {errors.leave_application}
-                  </p>
-                ) : null}
-                <button
-                  type="submit"
-                  className=" flex  text-white gap-3 mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                {errors.leave_application && touched.leave_application && <p className="text-red-600 text-xs mt-1">{errors.leave_application}</p>}
+              </div>
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-3 w-full text-white mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow transition-all duration-200"
+              >
+                <svg
+                  className="w-6 h-6 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 18"
                 >
-                  <svg
-                    className="w-6 h-6 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 18"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
-                    />
-                  </svg>
-                  Apply Leave
-                </button>
-              </form>
-            </div>
-          )}{" "}
-        </div>
-      </section>
-    </>
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
+                  />
+                </svg>
+                Apply Leave
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 

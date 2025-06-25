@@ -288,394 +288,265 @@ const AddUser = () => {
   }, [values.staff_type, setFieldValue]);
 
   return (
-    <>
-      <section id="addUser">
-        <div className="p-4 sm:ml-64">
-          {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
-          {!Loading && (
-            <div className="p-4 border-2 border-[#4a9dc9] h-auto border-dashed rounded-lg dark:border-gray-700  mt-16  ">
-              <h1 className="text-3xl text-center my-4">Add New Employee</h1>
-              <p className="my-6 text-center lg:mx-[25%] md:mx-[15%] ">
-                Please fill out this form to add a new employee to the team and
-                ensure all necessary details are recorded for onboarding.
-              </p>
-              <p></p>
-              <form
-                className="md:mx-[15%]  lg:mx-[25%]"
-                onSubmit={handleSubmit}
-              >
-                <div className="flex gap-4 justify-between">
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      name="name"
-                      value={values.name}
-                      id="base-input"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.name && touched.name ? (
-                      <p className="text-red-600 text-sm">{errors.name}</p>
-                    ) : null}
-                  </div>
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Salary
-                    </label>
-                    <input
-                      name="salary"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.salary}
-                      type="number"
-                      id="base-input"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.salary && touched.salary ? (
-                      <p className="text-red-600 text-sm">{errors.salary}</p>
-                    ) : null}
-                  </div>{" "}
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Age
-                    </label>
-                    <input
-                      type="number"
-                      id="base-input"
-                      name="age"
-                      value={values.age}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.age && touched.age ? (
-                      <p className="text-red-600 text-sm">{errors.age}</p>
-                    ) : null}
-                  </div>{" "}
-                  <div className="mb-5">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Exit Date
-                    </label>
-                    <input
-                      type="text"
-                      id="base-input"
-                      name="exit_date"
-                      value={values.exit_date}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.exit_date && touched.exit_date ? (
-                      <p className="text-red-600 text-sm">{errors.exit_date}</p>
-                    ) : null}
-                  </div>
+    <section id="addUser" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10 mx-2 animate-fadeIn mt-20">
+        {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
+        {!Loading && (
+          <>
+            <h1 className="text-3xl text-center mb-2 text-gray-900 dark:text-white">Add New Employee</h1>
+            <p className="mb-6 text-center text-gray-500 dark:text-gray-300 lg:mx-[5%] md:mx-[15%]">Please fill out this form to add a new employee to the team and ensure all necessary details are recorded for onboarding.</p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.name && touched.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
                 </div>
+                <div>
+                  <label htmlFor="salary" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Salary</label>
+                  <input
+                    name="salary"
+                    id="salary"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.salary}
+                    type="number"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.salary && touched.salary && <p className="text-red-600 text-xs mt-1">{errors.salary}</p>}
+                </div>
+                <div>
+                  <label htmlFor="age" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Age</label>
+                  <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    value={values.age}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.age && touched.age && <p className="text-red-600 text-xs mt-1">{errors.age}</p>}
+                </div>
+                <div>
+                  <label htmlFor="exit_date" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Exit Date</label>
+                  <input
+                    type="text"
+                    id="exit_date"
+                    name="exit_date"
+                    value={values.exit_date}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.exit_date && touched.exit_date && <p className="text-red-600 text-xs mt-1">{errors.exit_date}</p>}
+                </div>
+              </div>
 
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Select Job Title
-                </label>
+              <div>
+                <label htmlFor="Job_title" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Job Title</label>
                 <select
-                  id="countries"
+                  id="Job_title"
                   value={values.Job_title}
                   name="Job_title"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                 >
-                  {data.role === "admin" ? (
-                    <>
-                      {HrRole.map((option, idx) => (
-                        <option key={option.value + '-' + idx} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </>
-                  ) : null}
-                  {data.role === "HR" ? (
-                    <>
-                      {position.map((option, idx) => (
-                        <option key={option.value + '-' + idx} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </>
-                  ) : null}
-                  {data.role === "Manager" ? (
-                    <>
-                      {managerPositions.map((option, idx) => (
-                        <option key={option.value + '-' + idx} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </>
-                  ) : null}
+                  {data.role === "admin" && HrRole.map((option, idx) => (
+                    <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                  ))}
+                  {data.role === "HR" && position.map((option, idx) => (
+                    <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                  ))}
+                  {data.role === "Manager" && managerPositions.map((option, idx) => (
+                    <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                  ))}
                 </select>
-                {errors.Job_title && touched.Job_title ? (
-                  <p className="text-red-600 text-sm">{errors.Job_title}</p>
-                ) : null}
-                <fieldset className="flex items-center gap-6">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Gender
-                  </label>
-                  <legend className="sr-only">Gender</legend>
-                  <div className="flex ">
-                    <input
-                      id="male"
-                      type="radio"
-                      name="gender"
-                      value="Male"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="male"
-                      className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Male
-                    </label>
-                  </div>
-                  <div className="flex ">
-                    <input
-                      id="Female"
-                      type="radio"
-                      name="gender"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value="Female"
-                      className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
-                    />
+                {errors.Job_title && touched.Job_title && <p className="text-red-600 text-xs mt-1">{errors.Job_title}</p>}
+              </div>
 
-                    <label
-                      htmlFor="country-option-2"
-                      className="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      Female
-                    </label>
-                  </div>
-                </fieldset>
-                {errors.gender && touched.gender ? (
-                  <p className="text-red-600 text-sm">{errors.gender}</p>
-                ) : null}
-
-                <div className="mb-5">
-                  <label
-                    htmlFor="base-input"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Hire Date
-                  </label>
+              <fieldset className="flex items-center gap-6">
+                <legend className="sr-only">Gender</legend>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Gender:</label>
+                <div className="flex items-center gap-2">
                   <input
-                    type="date"
-                    id="base-input"
-                    value={values.hire_date}
-                    name="hire_date"
+                    id="male"
+                    type="radio"
+                    name="gender"
+                    value="Male"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600"
                   />
-                  {errors.hire_date && touched.hire_date ? (
-                    <p className="text-red-600 text-sm">{errors.hire_date}</p>
-                  ) : null}
+                  <label htmlFor="male" className="text-sm text-gray-700 dark:text-gray-300">Male</label>
                 </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="female"
+                    type="radio"
+                    name="gender"
+                    value="Female"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label htmlFor="female" className="text-sm text-gray-700 dark:text-gray-300">Female</label>
+                </div>
+              </fieldset>
+              {errors.gender && touched.gender && <p className="text-red-600 text-xs mt-1">{errors.gender}</p>}
 
-                <label
-                  htmlFor="countries"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Department
-                </label>
-                <select
-                  id="countries"
-                  value={values.department}
-                  name="department"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  {department.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}{" "}
-                </select>
-                {errors.department && touched.department ? (
-                  <p className="text-red-600 text-sm">{errors.department}</p>
-                ) : null}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="hire_date" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Hire Date</label>
+                  <input
+                    type="date"
+                    id="hire_date"
+                    name="hire_date"
+                    value={values.hire_date}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.hire_date && touched.hire_date && <p className="text-red-600 text-xs mt-1">{errors.hire_date}</p>}
+                </div>
+                <div>
+                  <label htmlFor="department" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Department</label>
+                  <select
+                    id="department"
+                    value={values.department}
+                    name="department"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  >
+                    {department.map((option) => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                  {errors.department && touched.department && <p className="text-red-600 text-xs mt-1">{errors.department}</p>}
+                </div>
+              </div>
 
-                <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="countries"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      City
-                    </label>
-                    <select
-                      id="countries"
-                      name="city"
-                      value={values.city}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                      {city.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}{" "}
-                    </select>
-                    {errors.city && touched.city ? (
-                      <p className="text-red-600 text-sm">{errors.city}</p>
-                    ) : null}
-                  </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Phone No:
-                    </label>
-                    <input
-                      type="tel"
-                      id="base-input"
-                      name="phone"
-                      value={values.phone}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="+923XXXXXXXX"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.phone && touched.phone ? (
-                      <p className="text-red-600 text-sm">{errors.phone}</p>
-                    ) : null}
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="city" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">City</label>
+                  <select
+                    id="city"
+                    name="city"
+                    value={values.city}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  >
+                    {city.map((option) => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                  {errors.city && touched.city && <p className="text-red-600 text-xs mt-1">{errors.city}</p>}
                 </div>
-                <div className="grid md:grid-cols-2 md:gap-6">
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="base-input"
-                      name="email"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.email}
-                      placeholder="name@gmail.com"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.email && touched.email ? (
-                      <p className="text-red-600 text-sm">{errors.email}</p>
-                    ) : null}
-                  </div>
-                  <div className="relative z-0 w-full mb-5 group">
-                    <label
-                      htmlFor="base-input"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      id="base-input"
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.password && touched.password ? (
-                      <p className="text-red-600 text-sm">{errors.password}</p>
-                    ) : null}
-                  </div>
+                <div>
+                  <label htmlFor="phone" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Phone No:</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={values.phone}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder="+923XXXXXXXX"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.phone && touched.phone && <p className="text-red-600 text-xs mt-1">{errors.phone}</p>}
                 </div>
-                <label
-                  htmlFor="staff_type"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Staff Type
-                </label>
-                <select
-                  id="staff_type"
-                  name="staff_type"
-                  value={values.staff_type}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  {staffTypeOptions.map((option, idx) => (
-                    <option key={option.value + '-' + idx} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.staff_type && touched.staff_type ? (
-                  <p className="text-red-600 text-sm">{errors.staff_type}</p>
-                ) : null}
-                <label
-                  htmlFor="role"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Select Role
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  value={values.role}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  disabled={roleOptions.length === 1}
-                >
-                  {roleOptions.map((option, idx) => (
-                    <option key={option.value + '-' + idx} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.role && touched.role ? (
-                  <p className="text-red-600 text-sm">{errors.role}</p>
-                ) : null}
-                <button
-                  type="submit"
-                  className="mt-4  sm:mt-0 text-black h-10 ease-in-out duration-300 transition bg-[#90d7f5] hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-4 sm:px-5 py-2.5 text-center flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          )}{" "}
-        </div>
-      </section>
-    </>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    placeholder="name@gmail.com"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.email && touched.email && <p className="text-red-600 text-xs mt-1">{errors.email}</p>}
+                </div>
+                <div>
+                  <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder="Password"
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  />
+                  {errors.password && touched.password && <p className="text-red-600 text-xs mt-1">{errors.password}</p>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="staff_type" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Staff Type</label>
+                  <select
+                    id="staff_type"
+                    name="staff_type"
+                    value={values.staff_type}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  >
+                    {staffTypeOptions.map((option, idx) => (
+                      <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                  {errors.staff_type && touched.staff_type && <p className="text-red-600 text-xs mt-1">{errors.staff_type}</p>}
+                </div>
+                <div>
+                  <label htmlFor="role" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Select Role</label>
+                  <select
+                    id="role"
+                    name="role"
+                    value={values.role}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                    disabled={roleOptions.length === 1}
+                  >
+                    {roleOptions.map((option, idx) => (
+                      <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                  {errors.role && touched.role && <p className="text-red-600 text-xs mt-1">{errors.role}</p>}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 mt-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow transition focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                Submit
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 

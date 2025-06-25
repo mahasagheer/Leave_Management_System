@@ -56,8 +56,8 @@ const User = () => {
           <div className="  h-auto  dark:border-gray-700  mt-16">
             {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
             {!Loading && (
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
-                <div className="flex flex-col lg:flex-row md:flex-col justify-between sm:flex-col items-center py-4 px-4 sm:px-6">
+              <div className="relative overflow-x-auto sm:rounded-lg p-3">
+                <div className="flex flex-col lg:flex-row md:flex-col justify-between sm:flex-col items-center py-1 px-2 ">
                   <div className="w-full lg:w-auto">
                     {isAdmin ? (
                       <h1 className="text-xl sm:text-2xl md:text-3xl py-4 sm:py-6 text-center lg:text-left">

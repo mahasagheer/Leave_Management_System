@@ -255,15 +255,15 @@ const AddUser = () => {
           .then((res) => {
             const userId = res.data.user;
             return axios.post(`${apiURL}/employee_leave_detail`, {
-              employee_id: userId,
-              annual_leave: values.annual_leave,
-              sick_leave: values.sick_leave,
+                employee_id: userId,
+                annual_leave: values.annual_leave,
+                sick_leave: values.sick_leave,
             }).then(() => userId);
           })
           .then((userId) => {
             return axios.post(`${apiURL}/inbox_messages`, {
               employee_id: userId,
-            });
+              });
           })
           .then(() => {
             setLoading(false);

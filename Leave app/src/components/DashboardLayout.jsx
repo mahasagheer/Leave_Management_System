@@ -75,8 +75,8 @@ function DashboardLayout() {
   return (
     <div>
       <nav
-        style={{ backgroundColor: themeColor }}
-        className={`fixed top-0 z-50 w-full transition-colors  duration-500 ease-in-out border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 `}
+        //style={{ backgroundColor: themeColor }}
+        className={`fixed top-0 z-50 bg-white w-full transition-colors  duration-500 ease-in-out border-gray-200 dark:bg-gray-800 dark:border-gray-700 `}
       >
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -90,7 +90,7 @@ function DashboardLayout() {
                 <FontAwesomeIcon icon={faBars} size="xl" />
                 <span className="sr-only">Open sidebar</span>
               </button>
-              <a href="#" className="flex ms-2 md:me-24">
+              <a href="#" className="flex md:me-24">
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   <img
                     src={`${apiURL}/uploads/${logo}`}
@@ -119,7 +119,7 @@ function DashboardLayout() {
                 >
                   <span className="sr-only">Open user menu</span>
                   <img
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                    className="w-8 h-8 min-w-[2.5rem] min-h-[2.5rem] rounded-full object-cover"
                     src={User}
                     alt="user photo"
                   />
@@ -161,7 +161,7 @@ function DashboardLayout() {
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }  border-r  sm:translate-x-0 dark:bg-gray-800 `}
+        }  sm:translate-x-0 dark:bg-gray-800 `}
         aria-label="Sidebar"
         style={{ backgroundColor: themeColor }}
       >

@@ -30,6 +30,8 @@ function DashboardLayout() {
     setHR,
     themeColor,
     logo,
+    isManager,
+    setManager
   } = useContext(AuthContext);
   const navigate = useNavigate();
   const [dataLeave, setDataLeave] = useState({});
@@ -38,7 +40,6 @@ function DashboardLayout() {
   const { id } = useParams();
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     axios
@@ -62,7 +63,9 @@ function DashboardLayout() {
       setAdmin(false);
     } else if (isHR == true) {
       setHR(false);
-    } else {
+    } else if(isManager == true){
+      setManager(false)
+    } else{
       setUser(false);
     }
     navigate("/");
@@ -181,7 +184,7 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
-            {isHR && (
+            {(isHR || isManager) && (
               <>
                 <li>
                   <Link
@@ -203,7 +206,7 @@ function DashboardLayout() {
                 </li>
               </>
             )}
-            {isUser && (
+            {(isUser )&& (
               <>
                 <li>
                   <Link
@@ -236,14 +239,14 @@ function DashboardLayout() {
                 </li>
               </>
             )}
-            {(isHR || isAdmin) && (
+            {(isHR || isAdmin ||isManager ) && (
               <li>
                 <Link
                   to="/inbox"
                   className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faInbox} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Inbox</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Leave Inbox</span>
                   <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-xs font-medium text-blue-800 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-300">
                     New
                   </span>

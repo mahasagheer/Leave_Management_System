@@ -23,7 +23,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute roles={["admin", "user", "HR"]}>
+            <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
               <Sidebar />
               <Dashboard />
             </ProtectedRoute>
@@ -41,7 +41,7 @@ function App() {
         <Route
           path="/Leave"
           element={
-            <ProtectedRoute roles={["user", "HR"]}>
+            <ProtectedRoute roles={["user", "HR","Manager"]}>
               <Sidebar />
               <ApplyLeave />
             </ProtectedRoute>
@@ -59,7 +59,7 @@ function App() {
         <Route
           path="/user"
           element={
-            <ProtectedRoute roles={["admin", "HR"]}>
+            <ProtectedRoute roles={["admin", "HR", "Manager"]}>
               <Sidebar />
               <User />
             </ProtectedRoute>
@@ -68,7 +68,7 @@ function App() {
         <Route
           path="/user/:id"
           element={
-            <ProtectedRoute roles={["admin", "HR"]}>
+            <ProtectedRoute roles={["admin", "HR", "Manager"]}>
               <Sidebar />
               <UserDetail />
             </ProtectedRoute>
@@ -105,7 +105,7 @@ function App() {
         <Route
           path="/inbox"
           element={
-            <ProtectedRoute roles={["admin", "user", "HR"]}>
+            <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
               <Sidebar />
               <Inbox />
             </ProtectedRoute>

@@ -11,27 +11,26 @@ import { useFormik } from "formik";
 const View = () => {
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const { data, isHR, isAdmin } = useContext(AuthContext);
+  const { data, isHR, isAdmin , isManager} = useContext(AuthContext);
   const apiURL = import.meta.env.VITE_API;
   const [loading, setLoading] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   const [error, setError] = useState(null);
   const [submitError, setSubmitError] = useState(null);
   const [selectedMsgIndex, setSelectedMsgIndex] = useState(null);
-
   const fetchMessages = () => {
     setLoading(true);
     setError(null);
     axios
       .get(
-        isHR || isAdmin
+        isHR || isAdmin || isManager
           ? `${apiURL}/inbox_messages/all_leaves/${selectedStatus}`
           : `${apiURL}/inbox_messages/${data._id}`
       )
       .then((response) => {
         setLoading(false);
         // Normalize the data structure for both HR/Admin and regular users
-        const normalizedData = isHR || isAdmin 
+        const normalizedData = isHR || isAdmin ||isManager
           ? response?.data 
           : response?.data?.messages 
             ? [{ employee_id: data._id, messages: response.data.messages }]
@@ -58,6 +57,7 @@ const View = () => {
           setAllUsers(res.data);
           setLoading(false);
         })
+
         .catch((err) => {
           console.error(err);
           setError("Failed to fetch users. Please try again later.");
@@ -68,7 +68,7 @@ const View = () => {
 
   // Filter messages for manager: only show messages from users with 'user' role
   let filteredMessages = allMessages;
-  if (data.role === "Manager" && !isHR && !isAdmin && allUsers.length > 0) {
+  if (isManager && !isHR && !isAdmin && allUsers.length > 0) {
     // Build a map of userId to role
     const userRoleMap = {};
     allUsers.forEach((user) => {
@@ -118,13 +118,13 @@ const View = () => {
     onSubmit: (values) => {
       setLoading(true);
       setSubmitError(null);
-      axios
-        .patch(`${apiURL}/send_email/update_message_status`, {
+      if(values.status === "Approved"){
+  if(isHR){
+        axios
+        .put(`${apiURL}/send_email/hr_approve`, {
           employee_id: values.employee_id,
-          status: values.status,
-          leave_id: values.leave_id,
-        })
-        .then(() => {
+          message_id: values.leave_id,
+        }).then(() => {
           return axios.post(`${apiURL}/send_email/leave_reply`, {
           name: values.name,
           email: values.email,
@@ -133,6 +133,82 @@ const View = () => {
           employee_id: values.employee_id,
           leave_id: values.leave_id,
           });
+        })
+        .then(() => {
+          setLoading(false);
+      fetchMessages();
+      resetForm();
+      setFieldValue("status", "");
+      setFieldValue("comment", "");
+    })
+    .catch((error) => {
+      console.error(error);
+      setLoading(false);
+      setSubmitError(
+        error.response?.data?.message ||
+          "Failed to process the request. Please try again."
+      );
+    });
+      }else if(data.role === "Manager"){
+      axios
+        .put(`${apiURL}/send_email/manager_approve`, {
+          employee_id: values.employee_id,
+          message_id: values.leave_id,
+        })
+        .then(() => {
+
+              setLoading(false);
+          fetchMessages();
+          resetForm();
+          setFieldValue("status", "");
+          setFieldValue("comment", "");
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+          setSubmitError(
+            error.response?.data?.message ||
+              "Failed to process the request. Please try again."
+          );
+        });
+      }
+      }
+      else{
+          if(isHR){
+        axios
+        .put(`${apiURL}/send_email/hr_reject`, {
+          employee_id: values.employee_id,
+          lmessage_id: values.leave_id,
+        }).then(() => {
+          return axios.post(`${apiURL}/send_email/leave_reply`, {
+          name: values.name,
+          email: values.email,
+          status: values.status,
+          comment: values.comment,
+          employee_id: values.employee_id,
+          leave_id: values.leave_id,
+          });
+        })
+        .then(() => {
+          setLoading(false);
+      fetchMessages();
+      resetForm();
+      setFieldValue("status", "");
+      setFieldValue("comment", "");
+    })
+    .catch((error) => {
+      console.error(error);
+      setLoading(false);
+      setSubmitError(
+        error.response?.data?.message ||
+          "Failed to process the request. Please try again."
+      );
+    });
+      }else if(data.role === "Manager"){
+      axios
+        .put(`${apiURL}/send_email/manager_reject`, {
+          employee_id: values.employee_id,
+          message_id: values.leave_id,
         })
         .then(() => {
               setLoading(false);
@@ -149,6 +225,9 @@ const View = () => {
               "Failed to process the request. Please try again."
           );
         });
+      }
+      }
+    
     },
   });
 
@@ -190,7 +269,7 @@ const View = () => {
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-              {isHR || isAdmin ? (
+              {isHR || isAdmin || isManager ? (
                 <>
                   <button
                     onClick={() => setSelectedStatus("All")}

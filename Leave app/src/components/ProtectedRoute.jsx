@@ -10,11 +10,12 @@ const ProtectedRoute = ({ children, roles }) => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const { isUser, isAdmin, isHR } = useContext(AuthContext);
+  const { isUser, isAdmin, isHR ,isManager} = useContext(AuthContext);
   const roleCheck = () => {
     if (roles.includes(userRole)) return true;
     if (isAdmin && roles.includes("admin")) return true;
     if (isUser && roles.includes("user")) return true;
+    if (isManager && roles.includes("Manager")) return true;
     if (isHR && roles.includes("HR")) return true;
     return false;
   };

@@ -9,6 +9,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAdmin, setAdmin] = useState(false);
   const [isHR, setHR] = useState(false);
+  const[isManager,setManager]=useState(false);
   const [isUser, setUser] = useState(false);
   const [data, setData] = useState([]);
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       const { color, logoPath, data: userData } = JSON.parse(storedUser);
       setData(userData);
+      console.log(userData)
       if (userData.role === "admin") {
         setAdmin(true);
         setThemeColor(color);
@@ -33,7 +35,12 @@ export const AuthProvider = ({ children }) => {
         setThemeColor(color);
         setLogo(logoPath);
         navigate("/dashboard");
-      } else {
+      } else if(userData.role === 'Manager'){
+        setManager(true);
+        setThemeColor(color);
+        setLogo(logoPath);
+        navigate("/dashboard");
+      }else {
         setUser(true);
         setThemeColor(color);
         setLogo(logoPath);
@@ -41,7 +48,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -55,7 +61,7 @@ export const AuthProvider = ({ children }) => {
         const logoPath = res.data.logoPath;
         const color = res.data.color;
         setData(userData);
-        if (userData.role === "admin" || userData.role === "HR") {
+        if (userData.role === "admin") {
           toast.success("Admin logged in successfully!");
           setAdmin(true);
           setHR(false);
@@ -63,7 +69,7 @@ export const AuthProvider = ({ children }) => {
           setLogo(logoPath);
           setUser(false);
           navigate("/user");
-        } else if (userData.role === "Manager") {
+        } else if ( userData.role === "HR") {
           toast.success("HR logged in successfully!");
           setAdmin(false);
           setHR(true);
@@ -71,8 +77,18 @@ export const AuthProvider = ({ children }) => {
           setLogo(logoPath);
           setUser(false);
           navigate("/dashboard");
-        } else {
-          toast.success("User logged in successfully!");
+        } else if(userData.role === "Manager"){
+          toast.success("Manager logged in successfully!");
+          setAdmin(false);
+          setHR(false);
+          setManager(true)
+          setThemeColor(color);
+          setLogo(logoPath);
+          setUser(false);
+          navigate("/dashboard");
+        }
+          else{
+          toast.success(`User logged in successfully!`);
           setAdmin(false);
           setHR(false);
           setThemeColor(color);
@@ -120,6 +136,7 @@ export const AuthProvider = ({ children }) => {
         password,
         setPassword,
         handleSubmit,
+        setManager,isManager,
         logout,
         setThemeColor,
         themeColor,

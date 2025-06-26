@@ -207,7 +207,30 @@ const View = () => {
                   "Failed to process the request. Please try again."
               );
             });
-        }
+        } else if(isAdmin){        
+            axios
+                  .put(`${apiURL}/send_email/admin_approve`, {
+                employee_id: values.employee_id,
+                    message_id: values.leave_id,
+                    comment: values.comment,
+                  })
+                  .then(() => {
+                    setLoading(false);
+                    fetchMessages();
+                    resetForm();
+                    setFieldValue("status", "");
+                    setFieldValue("comment", "");
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    setLoading(false);
+                    setSubmitError(
+                      error.response?.data?.message ||
+                        "Failed to process the request. Please try again."
+                    );
+                  });
+              }
+        
       } else {
         if (isHR) {
           axios
@@ -263,6 +286,28 @@ const View = () => {
                   "Failed to process the request. Please try again."
               );
             });
+        }else  if(isAdmin){
+          axios
+            .put(`${apiURL}/send_email/admin_reject`, {
+              employee_id: values.employee_id,
+              message_id: values.leave_id,
+              comment: values.comment,
+        })
+        .then(() => {
+              setLoading(false);
+          fetchMessages();
+          resetForm();
+          setFieldValue("status", "");
+          setFieldValue("comment", "");
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+          setSubmitError(
+            error.response?.data?.message ||
+              "Failed to process the request. Please try again."
+          );
+        });
         }
       }
     },

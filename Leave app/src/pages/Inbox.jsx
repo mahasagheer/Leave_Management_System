@@ -4,14 +4,18 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../service/authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faComment,
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { leaveDecisionSchema } from "../validation/addUserValidate";
 import { useFormik } from "formik";
 
 const View = () => {
   const [allMessages, setMessages] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const { data, isHR, isAdmin , isManager} = useContext(AuthContext);
+  const { data, isHR, isAdmin, isManager } = useContext(AuthContext);
   const apiURL = import.meta.env.VITE_API;
   const [loading, setLoading] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
@@ -21,18 +25,24 @@ const View = () => {
   const fetchMessages = () => {
     setLoading(true);
     setError(null);
+    let url = `${apiURL}/inbox_messages/${data._id}`;
+
+    if (isAdmin) {
+      url = `${apiURL}/inbox_messages/all_leaves/${selectedStatus}`;
+    } else if (isHR) {
+      url = `${apiURL}/inbox_messages/hr_leave/${selectedStatus}`;
+    } else if (isManager) {
+      url = `${apiURL}/inbox_messages/manager_leave/${selectedStatus}`;
+    }
     axios
-      .get(
-        isHR || isAdmin || isManager
-          ? `${apiURL}/inbox_messages/all_leaves/${selectedStatus}`
-          : `${apiURL}/inbox_messages/${data._id}`
-      )
+      .get(url)
       .then((response) => {
         setLoading(false);
         // Normalize the data structure for both HR/Admin and regular users
-        const normalizedData = isHR || isAdmin ||isManager
-          ? response?.data 
-          : response?.data?.messages 
+        const normalizedData =
+          isHR || isAdmin || isManager
+            ? response?.data
+            : response?.data?.messages
             ? [{ employee_id: data._id, messages: response.data.messages }]
             : [];
         setMessages(normalizedData);
@@ -52,7 +62,8 @@ const View = () => {
   useEffect(() => {
     if (data.role === "Manager") {
       setLoading(true);
-      axios.get(`${apiURL}/users`)
+      axios
+        .get(`${apiURL}/users`)
         .then((res) => {
           setAllUsers(res.data);
           setLoading(false);
@@ -81,32 +92,19 @@ const View = () => {
   }
 
   // For user role, flatten messages
-  const userMessages = data.role === "user" ? (allMessages[0]?.messages || []) : [];
+  const userMessages =
+    data.role === "user" ? allMessages[0]?.messages || [] : [];
 
   // Select the correct message list
   const messageList = data.role === "user" ? userMessages : filteredMessages;
 
-  // Sort messages by most recent date (descending), invalid/missing dates at the end
-  const getMessageDate = (msg) => {
-    const m = data.role === "user" ? msg : msg.messages || msg;
-    const date = new Date(m.createdAt);
-    return isNaN(date.getTime()) ? null : date.getTime();
-  };
-  const sortedMessageList = [...messageList].sort((a, b) => {
-    const dateA = getMessageDate(a);
-    const dateB = getMessageDate(b);
-    if (dateA === null && dateB === null) return 0;
-    if (dateA === null) return 1; // a is invalid, goes after b
-    if (dateB === null) return -1; // b is invalid, goes after a
-    return dateB - dateA; // most recent first
-  });
-
   // Select the message to show in detail
   const selectedMessage =
-    selectedMsgIndex !== null && sortedMessageList[selectedMsgIndex]
+    selectedMsgIndex !== null && messageList[selectedMsgIndex]
       ? data.role === "user"
-        ? sortedMessageList[selectedMsgIndex]
-        : sortedMessageList[selectedMsgIndex]?.messages || sortedMessageList[selectedMsgIndex]
+        ? messageList[selectedMsgIndex]
+        : messageList[selectedMsgIndex]?.messages ||
+          messageList[selectedMsgIndex]
       : null;
 
   // Formik for approve/decline
@@ -133,116 +131,115 @@ const View = () => {
     onSubmit: (values) => {
       setLoading(true);
       setSubmitError(null);
-      if(values.status === "Approved"){
-  if(isHR){
-        axios
-        .put(`${apiURL}/send_email/hr_approve`, {
-          employee_id: values.employee_id,
-          message_id: values.leave_id,
-        }).then(() => {
-          return axios.post(`${apiURL}/send_email/leave_reply`, {
-          name: values.name,
-          email: values.email,
-          status: values.status,
-          comment: values.comment,
-          employee_id: values.employee_id,
-          leave_id: values.leave_id,
-          });
-        })
-        .then(() => {
-          setLoading(false);
-      fetchMessages();
-      resetForm();
-      setFieldValue("status", "");
-      setFieldValue("comment", "");
-    })
-    .catch((error) => {
-      console.error(error);
-      setLoading(false);
-      setSubmitError(
-        error.response?.data?.message ||
-          "Failed to process the request. Please try again."
-      );
-    });
-      }else if(data.role === "Manager"){
-      axios
-        .put(`${apiURL}/send_email/manager_approve`, {
-          employee_id: values.employee_id,
-          message_id: values.leave_id,
-        })
-        .then(() => {
-
+      if (values.status === "Approved") {
+        if (isHR) {
+          axios
+            .put(`${apiURL}/send_email/hr_approve`, {
+              employee_id: values.employee_id,
+              message_id: values.leave_id,
+            })
+            .then(() => {
+              return axios.post(`${apiURL}/send_email/leave_reply`, {
+                name: values.name,
+                email: values.email,
+                status: values.status,
+                comment: values.comment,
+                employee_id: values.employee_id,
+                leave_id: values.leave_id,
+              });
+            })
+            .then(() => {
               setLoading(false);
-          fetchMessages();
-          resetForm();
-          setFieldValue("status", "");
-          setFieldValue("comment", "");
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoading(false);
-          setSubmitError(
-            error.response?.data?.message ||
-              "Failed to process the request. Please try again."
-          );
-        });
-      }
-      }
-      else{
-          if(isHR){
-        axios
-        .put(`${apiURL}/send_email/hr_reject`, {
-          employee_id: values.employee_id,
-          lmessage_id: values.leave_id,
-        }).then(() => {
-          return axios.post(`${apiURL}/send_email/leave_reply`, {
-          name: values.name,
-          email: values.email,
-          status: values.status,
-          comment: values.comment,
-          employee_id: values.employee_id,
-          leave_id: values.leave_id,
-          });
-        })
-        .then(() => {
-          setLoading(false);
-      fetchMessages();
-      resetForm();
-      setFieldValue("status", "");
-      setFieldValue("comment", "");
-    })
-    .catch((error) => {
-      console.error(error);
-      setLoading(false);
-      setSubmitError(
-        error.response?.data?.message ||
-          "Failed to process the request. Please try again."
-      );
-    });
-      }else if(data.role === "Manager"){
-      axios
-        .put(`${apiURL}/send_email/manager_reject`, {
-          employee_id: values.employee_id,
-          message_id: values.leave_id,
-        })
-        .then(() => {
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
               setLoading(false);
-          fetchMessages();
-          resetForm();
-          setFieldValue("status", "");
-          setFieldValue("comment", "");
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoading(false);
-          setSubmitError(
-            error.response?.data?.message ||
-              "Failed to process the request. Please try again."
-          );
-        });
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
+        } else if (data.role === "Manager") {
+          axios
+            .put(`${apiURL}/send_email/manager_approve`, {
+              employee_id: values.employee_id,
+              message_id: values.leave_id,
+            })
+            .then(() => {
+              setLoading(false);
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
+        }
+      } else {
+        if (isHR) {
+          axios
+            .put(`${apiURL}/send_email/hr_reject`, {
+              employee_id: values.employee_id,
+              lmessage_id: values.leave_id,
+            })
+            .then(() => {
+              return axios.post(`${apiURL}/send_email/leave_reply`, {
+                name: values.name,
+                email: values.email,
+                status: values.status,
+                comment: values.comment,
+                employee_id: values.employee_id,
+                leave_id: values.leave_id,
+              });
+            })
+            .then(() => {
+              setLoading(false);
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
+        } else if (data.role === "Manager") {
+          axios
+            .put(`${apiURL}/send_email/manager_reject`, {
+              employee_id: values.employee_id,
+              message_id: values.leave_id,
+            })
+            .then(() => {
+              setLoading(false);
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
+        }
       }
-      }
-    
     },
   });
 
@@ -265,34 +262,19 @@ const View = () => {
 
   // Status badge color
   const statusBadge = (status) => {
-    if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
-    if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
-    if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
-    if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
+    if (status === "Approved")
+      return "bg-green-100 text-green-700 border-green-300";
     if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
-    if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
+    if (status === "Pending")
+      return "bg-yellow-100 text-yellow-700 border-yellow-300";
     return "bg-gray-100 text-gray-700 border-gray-300";
   };
 
-  // Statuses for filtering (matching badges)
-  const statusFilters = [
-    { label: "All", value: "All" },
-    { label: "Pending", value: "Pending" },
-    { label: "HR Approved", value: "HR Approved" },
-    { label: "Manager Approved", value: "Manager Approved" },
-    { label: "Rejected by Manager", value: "Rejected by Manager" },
-  ];
-
-  // Filter sortedMessageList by selectedStatus
-  const filteredSortedMessageList = selectedStatus === "All"
-    ? sortedMessageList
-    : sortedMessageList.filter((msgObj) => {
-        const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
-        return msg.status === selectedStatus;
-      });
-
   return (
-    <section id="inbox" className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900">
+    <section
+      id="inbox"
+      className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900"
+    >
       {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
       {error && (
         <div className="text-red-500 text-center p-4 bg-red-100 rounded-lg mb-4">
@@ -303,45 +285,90 @@ const View = () => {
         <div className="flex flex-col md:flex-row gap-4 h-[87vh] mt-16">
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
-            {/* Filter Buttons */}
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-              {(isHR || isAdmin || isManager) && (
+              {isHR || isAdmin || isManager ? (
                 <>
-                  {statusFilters.map((filter) => (
-                    <button
-                      key={filter.value}
-                      onClick={() => setSelectedStatus(filter.value)}
-                      className={`flex justify-center text-sm items-center bg-[#f3f4f6] p-1 gap-2 h-8 w-auto px-3 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${selectedStatus === filter.value ? "bg-[#dbdcdd]" : ""}`}
-                    >
-                      <span className="mt-[1px] text-black text-xs font-sans tracking-wider">
-                        {filter.label}
-                      </span>
-                    </button>
-                  ))}
+                  <button
+                    onClick={() => setSelectedStatus("All")}
+                    className={`flex justify-center text-sm items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "All" ? "bg-[#dbdcdd]" : ""
+                    }`}
+                  >
+                    <span className="mt-[1px] text-black font-sans tracking-wider">
+                      All ({filteredMessages?.length || 0})
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setSelectedStatus("Pending")}
+                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Pending" ? "bg-[#dbdcdd] " : ""
+                    }`}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    onClick={() => setSelectedStatus("Approved")}
+                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Approved" ? "bg-[#dbdcdd] " : ""
+                    }`}
+                  >
+                    Approved
+                  </button>
+                  <button
+                    onClick={() => setSelectedStatus("Declined")}
+                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
+                      selectedStatus === "Declined" ? "bg-[#dbdcdd] " : ""
+                    }`}
+                  >
+                    Declined
+                  </button>
                 </>
-              )}
+              ) : null}
             </div>
             {/* Message List */}
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredSortedMessageList.length === 0 && (
-                <div className="text-center text-gray-400 py-8">No messages found.</div>
+              {messageList.length === 0 && (
+                <div className="text-center text-gray-400 py-8">
+                  No messages found.
+                </div>
               )}
-              {filteredSortedMessageList.map((msgObj, idx) => {
-                const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
+              {messageList.map((msgObj, idx) => {
+                const msg =
+                  data.role === "user" ? msgObj : msgObj.messages || msgObj;
                 return (
                   <div
                     key={msg._id || idx}
-                    className={`flex items-center gap-3 p-3 cursor-pointer rounded-lg transition-colors mb-1 hover:bg-blue-50 dark:hover:bg-gray-700 ${selectedMsgIndex === idx ? "bg-blue-100 dark:bg-gray-700 border-l-4 border-blue-500" : ""}`}
+                    className={`flex items-center gap-3 p-3 cursor-pointer rounded-lg transition-colors mb-1 hover:bg-blue-50 dark:hover:bg-gray-700 ${
+                      selectedMsgIndex === idx
+                        ? "bg-blue-100 dark:bg-gray-700 border-l-4 border-blue-500"
+                        : ""
+                    }`}
                     onClick={() => handleSelectMessage(idx, msgObj)}
                   >
-                    <img src={User} alt="User" className="w-10 h-10 rounded-full object-cover" />
+                    <img
+                      src={User}
+                      alt="User"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-900 dark:text-white truncate">{msg.name}</span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs border ${statusBadge(msg.status)}`}>{msg.status}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white truncate">
+                          {msg.name}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs border ${statusBadge(
+                            msg.status
+                          )}`}
+                        >
+                          {msg.status}
+                        </span>
                       </div>
-                      <div className="text-xs text-gray-500 truncate">{msg.email}</div>
-                      <div className="text-xs text-gray-400">{new Date(msg.createdAt).toLocaleString()}</div>
+                      <div className="text-xs text-gray-500 truncate">
+                        {msg.email}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {new Date(msg.createdAt).toLocaleString()}
+                      </div>
                     </div>
                   </div>
                 );
@@ -358,56 +385,91 @@ const View = () => {
             ) : (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-4 border-b pb-4">
-                  <img src={User} alt="User" className="w-14 h-14 rounded-full object-cover" />
+                  <img
+                    src={User}
+                    alt="User"
+                    className="w-14 h-14 rounded-full object-cover"
+                  />
                   <div>
-                    <div className="font-bold text-lg text-gray-900 dark:text-white">{selectedMessage.name}</div>
-                    <div className="text-sm text-gray-500">{selectedMessage.email}</div>
-                    <div className="text-xs text-gray-400">{new Date(selectedMessage.createdAt).toLocaleString()}</div>
+                    <div className="font-bold text-lg text-gray-900 dark:text-white">
+                      {selectedMessage.name}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {selectedMessage.email}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {new Date(selectedMessage.createdAt).toLocaleString()}
+                    </div>
                   </div>
-                  <span className={`ml-auto px-3 py-1 rounded-full text-xs border ${statusBadge(selectedMessage.status)}`}>{selectedMessage.status}</span>
+                  <span
+                    className={`ml-auto px-3 py-1 rounded-full text-xs border ${statusBadge(
+                      selectedMessage.status
+                    )}`}
+                  >
+                    {selectedMessage.status}
+                  </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <div className="text-xs text-gray-500">From</div>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedMessage.to_date ? new Date(selectedMessage.to_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">
+                      {selectedMessage.to_date
+                        ? new Date(selectedMessage.to_date).toLocaleDateString(
+                            "en-US",
+                            { year: "numeric", month: "long", day: "numeric" }
+                          )
+                        : ""}
+                    </div>
                   </div>
                   <div>
                     <div className="text-xs text-gray-500">To</div>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedMessage.from_date ? new Date(selectedMessage.from_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">
+                      {selectedMessage.from_date
+                        ? new Date(
+                            selectedMessage.from_date
+                          ).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : ""}
+                    </div>
                   </div>
                   <div>
                     <div className="text-xs text-gray-500">Days</div>
-                    <div className="font-medium text-gray-900 dark:text-white">{selectedMessage.days}</div>
-                        </div>
-                            </div>
+                    <div className="font-medium text-gray-900 dark:text-white">
+                      {selectedMessage.days}
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <div className="text-xs text-gray-500 mb-1">Application</div>
                   <div className="bg-gray-100 dark:bg-gray-700 rounded p-3 text-gray-900 dark:text-white whitespace-pre-line max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
                     {selectedMessage.leave_application}
-                          </div>
-                        </div>
+                  </div>
+                </div>
                 {/* Approve/Decline/Comment for HR/Admin/Manager */}
                 {(isHR || isAdmin || data.role === "Manager") && (
-                          <form
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              handleSubmit();
-                            }}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSubmit();
+                    }}
                     className="mt-4"
-                          >
+                  >
                     <div className="mb-2">
-                              <textarea
+                      <textarea
                         className={`w-full p-2 rounded-md border ${
                           touched.comment && errors.comment
                             ? "border-red-500"
                             : "border-gray-300"
                         }`}
-                                placeholder="Write your comment..."
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.comment}
-                                name="comment"
-                              ></textarea>
+                        placeholder="Write your comment..."
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.comment}
+                        name="comment"
+                      ></textarea>
                       {touched.comment && errors.comment && (
                         <div className="text-red-500 text-sm mt-1">
                           {errors.comment}
@@ -415,49 +477,59 @@ const View = () => {
                       )}
                     </div>
                     <div className="flex gap-2 mb-2">
-                                  <button
-                                    type="button"
+                      <button
+                        type="button"
                         onClick={() => setFieldValue("status", "Declined")}
                         className={`px-4 py-1 rounded-md border ${
-                                      values.status === "Declined"
+                          values.status === "Declined"
                             ? "bg-red-500 text-white border-red-700"
                             : "bg-white text-red-600 border-red-300"
-                                    }`}
-                                  >
-                        <FontAwesomeIcon icon={faTimesCircle} className="mr-1" /> Decline
-                                  </button>
-                                  <button
-                                    type="button"
+                        }`}
+                      >
+                        <FontAwesomeIcon
+                          icon={faTimesCircle}
+                          className="mr-1"
+                        />{" "}
+                        Decline
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => setFieldValue("status", "Approved")}
                         className={`px-4 py-1 rounded-md border ${
-                                      values.status === "Approved"
+                          values.status === "Approved"
                             ? "bg-green-500 text-white border-green-700"
                             : "bg-white text-green-600 border-green-300"
-                                    }`}
-                                  >
-                        <FontAwesomeIcon icon={faCheckCircle} className="mr-1" /> Approve
-                                  </button>
-                                </div>
-                                <button
-                                  type="submit"
+                        }`}
+                      >
+                        <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          className="mr-1"
+                        />{" "}
+                        Approve
+                      </button>
+                    </div>
+                    <button
+                      type="submit"
                       disabled={loading}
                       className={`bg-blue-500 text-white px-6 py-2 rounded-md mt-2 ${
                         loading ? "opacity-50 cursor-not-allowed" : ""
                       }`}
-                                >
+                    >
                       {loading ? "Submitting..." : "Submit"}
-                                </button>
+                    </button>
                     {submitError && (
-                      <div className="text-red-500 text-sm mt-2">{submitError}</div>
-                    )}
-                          </form>
-                        )}
+                      <div className="text-red-500 text-sm mt-2">
+                        {submitError}
                       </div>
+                    )}
+                  </form>
+                )}
+              </div>
             )}
-            </div>
+          </div>
         </div>
       )}
-      </section>
+    </section>
   );
 };
 

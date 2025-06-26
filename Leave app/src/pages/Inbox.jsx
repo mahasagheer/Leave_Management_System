@@ -354,7 +354,7 @@ const View = () => {
   return (
     <section
       id="inbox"
-      className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900"
+      className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900 min-h-screen"
     >
       {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
       {error && (
@@ -363,7 +363,7 @@ const View = () => {
         </div>
       )}
       {!loading && !error && (
-        <div className="flex flex-col md:flex-row gap-4 h-[87vh] mt-16">
+        <div className="flex flex-col md:flex-row gap-4 h-[87vh] mt-20">
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">

@@ -55,10 +55,10 @@ const User = () => {
     filter = users.filter((data) => data.role === "user" || data.role === "HR" || data.role === "Manager");
   }
   return (
-    <section id="user" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900">
+    <section id="user" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
       {!Loading && (
-        <div className="flex flex-col gap-4 h-auto mt-16">
+        <div className="flex flex-col gap-4 h-auto mt-20">
           <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow p-4 overflow-x-auto">
             <ToastContainer />
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">

@@ -186,7 +186,7 @@ const dashboard = () => {
   return (
     <>
       <ToastContainer />
-      <div className="p-2 sm:p-6 md:p-4 mt-[2%] sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+      <div className="p-2 sm:p-6 md:p-4 mt-[3%] sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
         {Loading && <div className="loader mx-auto mt-32"></div>}
         {!Loading && (
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import User from "../public/userImg.png";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -99,8 +99,7 @@ function DashboardLayout() {
   return (
     <div>
       <nav
-        //style={{ backgroundColor: themeColor }}
-        className={`fixed top-0 z-50 bg-white w-full transition-colors  duration-500 ease-in-out border-gray-200 dark:bg-gray-800 dark:border-gray-700 `}
+        className={`fixed top-0 z-50  bg-white w-full transition-colors  duration-500 ease-in-out border-gray-200 dark:bg-gray-800 dark:border-gray-700 `}
       >
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -125,7 +124,7 @@ function DashboardLayout() {
               </a>
             </div>
             <div className="flex items-center relative">
-              <div className="flex items-center justify-center ms-3">
+              <div className="flex items-center justify-center mb-3">
                 {data && (
                   <div className="text-right mr-4 hidden sm:block">
                     <p className="text-sm sm:text-base invisible">
@@ -150,19 +149,19 @@ function DashboardLayout() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw]  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200">
+                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw] dark:bg-gray-900  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200">
                     <div className="flex items-center px-3 sm:px-4 py-2">
-                      <p className="ml-2 text-xs sm:text-sm text-gray-700">
-                        <span className="block text-sm sm:text-base">
+                      <p className="ml-2 text-xs sm:text-sm text-gray-700 dark:text-white">
+                        <span className="block text-sm sm:text-base ">
                           {data.name}
                         </span>
-                        <span className="block text-xs sm:text-sm text-gray-500">
+                        <span className="block text-xs sm:text-sm text-gray-500 dark:text-white">
                           {data.email}
                         </span>
                       </p>
                     </div>
                     <div className="border-t border-gray-200"></div>
-                    <div className="flex items-center px-3 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                    <div className="flex items-center px-3 sm:px-4 py-2  cursor-pointer">
                       <a
                         onClick={handleLogout}
                         className="flex items-center p-2 w-full text-xs sm:text-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
@@ -190,7 +189,7 @@ function DashboardLayout() {
         style={{ backgroundColor: themeColor }}
       >
         <div
-          className={`h-full px-3 pb-4 overflow-y-auto bg-white  `}
+          className={`h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-900  `}
           style={{ backgroundColor: themeColor }}
         >
           <ul className="space-y-2 font-medium">
@@ -219,7 +218,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700  group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -243,7 +242,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700  group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -255,7 +254,7 @@ function DashboardLayout() {
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                   >
                     <FontAwesomeIcon icon={faEnvelopesBulk} />
-                    <span className="ms-3">View Leave</span>
+                    <span className="ms-3">My Leaves Inbox</span>
                   </Link>
                 </li>
               </>
@@ -297,6 +296,17 @@ function DashboardLayout() {
                   <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
                 </Link>
               </li>
+            )}
+            {isHR || isManager && (
+               <li>
+               <Link
+                 to="/inbox"
+                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+               >
+                 <FontAwesomeIcon icon={faEnvelopesBulk} />
+                 <span className="ms-3">My Leaves Inbox</span>
+               </Link>
+             </li>
             )}
           </ul>
         </div>

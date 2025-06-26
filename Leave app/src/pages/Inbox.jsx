@@ -184,6 +184,37 @@ const View = () => {
                   "Failed to process the request. Please try again."
               );
             });
+        }else if(isAdmin){
+          axios
+            .put(`${apiURL}/send_email/admin_approve`, {
+              employee_id: values.employee_id,
+              message_id: values.leave_id,
+            })
+            .then(() => {
+              return axios.post(`${apiURL}/send_email/leave_reply`, {
+                name: values.name,
+                email: values.email,
+                status: values.status,
+                comment: values.comment,
+                employee_id: values.employee_id,
+                leave_id: values.leave_id,
+              });
+            })
+            .then(() => {
+              setLoading(false);
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
         }
       } else {
         if (isHR) {
@@ -238,7 +269,38 @@ const View = () => {
                   "Failed to process the request. Please try again."
               );
             });
-        }
+        } else if(isAdmin){
+          axios
+            .put(`${apiURL}/send_email/admin_reject`, {
+              employee_id: values.employee_id,
+              lmessage_id: values.leave_id,
+            })
+            .then(() => {
+              return axios.post(`${apiURL}/send_email/leave_reply`, {
+                name: values.name,
+                email: values.email,
+                status: values.status,
+                comment: values.comment,
+                employee_id: values.employee_id,
+                leave_id: values.leave_id,
+              });
+            })
+            .then(() => {
+              setLoading(false);
+              fetchMessages();
+              resetForm();
+              setFieldValue("status", "");
+              setFieldValue("comment", "");
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoading(false);
+              setSubmitError(
+                error.response?.data?.message ||
+                  "Failed to process the request. Please try again."
+              );
+            });
+        } 
       }
     },
   });

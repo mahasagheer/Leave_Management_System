@@ -19,6 +19,7 @@ const Board = () => {
   };
   return (
     <>
+    <div className="dark:bg-gray-900">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
           <a className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -93,8 +94,8 @@ const Board = () => {
           </div>
         </div>
       </nav>
-      <section className="relative">
-        <div className="border mx-[5%] text-gray-50 duration-300 relative group cursor-pointer overflow-hidden h-1/2 w-[90%] mt-[2%] min-h-[50vh] rounded-3xl bg-[#90d7f5] p-2 flex flex-col lg:flex-row">
+      <section className="relative ">
+        <div className="border mx-[5%] text-gray-50  duration-300 relative group cursor-pointer overflow-hidden h-1/2 w-[90%] mt-[2%] min-h-[50vh] rounded-3xl bg-[#90d7f5] p-2 flex flex-col lg:flex-row">
           <div className="relative flex-1 lg:order-2 flex justify-end">
             <img
               src={User}
@@ -127,6 +128,7 @@ const Board = () => {
       <Section />
       <ApproveSection />
       <Footer />
+      </div>
     </>
   );
 };

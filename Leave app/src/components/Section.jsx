@@ -8,7 +8,7 @@ const Section = () => {
   }, []);
   return (
     <>
-      <div className="font-bold py-8 px-6 md:py-[10%] md:px-[15%] text-[#2b2f32]">
+      <div className="font-bold py-8 px-6 md:py-[10%] md:px-[15%] text-[#2b2f32] dark:text-gray-500">
         <p
           className="text-3xl lg:text-6xl md:text-5xl text-center "
           data-aos="fade-down"

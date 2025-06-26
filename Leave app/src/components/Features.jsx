@@ -10,12 +10,12 @@ const Features = () => {
   return (
     <>
       <section className=" mx-[5%] text-center my-[5%] overflow-hidden">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl text-center dark:text-white">
           Online leave management.{" "}
           <span className="text-lime-500">Now made more efficient</span>
         </h1>
 
-        <div className="flex flex-wrap mx-[5%] justify-evenly mt-[5%] gap-5">
+        <div className="flex flex-wrap mx-[5%] justify-evenly mt-[5%] gap-5 dark:text-white">
           <div className="w-full sm:w-[45%] lg:w-[30%] border-2 border-lime-500 rounded-lg p-4">
             <FontAwesomeIcon
               icon={faFileSignature}

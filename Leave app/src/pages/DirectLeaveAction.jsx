@@ -7,44 +7,36 @@ import User from "../public/userImg.png";
 import axios from "axios";
 import { AuthContext } from "../service/authentication";
 import { useFormik } from "formik";
-
-const mockLeave = {
-  id: "12345",
-  employee: "John Doe",
-  from_date: "2024-06-10",
-  to_date: "2024-06-12",
-  reason: "Family emergency",
-  status: "Pending",
-  type: "Sick Leave",
-  days: 3,
-};
+import { retinaScale } from "chart.js/helpers";
 
 const DirectLeaveActionContent = () => {
-  const { leaveId } = useParams();
+  const { token } = useParams();
   const { isDark } = useContext(ThemeContext);
-  const { data, isHR, isAdmin, isManager } = useContext(AuthContext);
+  const {  isHR, isAdmin, isManager } = useContext(AuthContext);
   const apiURL = import.meta.env.VITE_API;
   const [leave, setLeave] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [actioned, setActioned] = useState(false);
   const [submitError, setSubmitError] = useState(null);
-
+  const [role,setRole]= useState("");
+  const[employeeId,setEmployeeId]=useState("")
   // Fetch leave message by ID
   useEffect(() => {
     setLoading(true);
     setError(null);
-    axios
-      .get(`${apiURL}/inbox_messages/leave/verify_token`)
+    axios.post(`${apiURL}/inbox_messages/leave/verify_token`, { token })
       .then((res) => {
-        setLeave(res.data);
+        setLeave(res.data.message);
+        setRole(res.data.approverRole)
+        setEmployeeId(res.data.employee_id)
         setLoading(false);
       })
       .catch((err) => {
         setError("Failed to fetch leave details. Please try again later.");
         setLoading(false);
       });
-  }, [leaveId, apiURL]);
+  }, [token, apiURL]);
 
   // Formik for approve/reject
   const formik = useFormik({
@@ -56,17 +48,17 @@ const DirectLeaveActionContent = () => {
       setLoading(true);
       setSubmitError(null);
       let endpoint = "";
-      if (isHR) {
+      if (role === "HR") {
         endpoint = values.status === "Approved" ? "/send_email/hr_approve" : "/send_email/hr_reject";
-      } else if (isManager) {
+      } else if (role==="Manager") {
         endpoint = values.status === "Approved" ? "/send_email/manager_approve" : "/send_email/manager_reject";
-      } else if (isAdmin) {
+      } else if (role ==="admin") {
         endpoint = values.status === "Approved" ? "/send_email/admin_approve" : "/send_email/admin_reject";
       }
       axios
         .put(`${apiURL}${endpoint}`,
           {
-            employee_id: leave.employee_id || leave.employee?._id,
+            employee_id: employeeId,
             message_id: leave._id,
             comment: values.comment,
           }

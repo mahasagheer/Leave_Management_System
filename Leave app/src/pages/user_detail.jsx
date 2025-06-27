@@ -127,7 +127,7 @@ const user_detail = () => {
               <div className="text-blue-500 dark:text-blue-300 font-semibold mb-1">{data.Job_title || "-"}</div>
               <div className="text-gray-400 text-sm mb-2">{data.department || "-"}</div>
               <div className="flex flex-col gap-1 mb-2">
-                <span className="text-gray-700 dark:text-gray-200 text-sm"><strong>Role:</strong> {data.role}</span>
+                <span className="text-gray-700 dark:text-gray-200 text-sm"><strong>Role:</strong> {data.role === "user" ? "Employee" : data.role}</span>
                 <span className="text-gray-700 dark:text-gray-200 text-sm"><strong>Email:</strong> {data.email}</span>
                 {data.phone && <span className="text-gray-700 dark:text-gray-200 text-sm"><strong>Phone:</strong> {data.phone}</span>}
               </div>

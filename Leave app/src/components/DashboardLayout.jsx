@@ -141,6 +141,14 @@ function DashboardLayout() {
                   </div>
                 )}
                 <button
+                        onClick={toggleTheme}
+                        className="ml-2 p-3 mr-4 rounded-[100%] bg-gray-100 dark:bg-gray-700 hover:bg-lime-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+                        aria-label="Toggle theme"
+                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                      >
+                        <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-xl text-yellow-400 dark:text-gray-200" />
+                      </button>
+                <button
                   type="button"
                   onClick={toggleDropdown}
                   className="flex text-xs sm:text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -152,6 +160,7 @@ function DashboardLayout() {
                     alt="user photo"
                   />
                 </button>
+                
 
                 {dropdownOpen && (
                   <div className="absolute top-14 right-0 mt-2 w-80 max-w-xs bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 animate-fadeIn z-50">
@@ -165,14 +174,7 @@ function DashboardLayout() {
                         <span className="block text-base font-semibold text-gray-900 dark:text-white truncate">{data.name}</span>
                         <span className="block text-xs text-gray-500 dark:text-gray-400 truncate">{data.email}</span>
                       </div>
-                      <button
-                        onClick={toggleTheme}
-                        className="ml-2 p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-lime-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
-                        aria-label="Toggle theme"
-                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                      >
-                        <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-xl text-yellow-400 dark:text-gray-200" />
-                      </button>
+                      
                     </div>
                     <div className="border-t border-gray-100 dark:border-gray-700"></div>
                     <div className="flex items-center px-5 py-3">

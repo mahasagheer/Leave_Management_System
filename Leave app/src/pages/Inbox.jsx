@@ -213,7 +213,7 @@ const View = () => {
           axios
             .put(`${apiURL}/send_email/hr_reject`, {
               employee_id: values.employee_id,
-              lmessage_id: values.leave_id,
+              message_id: values.leave_id,
               comment: values.comment,
         })
         //.then(() => {

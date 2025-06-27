@@ -40,6 +40,8 @@ function DashboardLayout() {
   const { id } = useParams();
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -57,6 +59,25 @@ function DashboardLayout() {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    let url = "";
+    if (isAdmin) {
+      url = `${apiURL}/inbox_messages/all_leaves/Pending`;
+    } else if (isHR) {
+      url = `${apiURL}/inbox_messages/hr_leave/Pending`;
+    } else if (isManager) {
+      url = `${apiURL}/inbox_messages/manager_leave/Pending`;
+    }
+    if (url) {
+      axios.get(url, { headers: { Authorization: `${local}` } })
+        .then(res => {
+          setPendingCount(Array.isArray(res.data) ? res.data.length : 0);
+        })
+        .catch(() => setPendingCount(0));
+    }
+  }, [isAdmin, isHR, isManager, apiURL, local]);
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     if (isAdmin == true && data.name == "admin") {
@@ -247,8 +268,8 @@ function DashboardLayout() {
                 >
                   <FontAwesomeIcon icon={faInbox} />
                   <span className="flex-1 ms-3 whitespace-nowrap">Leave Inbox</span>
-                  <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-xs font-medium text-blue-800 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                    New
+                  <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 ms-3 text-xs font-medium text-blue-800 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                    {pendingCount}
                   </span>
                 </Link>
               </li>

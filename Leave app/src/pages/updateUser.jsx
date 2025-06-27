@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { updateUserSchema } from "../validation/addUserValidate";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const updateUser = () => {
   const [data, setData] = useState([]);
@@ -80,7 +82,10 @@ const updateUser = () => {
           )
           .then((res) => {
             setLoading(false);
-            navigate("/user");
+            toast.success("User updated successfully!");
+            setTimeout(() => {
+              navigate("/user");
+            }, 1200);
           })
           .catch((error) => {
             console.log(error);
@@ -91,6 +96,7 @@ const updateUser = () => {
   return (
     <section id="updateUser" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
       <div className="w-full mt-20 max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10 mx-2 animate-fadeIn">
+        <ToastContainer />
         {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
         {!Loading && (
           <>

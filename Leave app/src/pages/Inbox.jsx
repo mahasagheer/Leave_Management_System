@@ -22,6 +22,18 @@ const View = () => {
   const [error, setError] = useState(null);
   const [submitError, setSubmitError] = useState(null);
   const [selectedMsgIndex, setSelectedMsgIndex] = useState(null);
+
+  // Define all status filters with their badge color
+  const statusFilters = [
+    { label: "All", value: "All", color: "bg-gray-200 text-gray-700" },
+    { label: "Pending", value: "Pending", color: "bg-yellow-100 text-yellow-700 border-yellow-300" },
+    { label: "HR Approved", value: "HR Approved", color: "bg-blue-100 text-blue-700 border-blue-300" },
+    { label: "Manager Approved", value: "Manager Approved", color: "bg-teal-100 text-teal-700 border-teal-300" },
+    { label: "Rejected by Manager", value: "Rejected by Manager", color: "bg-orange-100 text-orange-700 border-orange-300" },
+    { label: "Admin Approved", value: "Admin Approved", color: "bg-blue-100 text-blue-700 border-blue-300" },
+    { label: "Admin Rejected", value: "Admin Rejected", color: "bg-red-100 text-red-700 border-red-300" },
+  ];
+
   const fetchMessages = () => {
     setLoading(true);
     setError(null);
@@ -41,8 +53,8 @@ const View = () => {
         // Normalize the data structure for both HR/Admin and regular users
         const normalizedData =
           isHR || isAdmin || isManager
-            ? response?.data
-            : response?.data?.messages
+          ? response?.data 
+          : response?.data?.messages 
             ? [{ employee_id: data._id, messages: response.data.messages }]
             : [];
         setMessages(normalizedData);
@@ -92,9 +104,18 @@ const View = () => {
   }
 
   // For user role, flatten messages
-  const userMessages =
-    data.role === "user" ? allMessages[0]?.messages || [] : [];
-
+  let userMessages = data.role === "user" ? allMessages[0]?.messages || [] : [];
+  // Sort user messages by most recent createdAt (descending)
+  if (data.role === "user" && Array.isArray(userMessages)) {
+    userMessages = [...userMessages].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      if (isNaN(dateA) && isNaN(dateB)) return 0;
+      if (isNaN(dateA)) return 1;
+      if (isNaN(dateB)) return -1;
+      return dateB - dateA;
+    });
+  }
   // Select the correct message list
   const messageList = data.role === "user" ? userMessages : filteredMessages;
 
@@ -133,21 +154,22 @@ const View = () => {
       setSubmitError(null);
       if (values.status === "Approved") {
         if (isHR) {
-          axios
+      axios
             .put(`${apiURL}/send_email/hr_approve`, {
-              employee_id: values.employee_id,
+          employee_id: values.employee_id,
               message_id: values.leave_id,
+              comment: values.comment,
             })
-            .then(() => {
-              return axios.post(`${apiURL}/send_email/leave_reply`, {
-                name: values.name,
-                email: values.email,
-                status: values.status,
-                comment: values.comment,
-                employee_id: values.employee_id,
-                leave_id: values.leave_id,
-              });
-            })
+           // .then(() => {
+           //   return axios.post(`${apiURL}/send_email/leave_reply`, {
+            //    name: values.name,
+            //    email: values.email,
+         // status: values.status,
+           //     comment: values.comment,
+           //     employee_id: values.employee_id,
+         // leave_id: values.leave_id,
+          //    });
+          //  })
             .then(() => {
               setLoading(false);
               fetchMessages();
@@ -168,37 +190,7 @@ const View = () => {
             .put(`${apiURL}/send_email/manager_approve`, {
               employee_id: values.employee_id,
               message_id: values.leave_id,
-            })
-            .then(() => {
-              setLoading(false);
-              fetchMessages();
-              resetForm();
-              setFieldValue("status", "");
-              setFieldValue("comment", "");
-            })
-            .catch((error) => {
-              console.error(error);
-              setLoading(false);
-              setSubmitError(
-                error.response?.data?.message ||
-                  "Failed to process the request. Please try again."
-              );
-            });
-        }else if(isAdmin){
-          axios
-            .put(`${apiURL}/send_email/admin_approve`, {
-              employee_id: values.employee_id,
-              message_id: values.leave_id,
-            })
-            .then(() => {
-              return axios.post(`${apiURL}/send_email/leave_reply`, {
-                name: values.name,
-                email: values.email,
-                status: values.status,
-                comment: values.comment,
-                employee_id: values.employee_id,
-                leave_id: values.leave_id,
-              });
+              comment: values.comment,
             })
             .then(() => {
               setLoading(false);
@@ -222,37 +214,39 @@ const View = () => {
             .put(`${apiURL}/send_email/hr_reject`, {
               employee_id: values.employee_id,
               lmessage_id: values.leave_id,
-            })
-            .then(() => {
-              return axios.post(`${apiURL}/send_email/leave_reply`, {
-                name: values.name,
-                email: values.email,
-                status: values.status,
-                comment: values.comment,
-                employee_id: values.employee_id,
-                leave_id: values.leave_id,
-              });
-            })
-            .then(() => {
+              comment: values.comment,
+        })
+        //.then(() => {
+        //  return axios.post(`${apiURL}/send_email/leave_reply`, {
+         // name: values.name,
+         // email: values.email,
+         // status: values.status,
+         // comment: values.comment,
+         // employee_id: values.employee_id,
+         // leave_id: values.leave_id,
+         // });
+      //  })
+        .then(() => {
               setLoading(false);
-              fetchMessages();
-              resetForm();
-              setFieldValue("status", "");
-              setFieldValue("comment", "");
-            })
-            .catch((error) => {
-              console.error(error);
-              setLoading(false);
-              setSubmitError(
-                error.response?.data?.message ||
-                  "Failed to process the request. Please try again."
-              );
-            });
+          fetchMessages();
+          resetForm();
+          setFieldValue("status", "");
+          setFieldValue("comment", "");
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+          setSubmitError(
+            error.response?.data?.message ||
+              "Failed to process the request. Please try again."
+          );
+        });
         } else if (data.role === "Manager") {
           axios
             .put(`${apiURL}/send_email/manager_reject`, {
               employee_id: values.employee_id,
               message_id: values.leave_id,
+              comment: values.comment,
             })
             .then(() => {
               setLoading(false);
@@ -269,38 +263,7 @@ const View = () => {
                   "Failed to process the request. Please try again."
               );
             });
-        } else if(isAdmin){
-          axios
-            .put(`${apiURL}/send_email/admin_reject`, {
-              employee_id: values.employee_id,
-              lmessage_id: values.leave_id,
-            })
-            .then(() => {
-              return axios.post(`${apiURL}/send_email/leave_reply`, {
-                name: values.name,
-                email: values.email,
-                status: values.status,
-                comment: values.comment,
-                employee_id: values.employee_id,
-                leave_id: values.leave_id,
-              });
-            })
-            .then(() => {
-              setLoading(false);
-              fetchMessages();
-              resetForm();
-              setFieldValue("status", "");
-              setFieldValue("comment", "");
-            })
-            .catch((error) => {
-              console.error(error);
-              setLoading(false);
-              setSubmitError(
-                error.response?.data?.message ||
-                  "Failed to process the request. Please try again."
-              );
-            });
-        } 
+        }
       }
     },
   });
@@ -324,13 +287,24 @@ const View = () => {
 
   // Status badge color
   const statusBadge = (status) => {
-    if (status === "Approved")
-      return "bg-green-100 text-green-700 border-green-300";
+    if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+    if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
+    if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
+    if (status === "Admin Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+    if (status === "Admin Rejected") return "bg-red-100 text-red-700 border-red-300";
+    if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
     if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
-    if (status === "Pending")
-      return "bg-yellow-100 text-yellow-700 border-yellow-300";
+    if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
     return "bg-gray-100 text-gray-700 border-gray-300";
   };
+
+  // When filtering messages:
+  const filteredSortedMessageList = selectedStatus === "All"
+    ? messageList
+    : messageList.filter((msgObj) => {
+        const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
+        return msg.status === selectedStatus;
+      });
 
   return (
     <section
@@ -348,53 +322,30 @@ const View = () => {
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-              {isHR || isAdmin || isManager ? (
+              {(isHR || isAdmin || isManager) && (
                 <>
+                  {statusFilters.map((filter) => (
                   <button
-                    onClick={() => setSelectedStatus("All")}
-                    className={`flex justify-center text-sm items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20 rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "All" ? "bg-[#dbdcdd]" : ""
-                    }`}
+                      key={filter.value}
+                      onClick={() => setSelectedStatus(filter.value)}
+                      className={`flex justify-center text-sm items-center p-1 gap-2 h-8 w-auto px-3 rounded-full cursor-pointer transition-all text-xs sm:text-sm md:text-base border ${filter.color} ${selectedStatus === filter.value ? 'ring-2 ring-blue-400' : ''}`}
                   >
-                    <span className="mt-[1px] text-black font-sans tracking-wider">
-                      All ({filteredMessages?.length || 0})
+                      <span className="mt-[1px] text-xs font-sans">
+                        {filter.label}
                     </span>
                   </button>
-                  <button
-                    onClick={() => setSelectedStatus("Pending")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Pending" ? "bg-[#dbdcdd] " : ""
-                    }`}
-                  >
-                    Pending
-                  </button>
-                  <button
-                    onClick={() => setSelectedStatus("Approved")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Approved" ? "bg-[#dbdcdd] " : ""
-                    }`}
-                  >
-                    Approved
-                  </button>
-                  <button
-                    onClick={() => setSelectedStatus("Declined")}
-                    className={`flex justify-center text-sm  items-center bg-[#f3f4f6] p-1 gap-2 h-10 w-20  rounded-full cursor-pointer hover:bg-[#f4f4f5] transition-all text-xs sm:text-sm md:text-base ${
-                      selectedStatus === "Declined" ? "bg-[#dbdcdd] " : ""
-                    }`}
-                  >
-                    Declined
-                  </button>
+                  ))}
                 </>
-              ) : null}
+              )}
             </div>
             {/* Message List */}
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {messageList.length === 0 && (
+              {filteredSortedMessageList.length === 0 && (
                 <div className="text-center text-gray-400 py-8">
                   No messages found.
                 </div>
               )}
-              {messageList.map((msgObj, idx) => {
+              {filteredSortedMessageList.map((msgObj, idx) => {
                 const msg =
                   data.role === "user" ? msgObj : msgObj.messages || msgObj;
                 return (
@@ -502,36 +453,39 @@ const View = () => {
                     <div className="font-medium text-gray-900 dark:text-white">
                       {selectedMessage.days}
                     </div>
-                  </div>
-                </div>
+                        </div>
+                            </div>
                 <div>
                   <div className="text-xs text-gray-500 mb-1">Application</div>
                   <div className="bg-gray-100 dark:bg-gray-700 rounded p-3 text-gray-900 dark:text-white whitespace-pre-line max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
                     {selectedMessage.leave_application}
-                  </div>
-                </div>
+                          </div>
+                        </div>
                 {/* Approve/Decline/Comment for HR/Admin/Manager */}
-                {(isHR || isAdmin || data.role === "Manager") && (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleSubmit();
-                    }}
+                {(isHR || isAdmin || data.role === "Manager") && selectedMessage && (
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                      // Prevent submission if status is HR Approved or Admin Approved
+                      if (selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved") return;
+                              handleSubmit();
+                            }}
                     className="mt-4"
-                  >
+                          >
                     <div className="mb-2">
-                      <textarea
+                              <textarea
                         className={`w-full p-2 rounded-md border ${
                           touched.comment && errors.comment
                             ? "border-red-500"
                             : "border-gray-300"
                         }`}
-                        placeholder="Write your comment..."
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.comment}
-                        name="comment"
-                      ></textarea>
+                                placeholder="Write your comment..."
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.comment}
+                                name="comment"
+                        disabled={selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved"}
+                              ></textarea>
                       {touched.comment && errors.comment && (
                         <div className="text-red-500 text-sm mt-1">
                           {errors.comment}
@@ -539,59 +493,51 @@ const View = () => {
                       )}
                     </div>
                     <div className="flex gap-2 mb-2">
-                      <button
-                        type="button"
+                                  <button
+                                    type="button"
                         onClick={() => setFieldValue("status", "Declined")}
                         className={`px-4 py-1 rounded-md border ${
-                          values.status === "Declined"
+                                      values.status === "Declined"
                             ? "bg-red-500 text-white border-red-700"
                             : "bg-white text-red-600 border-red-300"
-                        }`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faTimesCircle}
-                          className="mr-1"
-                        />{" "}
-                        Decline
-                      </button>
-                      <button
-                        type="button"
+                                    }`}
+                        disabled={selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved"}
+                                  >
+                        <FontAwesomeIcon icon={faTimesCircle} className="mr-1" /> Decline
+                                  </button>
+                                  <button
+                                    type="button"
                         onClick={() => setFieldValue("status", "Approved")}
                         className={`px-4 py-1 rounded-md border ${
-                          values.status === "Approved"
+                                      values.status === "Approved"
                             ? "bg-green-500 text-white border-green-700"
                             : "bg-white text-green-600 border-green-300"
-                        }`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faCheckCircle}
-                          className="mr-1"
-                        />{" "}
-                        Approve
-                      </button>
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={loading}
+                                    }`}
+                        disabled={selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved"}
+                                  >
+                        <FontAwesomeIcon icon={faCheckCircle} className="mr-1" /> Approve
+                                  </button>
+                                </div>
+                                <button
+                                  type="submit"
+                      disabled={loading || selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved"}
                       className={`bg-blue-500 text-white px-6 py-2 rounded-md mt-2 ${
-                        loading ? "opacity-50 cursor-not-allowed" : ""
+                        loading || selectedMessage.status === "HR Approved" || selectedMessage.status === "Admin Approved" ? "opacity-50 cursor-not-allowed" : ""
                       }`}
-                    >
+                                >
                       {loading ? "Submitting..." : "Submit"}
-                    </button>
+                                </button>
                     {submitError && (
-                      <div className="text-red-500 text-sm mt-2">
-                        {submitError}
-                      </div>
+                      <div className="text-red-500 text-sm mt-2">{submitError}</div>
                     )}
-                  </form>
-                )}
-              </div>
+                          </form>
+                        )}
+                      </div>
             )}
-          </div>
+            </div>
         </div>
       )}
-    </section>
+      </section>
   );
 };
 

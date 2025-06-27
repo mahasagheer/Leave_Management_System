@@ -233,3 +233,29 @@
     transform: rotate(0.5turn);
   }
 }
+
+@media print {
+  .print-table {
+    border: 1px solid #888 !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+    color: #222 !important;
+    background: #fff !important;
+    font-size: 13px !important;
+  }
+  .print-table th, .print-table td {
+    border: 1px solid #888 !important;
+    padding: 8px 12px !important;
+    background: #fff !important;
+  }
+  .print-table th {
+    font-weight: bold !important;
+    background: #e5e7eb !important;
+  }
+  .print-table tr:nth-child(even) td {
+    background: #f3f4f6 !important;
+  }
+  .print-table tr:nth-child(odd) td {
+    background: #fff !important;
+  }
+}

@@ -15,6 +15,63 @@ import {
   faVirus,
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+
+function CircularProgressBar({ value, max, color, label }) {
+  const radius = 36;
+  const stroke = 8;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const percent = Math.min(100, Math.round((value / max) * 100));
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
+  return (
+    <div className="flex flex-col items-center">
+      <svg height={radius * 2} width={radius * 2} className="mb-2">
+        <circle
+          stroke="#E5E7EB"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+        <circle
+          stroke={color}
+          fill="transparent"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference + ' ' + circumference}
+          style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.5s' }}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dy="0.3em"
+          className="text-xl font-bold fill-gray-900 dark:fill-white"
+        >
+          {value}
+        </text>
+      </svg>
+      <span className="text-sm text-gray-500 text-center leading-tight">{label}</span>
+    </div>
+  );
+}
+
+function statusBadge(status) {
+  if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+  if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
+  if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
+  if (status === "Admin Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+  if (status === "Admin Rejected") return "bg-red-100 text-red-700 border-red-300";
+  if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
+  if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
+  if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
+  return "bg-gray-100 text-gray-700 border-gray-300";
+}
 
 const dashboard = () => {
   const { data } = useContext(AuthContext);
@@ -26,8 +83,9 @@ const dashboard = () => {
   const local = localStorage.getItem("user");
   const userdata = JSON.parse(local)?.data;
   const [datahandler, setDatahandler] = useState(false);
-
   const [Loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -128,85 +186,105 @@ const dashboard = () => {
   return (
     <>
       <ToastContainer />
-      <div className="p-4 sm:ml-64">
-        {Loading && <div className=" loader ml-[50%] mt-[25%]"></div>}
-
+      <div className="p-2 sm:p-6 md:p-4 mt-[2%] sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+        {Loading && <div className="loader mx-auto mt-32"></div>}
         {!Loading && (
-          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-16">
-            <div className="flex items-center h-25 mb-4 rounded ">
-              <div className="py-6 pl-4">
-                <FontAwesomeIcon icon={faHouse} size="xl" className="pb-2" />
-                <p className="text-3xl "> Hi {data.name}! </p>
-                <p className="text-lg">
-                  Effortlessly manage your leave requests and stay on top of
-                  your time off with our intuitive system
-                </p>
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
+            {/* LEFT COLUMN: Leave Management, Calendar */}
+            <div className="lg:col-span-2 flex flex-col gap-8">
+              {/* Leave Management Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+                <div className="flex flex-col md:flex-row gap-8 flex-1">
+                  {/* Circular Progress Bars */}
+                  <div className="flex flex-row gap-8 items-center">
+                    <CircularProgressBar
+                      value={leaveDetail?.remaining_leave ?? 15}
+                      max={30}
+                      color="#36A2EB"
+                      label={<>Remaining Leave</>}
+                    />
+                    <CircularProgressBar
+                      value={leaveDetail?.sick_leave ?? 1}
+                      max={15}
+                      color="#FF6384"
+                      label={<>Sick Leave</>}
+                    />
+                    <CircularProgressBar
+                      value={leaveDetail?.pending_leave ?? 4}
+                      max={10}
+                      color="#FFCE56"
+                      label={<>Pending Leave</>}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <button
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 shadow transition-all text-base"
+                    onClick={() => navigate('/Leave')}
+                  >
+                    Request a Leave
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4 mb-4 px-2 sm:px-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
-              <button className="relative group cursor-pointer text-lg sm:text-xl overflow-hidden w-full rounded-md p-2 flex justify-center items-center">
-                <p className="z-10 flex flex-col items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                  <span className="text-base sm:text-xl">Leave Dates</span>
+              {/* Calendar Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-0">Calendar</h2>
+                  <div className="flex gap-2">
+                    <button className="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-xs font-semibold">Month</button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
                   <Calendar id={data._id} />
-                </p>
-              </button>
+                </div>
+                {/* Legend */}
+                <div className="flex flex-wrap gap-4 mt-4 text-xs">
+                  <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-yellow-400 inline-block"></span>Pending Leave</span>
 
-              <button className="relative group cursor-pointer text-lg sm:text-xl overflow-hidden w-full rounded-md p-2 flex justify-center items-center">
-                <p className="z-10 flex flex-col items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                  <span className="text-base sm:text-xl">Leave Detail</span>
-                  <PieChart chartData={leave} />
-                </p>
-              </button>
-
-              <div className="flex gap-4 flex-col">
-                <button className="relative group cursor-pointer text-lg sm:text-xl text-white overflow-hidden w-full h-[50%] rounded-md bg-[#36A2EB] p-2 flex justify-center items-center hover:scale-95 duration-300">
-                  <div>
-                    <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                      <FontAwesomeIcon icon={faBell} size="lg" />
-                      <span className="text-sm sm:text-base">
-                        Remaining {leaveDetail?.remaining_leave ?? 35}
-                      </span>
-                    </p>
-                  </div>
-                </button>
-
-                <button className="relative group cursor-pointer text-lg sm:text-xl text-white overflow-hidden w-full h-[50%] rounded-md bg-[#FF6384] p-2 flex justify-center items-center hover:scale-95 duration-300">
-                  <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                    <FontAwesomeIcon icon={faVirus} size="lg" />
-                    <span className="text-sm sm:text-base">
-                      Sick {leaveDetail?.sick_leave ?? 15}
-                    </span>
-                  </p>
-                </button>
-              </div>
-
-              <div className="flex gap-4 flex-col">
-                <button className="relative group cursor-pointer text-lg sm:text-xl text-white overflow-hidden w-full h-[50%] rounded-md bg-[#FFCE56] p-2 flex justify-center items-center hover:scale-95 duration-300">
-                  <div>
-                    <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                      <FontAwesomeIcon icon={faHourglassHalf} size="lg" />
-                      <span className="text-sm sm:text-base">
-                        Pending {leaveDetail?.pending_leave ?? 0}
-                      </span>
-                    </p>
-                  </div>
-                </button>
-
-                <button className="relative group cursor-pointer text-lg sm:text-xl text-white overflow-hidden w-full h-[50%] rounded-md bg-[#4BC0C0] p-2 flex justify-center items-center hover:scale-95 duration-300">
-                  <p className="z-10 flex items-center gap-1 sm:gap-2 text-sm sm:text-lg">
-                    <FontAwesomeIcon icon={faCircleXmark} size="lg" />
-                    <span className="text-sm sm:text-base">
-                      Annual {leaveDetail?.annual_leave ?? 0}
-                    </span>
-                  </p>
-                </button>
+                </div>
               </div>
             </div>
 
-            <div className="overflow-x-auto w-full my-8 flex justify-center px-6  ">
-              <table className="w-full text-sm text-left rtl:text-right ">
-                <thead className="text-xs text-black uppercase dark:text-gray-400 bg-[#7cc5fa]">
+            {/* RIGHT COLUMN: Public Holidays, Pie Chart */}
+            <div className="flex flex-col gap-8">
+              {/* Upcoming Public Holidays Section */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Upcoming Public Holidays</h2>
+                <ul className="flex flex-col gap-3 max-h-96 overflow-y-auto pr-2">
+                  {/* Example holidays, replace with real data if available */}
+                  <li className="flex flex-col gap-1 border-b pb-2">
+                    <span className="text-xs text-gray-400">Jul 08, 2022 &bull; Friday</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-100">Arafat Day</span>
+                  </li>
+                  <li className="flex flex-col gap-1 border-b pb-2">
+                    <span className="text-xs text-gray-400">Jul 09, 2022 &bull; Saturday</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-100">Eid al-Adha</span>
+                  </li>
+                  <li className="flex flex-col gap-1 border-b pb-2">
+                    <span className="text-xs text-gray-400">Jul 10, 2022 &bull; Sunday</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-100">Eid al-Adha Holiday</span>
+                  </li>
+                  {/* ...more holidays... */}
+                </ul>
+              </div>
+              {/* Pie Chart Section (after holidays) */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Leave Breakdown</h2>
+                <div className="w-full flex justify-center">
+                  <PieChart chartData={leave} />
+                  </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Leave Record Table: Full width below all cards */}
+        {!Loading && (
+          <div className="max-w-7xl mx-auto mt-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-all duration-300 overflow-x-auto">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Leave Record</h2>
+              <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
+                <thead className="text-xs uppercase bg-[#90d7f5] dark:bg-gray-700 text-gray-700 dark:text-gray-200">
                   <tr>
                     {leavehistorytable?.map((item, index) => (
                       <th
@@ -219,34 +297,20 @@ const dashboard = () => {
                     ))}
                   </tr>
                 </thead>
-                {dataLeave?.messages?.map((data) => {
-                  return (
-                    <tbody key={data._id}>
-                      <tr className="border-b px-2 sm:px-4">
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
-                          {data.leave_type}
-                        </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
-                          {data.days}
-                        </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
-                          {data.from_date.substring(0, 10)}
-                        </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
-                          {data.to_date.substring(0, 10)}
-                        </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
-                          {data.leave_application
-                            ? data.leave_application
-                                .split(" ")
-                                .slice(0, 3)
-                                .join(" ") + "..."
-                            : ""}
-                        </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
+                <tbody>
+                  {dataLeave?.messages?.map((data) => (
+                    <tr key={data._id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                      <td className="px-6 py-4">{data.leave_type}</td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow border ${statusBadge(data.status)}`}>
                           {data.status}
+                        </span>
                         </td>
-                        <td className="p-1 sm:p-2 whitespace-nowrap">
+                      <td className="px-6 py-4">{data.from_date.substring(0, 10)}</td>
+                      <td className="px-6 py-4">{data.to_date.substring(0, 10)}</td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.leave_application ? data.leave_application.split(" ").slice(0, 3).join(" ") + "..." : ""}</td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.status}</td>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                           <button
                             onClick={sendLeaveReminder}
                             disabled={
@@ -254,24 +318,22 @@ const dashboard = () => {
                               data.status === "Declined" ||
                               !data?.reminder
                             }
-                            className={`px-2 py-1 sm:px-3 sm:py-2 text-white ${
+                          className={`px-2 py-1 sm:px-3 sm:py-2 text-white transition-all duration-200 ${
                               data.status === "Approved" ||
                               data.status === "Declined" ||
                               !data.reminder
-                                ? "bg-gray-400"
-                                : "bg-blue-500"
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-blue-500 hover:bg-blue-600"
                             } rounded`}
                           >
-                            {data.status === "Approved" ||
-                            data.status === "Declined"
+                          {data.status === "Approved" || data.status === "Declined"
                               ? "Actioned"
                               : "Notify"}
                           </button>
                         </td>
                       </tr>
+                  ))}
                     </tbody>
-                  );
-                })}
               </table>
             </div>
           </div>

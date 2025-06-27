@@ -11,6 +11,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Deleteuser from "../components/deleteuser";
 import UserAvatar from "../public/userImg.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const User = () => {
   const { data, isAdmin } = useContext(AuthContext);
@@ -41,8 +43,9 @@ const User = () => {
     fetchUsers();
   }, []);
 
-  const handleUserDelete = (id) => {
+  const handleUserDelete = (id, name) => {
     setUsers(users.filter((user) => user._id !== id));
+    toast.success(`${name} deleted successfully!`);
   };
   let filter;
   if (data.role === "Manager") {
@@ -57,6 +60,7 @@ const User = () => {
       {!Loading && (
         <div className="flex flex-col gap-4 h-auto mt-16">
           <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow p-4 overflow-x-auto">
+            <ToastContainer />
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl text-gray-900 dark:text-white">
@@ -130,7 +134,7 @@ const User = () => {
                                 <FontAwesomeIcon icon={faPenToSquare} size="lg" />
                               </button>
                             </Link>
-                            <Deleteuser id={data._id} onDelete={() => handleUserDelete(data._id)} />
+                            <Deleteuser id={data._id} onDelete={() => handleUserDelete(data._id, data.name)} />
                           </div>
                         </td>
                       </tr>

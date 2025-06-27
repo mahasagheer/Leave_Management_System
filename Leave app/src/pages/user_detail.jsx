@@ -8,6 +8,18 @@ import { useReactToPrint } from "react-to-print";
 import { ToastContainer, toast } from "react-toastify";
 import UserAvatar from "../public/userImg.png";
 
+function statusBadge(status) {
+  if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+  if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
+  if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
+  if (status === "Admin Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+  if (status === "Admin Rejected") return "bg-red-100 text-red-700 border-red-300";
+  if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
+  if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
+  if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
+  return "bg-gray-100 text-gray-700 border-gray-300";
+}
+
 const user_detail = () => {
   const component = useRef();
   const [data, setData] = useState({});
@@ -17,6 +29,7 @@ const user_detail = () => {
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
   const [leave, setLeave] = useState({});
+  const [isPrinting, setIsPrinting] = useState(false);
   const notify = () => {
     toast.success("Report generated");
   };
@@ -89,8 +102,10 @@ const user_detail = () => {
 
   const handleGeneratePdf = useReactToPrint({
     content: () => component.current,
-    documentTitle: "leaveDetail",
-    onAfterPrint: () => notify(),
+    documentTitle: `${data.name ? data.name.replace(/\s+/g, '_') : 'employee'}_leave_report`,
+    onAfterPrint: () => {
+      notify();
+    },
   });
   return (
     <section id="user-profile" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -210,26 +225,37 @@ const user_detail = () => {
 
           {/* Leave History Table & PDF Button */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mt-2">
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Employee Leave History</h2>
             <div className="overflow-x-auto w-full my-4" ref={component}>
-              <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
+              <h1 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white print:mb-4">
+                {(data.name || 'Employee') + " Leave Report"}
+              </h1>
+              <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200 print-table">
                 <thead className="text-xs uppercase bg-[#90d7f5] dark:bg-gray-700 text-gray-700 dark:text-gray-200">
                     <tr>
-                      {leavehistorytable?.map((item, index) => (
-                      <th scope="col" key={index} className="px-6 py-3">{item}</th>
-                      ))}
+                      {leavehistorytable
+                        .filter((item) => item !== "Reminder")
+                        .map((item, index) => (
+                          <th scope="col" key={index} className="px-6 py-3">{item}</th>
+                        ))}
                     </tr>
                   </thead>
                 <tbody>
-                  {dataLeave?.messages?.map((data) => (
-                    <tr key={data._id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
-                        <td className="px-6 py-4">{data.leave_type}</td>
+                  {dataLeave?.messages?.map((data, idx) => (
+                    <tr
+                      key={data._id}
+                      className={`border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}`}
+                    >
+                      <td className="px-6 py-4">{data.leave_type}</td>
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.days}</td>
                       <td className="px-6 py-4">{data.from_date.substring(0, 10)}</td>
                       <td className="px-6 py-4">{data.to_date.substring(0, 10)}</td>
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.leave_application}</td>
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.status}</td>
-                      </tr>
+                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow border ${statusBadge(data.status)}`}>
+                          {data.status}
+                        </span>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
                 </table>

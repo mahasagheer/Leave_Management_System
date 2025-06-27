@@ -50,8 +50,7 @@ const View = () => {
     } else if (isHR) {
       url = `${apiURL}/inbox_messages/hr_leave/${selectedStatus}`;
     } else if (isManager) {
-      url = `${apiURL}/inbox_messages/manager_leave/${selectedStatus}`;
-    }
+      url = `${apiURL}/inbox_messages/manager_leave/${data._id}/${selectedStatus}`;    }
     axios
       .get(url)
       .then((response) => {

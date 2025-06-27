@@ -242,11 +242,11 @@ const dashboard = () => {
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-0">
                     Calendar
                   </h2>
-                  <div className="flex gap-2">
+                 {/*  <div className="flex gap-2">
                     <button className="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-xs font-semibold">
                       Month
                     </button>
-                  </div>
+                  </div>*/}
                 </div>
                 <div className="overflow-x-auto">
                   <Calendar id={data._id} />
@@ -257,6 +257,12 @@ const dashboard = () => {
                     <span className="w-3 h-3 rounded bg-yellow-400 inline-block"></span>
                     Pending Leave
                   </span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 rounded bg-[#FF6384] inline-block"></span>
+                    Sick Leave
+                  </span>
+                  
+                  
                 </div>
               </div>
             </div>
@@ -306,95 +312,6 @@ const dashboard = () => {
                   <PieChart chartData={leave} />
                 </div>
               </div>
-            </div>
-          </div>
-        )}
-        {/* Leave Record Table: Full width below all cards */}
-        {!Loading && (
-          <div className="max-w-7xl mx-auto mt-8">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-all duration-300 overflow-x-auto">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Leave Record
-              </h2>
-              <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
-                <thead className="text-xs uppercase bg-[#90d7f5] dark:bg-gray-700 text-gray-700 dark:text-gray-200">
-                  <tr>
-                    {leavehistorytable?.map((item, index) => (
-                      <th
-                        scope="col"
-                        key={index}
-                        className="px-6 py-3 whitespace-nowrap"
-                      >
-                        {item}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataLeave?.messages?.map((data) => (
-                    <tr
-                      key={data._id}
-                      className="border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
-                    >
-                      <td className="px-6 py-4">{data.leave_type}</td>
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold shadow border`}
-                        >
-                          {data.days}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        {data.from_date.substring(0, 10)}
-                      </td>
-                      <td className="px-6 py-4">
-                        {data.to_date.substring(0, 10)}
-                      </td>
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                        {data.leave_application
-                          ? data.leave_application
-                              .split(" ")
-                              .slice(0, 3)
-                              .join(" ") + "..."
-                          : ""}
-                      </td>
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                        {["Admin Approved", "Hr Approved"].includes(data.status)
-                          ? "Approved"
-                          : [
-                              "Admin Rejected",
-                              "Hr Rejected",
-                              "Manager Rejected",
-                            ].includes(data.status)
-                          ? "Rejected"
-                          : "Pending"}
-                      </td>{" "}
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                        <button
-                          onClick={sendLeaveReminder}
-                          disabled={
-                            data.status === "Approved" ||
-                            data.status === "Declined" ||
-                            !data?.reminder
-                          }
-                          className={`px-2 py-1 sm:px-3 sm:py-2 text-white transition-all duration-200 ${
-                            data.status === "Approved" ||
-                            data.status === "Declined" ||
-                            !data.reminder
-                              ? "bg-gray-400 cursor-not-allowed"
-                              : "bg-blue-500 hover:bg-blue-600"
-                          } rounded`}
-                        >
-                          {data.status === "Approved" ||
-                          data.status === "Declined"
-                            ? "Actioned"
-                            : "Notify"}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         )}

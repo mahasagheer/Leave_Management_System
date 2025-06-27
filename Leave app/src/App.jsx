@@ -74,7 +74,7 @@ function App() {
           path="/associate_members"
           element={
             <ThemeProvider>
-              <ProtectedRoute roles={["Manager"]}>
+              <ProtectedRoute roles={["admin", "HR", "Manager"]}>
                 <Sidebar />
                 <AssignEmployees />
               </ProtectedRoute>

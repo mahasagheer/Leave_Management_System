@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import Calender from "../components/Calender";
+import UserDayCalendar from "../components/UserDayCalendar";
+
 
 import axios from "axios";
 import { leavehistorytable } from "../Utiles/TableHearer";
@@ -133,8 +134,15 @@ const user_detail = () => {
               </div>
             </div>
             {/* Calendar */}
-            <div className="col-span-1 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col items-center justify-center">
-              <Calender id={id} />
+            <div className="col-span-1 bg-white dark:bg-gray-800 rounded-2xl shadow-xl flex flex-col items-center justify-center">
+              {/* Import UserDayCalendar at the top of your file: 
+                  import UserDayCalendar from "../components/UserDayCalendar";
+                  Then use the component below */}
+              <UserDayCalendar
+                messages={Array.isArray(dataLeave?.messages)
+                  ? dataLeave.messages.filter(l => l.status === 'Pending')
+                  : []}
+              />
             </div>
             {/* Leave Stats */}
             <div className="col-span-1 flex flex-col gap-6">

@@ -324,15 +324,7 @@ function DashboardLayout() {
                   </span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/associate_members"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
-                >
-                  <FontAwesomeIcon icon={faLink} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Associate Employees</span>
-                </Link>
-              </li>
+              
               </>
               
             )}
@@ -349,7 +341,7 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
-             {/* {isManager && (
+             {isManager && (
               <li>
                 <Link
                   to="/associate_members"
@@ -360,6 +352,7 @@ function DashboardLayout() {
                 </Link>
               </li>
             )} 
+             {/*
              {isAdmin && (
               <li>
                 <Link

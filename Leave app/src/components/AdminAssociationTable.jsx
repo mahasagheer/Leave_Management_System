@@ -7,7 +7,7 @@ import { faMagnifyingGlass, faUserXmark } from "@fortawesome/free-solid-svg-icon
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function AssignEmployees() {
+function AdminAssociatedEmployees() {
   const [associatedEmployees, setAssociatedEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -283,4 +283,4 @@ function AssignEmployees() {
   );
 }
 
-export default AssignEmployees;
+export default AdminAssociatedEmployees;

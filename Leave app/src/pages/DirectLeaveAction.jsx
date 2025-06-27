@@ -167,8 +167,8 @@ const DirectLeaveActionContent = () => {
           </div>
         </div>
         {/* Approve/Reject Form for HR/Manager/Admin only */}
-        {(isHR || isAdmin || isManager) && !actioned && (
-          <form onSubmit={formik.handleSubmit} className="mt-4">
+        {(role === "HR" || role ==="Manager" || role==="admin") && !actioned && (
+          <form onSubmit={formik.onSubmit} className="mt-4">
             <div className="mb-2">
               <textarea
                 className={`w-full p-2 rounded-md border ${formik.touched.comment && formik.errors.comment ? "border-red-500" : "border-gray-300"}`}

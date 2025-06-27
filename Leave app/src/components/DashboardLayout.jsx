@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGauge,
   faUser,
+  faLink,
   faEnvelopeOpenText,
   faEnvelopesBulk,
   faUsers,
@@ -18,6 +19,7 @@ import {
   faGear,
   faSun,
   faMoon,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "../context/themeContext";
 
@@ -242,6 +244,26 @@ function DashboardLayout() {
                     <span className="ms-3">Apply Leave</span>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/notify_leave"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 group"
+                  >
+                    <FontAwesomeIcon icon={faBell} />
+                    <span className="ms-3">Notify Leave</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/my_profile"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      My Profile
+                    </span>
+                  </Link>
+                </li>
               </>
             )}
             {isUser && (
@@ -266,7 +288,7 @@ function DashboardLayout() {
                     <span className="ms-3">Apply Leave</span>
                   </Link>
                 </li>
-                <li>
+               {/*  <li>
                   <Link
                     to="/inbox"
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
@@ -274,10 +296,20 @@ function DashboardLayout() {
                     <FontAwesomeIcon icon={faEnvelopesBulk} />
                     <span className="ms-3">My Leave Inbox</span>
                   </Link>
+                </li>*/}
+                <li>
+                  <Link
+                    to="/notify_leave"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 group"
+                  >
+                    <FontAwesomeIcon icon={faBell} />
+                    <span className="ms-3">Notify Leave</span>
+                  </Link>
                 </li>
               </>
             )}
             {(isHR || isAdmin || isManager) && (
+              <>
               <li>
                 <Link
                   to="/inbox"
@@ -292,6 +324,8 @@ function DashboardLayout() {
                   </span>
                 </Link>
               </li>
+              </>
+              
             )}
             {(isAdmin || isHR) && (
               <li>
@@ -306,6 +340,17 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
+            {isManager && (
+              <li>
+                <Link
+                  to="/associate_members"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                >
+                  <FontAwesomeIcon icon={faLink} />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Associate Employees</span>
+                </Link>
+              </li>
+            )} 
             {/*  {isAdmin && (
               <li>
                 <Link

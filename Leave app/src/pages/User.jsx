@@ -49,10 +49,10 @@ const User = () => {
   };
   let filter;
   if (data.role === "Manager") {
-    filter = users.filter((data) => data.role === "user");
+    filter = users.filter((user) => user.role === "user" && user._id !== data._id);
   }
   if (data.role === "admin" ||  data.role === "HR") {
-    filter = users.filter((data) => data.role === "user" || data.role === "HR" || data.role === "Manager");
+    filter = users.filter((user) => (user.role === "user" || user.role === "HR" || user.role === "Manager") && user._id !== data._id);
   }
   return (
     <section id="user" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">

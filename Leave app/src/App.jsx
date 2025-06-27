@@ -16,6 +16,8 @@ import UpdateUser from "./pages/updateUser";
 import Home from "./pages/Board";
 import Sidebar from "./components/DashboardLayout";
 import Forgot from "./pages/Forgot";
+import NotifyLeave from "./pages/Notifyleave";
+import AssignEmployees from "./pages/AssociateEmployee";
 
 function App() {
   return (
@@ -57,11 +59,33 @@ function App() {
             </ThemeProvider>
           }
         />
+         <Route
+          path="/notify_leave"
+          element={
+            <ThemeProvider>
+              <ProtectedRoute roles={["user", "HR","Manager"]}>
+                <Sidebar />
+                <NotifyLeave />
+              </ProtectedRoute>
+            </ThemeProvider>
+          }
+        />
+        <Route
+          path="/associate_members"
+          element={
+            <ThemeProvider>
+              <ProtectedRoute roles={["Manager"]}>
+                <Sidebar />
+                <AssignEmployees />
+              </ProtectedRoute>
+            </ThemeProvider>
+          }
+        />
         <Route
           path="/my_profile"
           element={
             <ThemeProvider>
-              <ProtectedRoute roles={["user"]}>
+              <ProtectedRoute roles={["user", "HR","Manager"]}>
                 <Sidebar />
                 <MyProfile />
               </ProtectedRoute>

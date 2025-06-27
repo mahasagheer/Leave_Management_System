@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import UserDayCalendar from "../components/UserDayCalendar";
-
-
+import AdminAssociatedEmployees from "../components/AdminAssociationTable";
 import axios from "axios";
 import { leavehistorytable } from "../Utiles/TableHearer";
 import { useReactToPrint } from "react-to-print";
@@ -231,6 +230,8 @@ const user_detail = () => {
             </div>
             </div>
 
+{data.role === "Manager" &&(<AdminAssociatedEmployees />
+)}
           {/* Leave History Table & PDF Button */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mt-2">
             <div className="overflow-x-auto w-full my-4" ref={component}>

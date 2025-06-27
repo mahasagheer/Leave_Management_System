@@ -34,7 +34,7 @@ function DashboardLayout() {
     themeColor,
     logo,
     isManager,
-    setManager
+    setManager,
   } = useContext(AuthContext);
   const navigate = useNavigate();
   const [dataLeave, setDataLeave] = useState({});
@@ -74,8 +74,9 @@ function DashboardLayout() {
       url = `${apiURL}/inbox_messages/manager_leave/Pending`;
     }
     if (url) {
-      axios.get(url, { headers: { Authorization: `${local}` } })
-        .then(res => {
+      axios
+        .get(url, { headers: { Authorization: `${local}` } })
+        .then((res) => {
           setPendingCount(Array.isArray(res.data) ? res.data.length : 0);
         })
         .catch(() => setPendingCount(0));
@@ -88,9 +89,9 @@ function DashboardLayout() {
       setAdmin(false);
     } else if (isHR == true) {
       setHR(false);
-    } else if(isManager == true){
-      setManager(false)
-    } else{
+    } else if (isManager == true) {
+      setManager(false);
+    } else {
       setUser(false);
     }
     navigate("/");
@@ -141,13 +142,18 @@ function DashboardLayout() {
                   </div>
                 )}
                 <button
-                        onClick={toggleTheme}
-                        className="ml-2 p-3 mr-4 rounded-[100%] bg-gray-100 dark:bg-gray-700 hover:bg-lime-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
-                        aria-label="Toggle theme"
-                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                      >
-                        <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-xl text-yellow-400 dark:text-gray-200" />
-                      </button>
+                  onClick={toggleTheme}
+                  className="ml-2 p-3 mr-4 rounded-[100%] bg-gray-100 dark:bg-gray-700 hover:bg-lime-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+                  aria-label="Toggle theme"
+                  title={
+                    isDark ? "Switch to light mode" : "Switch to dark mode"
+                  }
+                >
+                  <FontAwesomeIcon
+                    icon={isDark ? faSun : faMoon}
+                    className="text-xl text-yellow-400 dark:text-gray-200"
+                  />
+                </button>
                 <button
                   type="button"
                   onClick={toggleDropdown}
@@ -160,7 +166,6 @@ function DashboardLayout() {
                     alt="user photo"
                   />
                 </button>
-                
 
                 {dropdownOpen && (
                   <div className="absolute top-14 right-0 mt-2 w-80 max-w-xs bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 animate-fadeIn z-50">
@@ -171,10 +176,13 @@ function DashboardLayout() {
                         className="w-12 h-12 rounded-full object-cover border-2 border-lime-400 shadow-sm"
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="block text-base font-semibold text-gray-900 dark:text-white truncate">{data.name}</span>
-                        <span className="block text-xs text-gray-500 dark:text-gray-400 truncate">{data.email}</span>
+                        <span className="block text-base font-semibold text-gray-900 dark:text-white truncate">
+                          {data.name}
+                        </span>
+                        <span className="block text-xs text-gray-500 dark:text-gray-400 truncate">
+                          {data.email}
+                        </span>
                       </div>
-                      
                     </div>
                     <div className="border-t border-gray-100 dark:border-gray-700"></div>
                     <div className="flex items-center px-5 py-3">
@@ -201,9 +209,7 @@ function DashboardLayout() {
         }  sm:translate-x-0 bg-white dark:bg-gray-800`}
         aria-label="Sidebar"
       >
-        <div
-          className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800"
-        >
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
             {isUser && (
               <li>
@@ -238,7 +244,7 @@ function DashboardLayout() {
                 </li>
               </>
             )}
-            {(isUser )&& (
+            {isUser && (
               <>
                 <li>
                   <Link
@@ -271,14 +277,16 @@ function DashboardLayout() {
                 </li>
               </>
             )}
-            {(isHR || isAdmin ||isManager ) && (
+            {(isHR || isAdmin || isManager) && (
               <li>
                 <Link
                   to="/inbox"
                   className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faInbox} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Leave Inbox</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Leave Inbox
+                  </span>
                   <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 ms-3 text-xs font-medium text-blue-800 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-300">
                     {pendingCount}
                   </span>
@@ -298,7 +306,7 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
-          {/*  {isAdmin && (
+            {/*  {isAdmin && (
               <li>
                 <Link
                   to="/setting"

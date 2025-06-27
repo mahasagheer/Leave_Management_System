@@ -24,7 +24,7 @@ const View = () => {
   const [selectedMsgIndex, setSelectedMsgIndex] = useState(null);
 
   // Define all status filters with their badge color
-  const statusFilters = [
+  const adminStatusFilters = [
     { label: "All", value: "All", color: "bg-gray-200 text-gray-700" },
     { label: "Pending", value: "Pending", color: "bg-yellow-100 text-yellow-700 border-yellow-300" },
     { label: "HR Approved", value: "HR Approved", color: "bg-blue-100 text-blue-700 border-blue-300" },
@@ -32,6 +32,12 @@ const View = () => {
     { label: "Rejected by Manager", value: "Rejected by Manager", color: "bg-orange-100 text-orange-700 border-orange-300" },
     { label: "Admin Approved", value: "Admin Approved", color: "bg-blue-100 text-blue-700 border-blue-300" },
     { label: "Admin Rejected", value: "Admin Rejected", color: "bg-red-100 text-red-700 border-red-300" },
+  ];
+  const userStatusFilters = [
+    { label: "All", value: "All", color: "bg-gray-200 text-gray-700" },
+    { label: "Pending", value: "Pending", color: "bg-yellow-100 text-yellow-700 border-yellow-300" },
+    { label: "Approved", value: "Approved", color: "bg-green-100 text-green-700 border-green-300" },
+    { label: "Declined", value: "Declined", color: "bg-red-100 text-red-700 border-red-300" },
   ];
 
   const fetchMessages = () => {
@@ -118,6 +124,14 @@ const View = () => {
   }
   // Select the correct message list
   const messageList = data.role === "user" ? userMessages : filteredMessages;
+
+  // Map status for user view
+  const mapUserStatus = (status) => {
+    if (["HR Approved", "Manager Approved", "Admin Approved", "Approved"].includes(status)) return "Approved";
+    if (["Admin Rejected", "Rejected by Manager", "Declined"].includes(status)) return "Declined";
+    if (status === "Pending") return "Pending";
+    return status;
+  };
 
   // Select the message to show in detail
   const selectedMessage =
@@ -269,7 +283,7 @@ const View = () => {
             .put(`${apiURL}/send_email/manager_reject`, {
               employee_id: values.employee_id,
               message_id: values.leave_id,
-              comment: values.comment,
+          comment: values.comment,
             })
             .then(() => {
               setLoading(false);
@@ -289,7 +303,7 @@ const View = () => {
         }else  if(isAdmin){
           axios
             .put(`${apiURL}/send_email/admin_reject`, {
-              employee_id: values.employee_id,
+          employee_id: values.employee_id,
               message_id: values.leave_id,
               comment: values.comment,
         })
@@ -332,11 +346,15 @@ const View = () => {
 
   // Status badge color
   const statusBadge = (status) => {
-    if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
-    if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
-    if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
-    if (status === "Admin Approved") return "bg-blue-100 text-blue-700 border-blue-300";
-    if (status === "Admin Rejected") return "bg-red-100 text-red-700 border-red-300";
+    if (isHR || isAdmin || isManager) {
+      if (status === "HR Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+      if (status === "Manager Approved") return "bg-teal-100 text-teal-700 border-teal-300";
+      if (status === "Rejected by Manager") return "bg-orange-100 text-orange-700 border-orange-300";
+      if (status === "Admin Approved") return "bg-blue-100 text-blue-700 border-blue-300";
+      if (status === "Admin Rejected") return "bg-red-100 text-red-700 border-red-300";
+      if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
+    }
+    // For user, only show Approved, Declined, Pending
     if (status === "Approved") return "bg-green-100 text-green-700 border-green-300";
     if (status === "Declined") return "bg-red-100 text-red-700 border-red-300";
     if (status === "Pending") return "bg-yellow-100 text-yellow-700 border-yellow-300";
@@ -348,6 +366,15 @@ const View = () => {
     ? messageList
     : messageList.filter((msgObj) => {
         const msg = data.role === "user" ? msgObj : msgObj.messages || msgObj;
+        if (!(isHR || isAdmin || isManager)) {
+          // For user, map status for filtering
+          const mapped = mapUserStatus(msg.status);
+          if (["Approved", "Declined", "Pending"].includes(selectedStatus)) {
+            return mapped === selectedStatus;
+          }
+          return true;
+        }
+        // For admin/HR/manager, filter as before
         return msg.status === selectedStatus;
       });
 
@@ -367,9 +394,9 @@ const View = () => {
           {/* Left Panel: Message List */}
           <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 rounded-lg shadow p-2 overflow-y-auto">
             <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-              {(isHR || isAdmin || isManager) && (
+              {(isHR || isAdmin || isManager) ? (
                 <>
-                  {statusFilters.map((filter) => (
+                  {adminStatusFilters.map((filter) => (
                   <button
                       key={filter.value}
                       onClick={() => setSelectedStatus(filter.value)}
@@ -378,6 +405,20 @@ const View = () => {
                       <span className="mt-[1px] text-xs font-sans">
                         {filter.label}
                     </span>
+                  </button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {userStatusFilters.map((filter) => (
+                  <button
+                      key={filter.value}
+                      onClick={() => setSelectedStatus(filter.value)}
+                      className={`flex justify-center text-sm items-center p-1 gap-2 h-8 w-auto px-3 rounded-full cursor-pointer transition-all text-xs sm:text-sm md:text-base border ${filter.color} ${selectedStatus === filter.value ? 'ring-2 ring-blue-400' : ''}`}
+                  >
+                      <span className="mt-[1px] text-xs font-sans">
+                        {filter.label}
+                      </span>
                   </button>
                   ))}
                 </>
@@ -413,13 +454,23 @@ const View = () => {
                         <span className="font-semibold text-gray-900 dark:text-white truncate">
                           {msg.name}
                         </span>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-xs border ${statusBadge(
-                            msg.status
-                          )}`}
-                        >
-                          {msg.status}
-                        </span>
+                        {(isHR || isAdmin || isManager) ? (
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs border ${statusBadge(
+                              msg.status
+                            )}`}
+                          >
+                            {msg.status}
+                          </span>
+                        ) : (["Approved", "Declined", "Pending"].includes(mapUserStatus(msg.status)) && (
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs border ${statusBadge(
+                              mapUserStatus(msg.status)
+                            )}`}
+                          >
+                            {mapUserStatus(msg.status)}
+                          </span>
+                        ))}
                       </div>
                       <div className="text-xs text-gray-500 truncate">
                         {msg.email}
@@ -461,10 +512,10 @@ const View = () => {
                   </div>
                   <span
                     className={`ml-auto px-3 py-1 rounded-full text-xs border ${statusBadge(
-                      selectedMessage.status
+                      isHR || isAdmin || isManager ? selectedMessage.status : mapUserStatus(selectedMessage.status)
                     )}`}
                   >
-                    {selectedMessage.status}
+                    {isHR || isAdmin || isManager ? selectedMessage.status : mapUserStatus(selectedMessage.status)}
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

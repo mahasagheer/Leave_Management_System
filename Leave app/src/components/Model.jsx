@@ -29,20 +29,20 @@ const ModalComponent = () => {
           id="authentication-modal"
           tabIndex="-1"
           aria-hidden="true"
-          role="dialog" // <-- add this line
-          data-testid="modal" // <-- add this line
+          role="dialog"
+          data-testid="modal"
           className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-[calc(100%)] max-h-full bg-black bg-opacity-50"
         >
           <div className="relative p-4 w-full max-w-md max-h-full">
-            <div className="relative bg-white rounded-lg shadow p-[5%] dark:bg-gray-700">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white">
+            <div className="relative bg-white rounded-lg shadow p-[5%]">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">
                   Sign in to our platform
                 </h3>
                 <button
                   type="button"
-                  data-testid="close-modal-button" // <-- add this line
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-testid="close-modal-button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                   onClick={closeModal}
                 >
                   <svg
@@ -68,7 +68,7 @@ const ModalComponent = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Your email
                     </label>
@@ -77,7 +77,7 @@ const ModalComponent = () => {
                       name="email"
                       id="email"
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-lime-500 outline-none block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-lime-500 outline-none block w-full p-2.5"
                       placeholder="Email"
                       required
                     />
@@ -85,7 +85,7 @@ const ModalComponent = () => {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Your password
                     </label>
@@ -95,14 +95,14 @@ const ModalComponent = () => {
                       id="password"
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-lime-500 outline-none block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-lime-500 outline-none block w-full p-2.5"
                       required
                     />
                   </div>
                   <button
                     type="submit"
-                    role="button" // <-- add this line
-                    className="w-full text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    role="button"
+                    className="w-full text-white bg-lime-500 hover:bg-lime-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Login to your account
                   </button>

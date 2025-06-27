@@ -154,35 +154,35 @@ function DashboardLayout() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw]  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                    <div className="flex items-center px-3 sm:px-4 py-2">
-                      <p className="ml-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200">
-                        <span className="block text-sm sm:text-base">
-                          {data.name}
-                        </span>
-                        <span className="block text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                          {data.email}
-                        </span>
-                      </p>
+                  <div className="absolute top-14 right-0 mt-2 w-80 max-w-xs bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 animate-fadeIn z-50">
+                    <div className="flex items-center gap-3 px-5 py-4">
+                      <img
+                        src={User}
+                        alt="User avatar"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-lime-400 shadow-sm"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="block text-base font-semibold text-gray-900 dark:text-white truncate">{data.name}</span>
+                        <span className="block text-xs text-gray-500 dark:text-gray-400 truncate">{data.email}</span>
+                      </div>
                       <button
                         onClick={toggleTheme}
-                        className="ml-auto p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-400 bg-gray-100 dark:bg-gray-700 hover:bg-lime-100 dark:hover:bg-gray-600 transition"
+                        className="ml-2 p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-lime-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
                         aria-label="Toggle theme"
+                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                       >
                         <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-xl text-yellow-400 dark:text-gray-200" />
                       </button>
                     </div>
-                    <div className="border-t border-gray-200 dark:border-gray-700"></div>
-                    <div className="flex items-center px-3 sm:px-4 py-2  cursor-pointer">
-                      <a
+                    <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                    <div className="flex items-center px-5 py-3">
+                      <button
                         onClick={handleLogout}
-                        className="flex items-center p-2 w-full text-xs sm:text-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+                        className="flex items-center gap-2 w-full justify-center px-4 py-2 rounded-lg text-sm font-medium bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-800 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-red-400"
                       >
                         <FontAwesomeIcon icon={faRightFromBracket} />
-                        <span className="flex-1 ml-2 sm:ml-3 whitespace-nowrap">
-                          Log Out
-                        </span>
-                      </a>
+                        <span>Log Out</span>
+                      </button>
                     </div>
                   </div>
                 )}

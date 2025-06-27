@@ -84,7 +84,7 @@ const updateUser = () => {
             setLoading(false);
             toast.success("User updated successfully!");
             setTimeout(() => {
-              navigate("/user");
+            navigate("/user");
             }, 1200);
           })
           .catch((error) => {
@@ -97,7 +97,7 @@ const updateUser = () => {
     <section id="updateUser" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
       <div className="w-full mt-20 max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-10 mx-2 animate-fadeIn">
         <ToastContainer />
-        {Loading && <div className="loader ml-[50%] mt-[25%]"></div>}
+        {Loading && <div className="loader ml-[50%] mt-[25%] mb-[25%]"></div>}
         {!Loading && (
           <>
             <h1 className="text-3xl text-center mb-2 text-gray-900 dark:text-white">Update Employee</h1>

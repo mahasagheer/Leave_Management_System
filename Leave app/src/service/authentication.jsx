@@ -118,6 +118,8 @@ export const AuthProvider = ({ children }) => {
     setAdmin(false);
     setHR(false);
     setUser(false);
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
     navigate("/login");
   };
   return (

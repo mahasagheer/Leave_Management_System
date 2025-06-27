@@ -141,9 +141,9 @@ const user_detail = () => {
               <div className="bg-gradient-to-tr from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 rounded-2xl shadow-xl p-6 flex-1 flex flex-col justify-between">
                 <div className="flex items-center gap-2 mb-2">
                   <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 17l4 4 4-4m0-5V3m-8 4v10a4 4 0 004 4h4a4 4 0 004-4V7a4 4 0 00-4-4H8a4 4 0 00-4 4v10a4 4 0 004 4h4" /></svg>
-                  <h2 className="text-lg font-bold text-blue-800 dark:text-blue-200">Leave Balances</h2>
+                  <h2 className="text-lg font-bold text-blue-800 dark:text-white">Leave Balances</h2>
                 </div>
-                <ul className="space-y-2 text-base">
+                <ul className="space-y-2 text-base text-gray-700 dark:text-white">
                   <li><strong>Remaining:</strong> {leave.remaining_leave ?? 0}</li>
                   <li><strong>Sick:</strong> {leave.sick_leave ?? 0}</li>
                   <li><strong>Pending:</strong> {leave.pending_leave ?? 0}</li>
@@ -153,17 +153,17 @@ const user_detail = () => {
               <div className="bg-gradient-to-tr from-green-100 to-green-300 dark:from-green-900 dark:to-green-700 rounded-2xl shadow-xl p-6 flex-1 flex flex-col justify-between">
                 <div className="flex items-center gap-2 mb-2">
                   <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                  <h2 className="text-lg font-bold text-green-800 dark:text-green-200">Leave Requests</h2>
+                  <h2 className="text-lg font-bold text-green-800 dark:text-white">Leave Requests</h2>
                 </div>
                 {Array.isArray(dataLeave?.messages) ? (
-                  <ul className="space-y-2 text-base">
+                  <ul className="space-y-2 text-base text-gray-700 dark:text-white">
                     <li><strong>Total:</strong> {dataLeave.messages.length}</li>
                     <li><strong>Pending:</strong> {dataLeave.messages.filter(l => l.status === 'Pending').length}</li>
                     <li><strong>Approved:</strong> {dataLeave.messages.filter(l => l.status === 'Approved').length}</li>
                     <li><strong>Declined:</strong> {dataLeave.messages.filter(l => l.status === 'Declined').length}</li>
                   </ul>
                 ) : (
-                  <p className="text-gray-400">No leave requests found.</p>
+                  <p className="text-gray-400 dark:text-gray-300">No leave requests found.</p>
                 )}
               </div>
               </div>
@@ -228,7 +228,7 @@ const user_detail = () => {
             <div className="overflow-x-auto w-full my-4" ref={component}>
               <h1 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white print:mb-4">
                 {(data.name || 'Employee') + " Leave Report"}
-              </h1>
+            </h1>
               <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200 print-table">
                 <thead className="text-xs uppercase bg-[#90d7f5] dark:bg-gray-700 text-gray-700 dark:text-gray-200">
                     <tr>
@@ -236,26 +236,30 @@ const user_detail = () => {
                         .filter((item) => item !== "Reminder")
                         .map((item, index) => (
                           <th scope="col" key={index} className="px-6 py-3">{item}</th>
-                        ))}
+                      ))}
                     </tr>
                   </thead>
                 <tbody>
                   {dataLeave?.messages?.map((data, idx) => (
                     <tr
                       key={data._id}
-                      className={`border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors ${idx % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}`}
+                      className={`border-b border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors
+                        ${idx % 2 === 0
+                          ? 'bg-white dark:bg-gray-800'
+                          : 'bg-gray-50 dark:bg-gray-900'}
+                      `}
                     >
-                      <td className="px-6 py-4">{data.leave_type}</td>
+                        <td className="px-6 py-4">{data.leave_type}</td>
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.days}</td>
                       <td className="px-6 py-4">{data.from_date.substring(0, 10)}</td>
                       <td className="px-6 py-4">{data.to_date.substring(0, 10)}</td>
                       <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">{data.leave_application}</td>
-                      <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow border ${statusBadge(data.status)}`}>
                           {data.status}
                         </span>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
                   ))}
                 </tbody>
                 </table>

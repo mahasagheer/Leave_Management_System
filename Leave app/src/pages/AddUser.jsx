@@ -271,7 +271,7 @@ const AddUser = () => {
             setLoading(false);
             toast.success("New team member added successfully!");
             setTimeout(() => {
-              navigate("/user");
+            navigate("/user");
             }, 1200);
           })
           .catch((error) => {
@@ -352,9 +352,9 @@ const AddUser = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
-                  />
+                    />
                   {errors.exit_date && touched.exit_date && <p className="text-red-600 text-xs mt-1">{errors.exit_date}</p>}
-                </div>
+                  </div>
                 </div>
 
               <div>

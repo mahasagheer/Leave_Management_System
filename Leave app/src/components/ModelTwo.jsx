@@ -104,7 +104,6 @@ const ModelTwo = () => {
                     >
                       Login to your account
                     </button>
-                    <ResetPassword />
                   </form>
                 </div>
               </div>

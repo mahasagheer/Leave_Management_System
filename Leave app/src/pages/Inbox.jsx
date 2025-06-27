@@ -354,7 +354,7 @@ const View = () => {
   return (
     <section
       id="inbox"
-      className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900"
+      className="p-0 sm:p-4 sm:ml-64  sm:t-50 bg-gray-50 dark:bg-gray-900 min-h-screen"
     >
       {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
       {error && (

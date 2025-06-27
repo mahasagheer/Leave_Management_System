@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./context/themeContext";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -14,101 +15,124 @@ import UserDetail from "./pages/user_detail";
 import UpdateUser from "./pages/updateUser";
 import Home from "./pages/Board";
 import Sidebar from "./components/DashboardLayout";
+import Forgot from "./pages/Forgot";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/forgot_password" element={<Forgot/>} />
+
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
-              <Sidebar />
-              <Dashboard />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
+                <Sidebar />
+                <Dashboard />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/setting"
           element={
-            <ProtectedRoute roles={["admin"]}>
-              <Sidebar />
-              <Setting />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin"]}>
+                <Sidebar />
+                <Setting />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/Leave"
           element={
-            <ProtectedRoute roles={["user", "HR","Manager"]}>
-              <Sidebar />
-              <ApplyLeave />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["user", "HR","Manager"]}>
+                <Sidebar />
+                <ApplyLeave />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/my_profile"
           element={
-            <ProtectedRoute roles={["user"]}>
-              <Sidebar />
-              <MyProfile />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["user"]}>
+                <Sidebar />
+                <MyProfile />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/user"
           element={
-            <ProtectedRoute roles={["admin", "HR", "Manager"]}>
-              <Sidebar />
-              <User />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "HR", "Manager"]}>
+                <Sidebar />
+                <User />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/user/:id"
           element={
-            <ProtectedRoute roles={["admin", "HR", "Manager"]}>
-              <Sidebar />
-              <UserDetail />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "HR", "Manager"]}>
+                <Sidebar />
+                <UserDetail />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/new_user/:id"
           element={
-            <ProtectedRoute roles={["admin", "HR"]}>
-              <Sidebar />
-              <AddUser />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "HR"]}>
+                <Sidebar />
+                <AddUser />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
 
         <Route
           path="/update_user/:id"
           element={
-            <ProtectedRoute roles={["admin", "HR"]}>
-              <Sidebar />
-              <UpdateUser />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "HR"]}>
+                <Sidebar />
+                <UpdateUser />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/new_user"
           element={
-            <ProtectedRoute roles={["admin", "HR"]}>
-              <Sidebar />
-              <AddUser />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "HR"]}>
+                <Sidebar />
+                <AddUser />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
         <Route
           path="/inbox"
           element={
-            <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
-              <Sidebar />
-              <Inbox />
-            </ProtectedRoute>
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin", "user", "HR","Manager"]}>
+                <Sidebar />
+                <Inbox />
+              </ProtectedRoute>
+            </ThemeProvider>
           }
         />
       </Routes>

@@ -16,7 +16,10 @@ import {
   faInbox,
   faBars,
   faGear,
+  faSun,
+  faMoon,
 } from "@fortawesome/free-solid-svg-icons";
+import { ThemeContext } from "../context/themeContext";
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,6 +44,7 @@ function DashboardLayout() {
   const apiURL = import.meta.env.VITE_API;
   const [Loading, setLoading] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const { isDark, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     setLoading(true);
@@ -150,19 +154,26 @@ function DashboardLayout() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw]  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200">
+                  <div className="absolute top-14 right-0 mt-2 sm:w-[100%] xs:w-[60vw]  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <div className="flex items-center px-3 sm:px-4 py-2">
-                      <p className="ml-2 text-xs sm:text-sm text-gray-700">
+                      <p className="ml-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200">
                         <span className="block text-sm sm:text-base">
                           {data.name}
                         </span>
-                        <span className="block text-xs sm:text-sm text-gray-500">
+                        <span className="block text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                           {data.email}
                         </span>
                       </p>
+                      <button
+                        onClick={toggleTheme}
+                        className="ml-auto p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-400 bg-gray-100 dark:bg-gray-700 hover:bg-lime-100 dark:hover:bg-gray-600 transition"
+                        aria-label="Toggle theme"
+                      >
+                        <FontAwesomeIcon icon={isDark ? faSun : faMoon} className="text-xl text-yellow-400 dark:text-gray-200" />
+                      </button>
                     </div>
-                    <div className="border-t border-gray-200"></div>
-                    <div className="flex items-center px-3 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                    <div className="border-t border-gray-200 dark:border-gray-700"></div>
+                    <div className="flex items-center px-3 sm:px-4 py-2  cursor-pointer">
                       <a
                         onClick={handleLogout}
                         className="flex items-center p-2 w-full text-xs sm:text-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
@@ -185,13 +196,11 @@ function DashboardLayout() {
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }  sm:translate-x-0 dark:bg-gray-800 `}
+        }  sm:translate-x-0 bg-white dark:bg-gray-800`}
         aria-label="Sidebar"
-        style={{ backgroundColor: themeColor }}
       >
         <div
-          className={`h-full px-3 pb-4 overflow-y-auto bg-white  `}
-          style={{ backgroundColor: themeColor }}
+          className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800"
         >
           <ul className="space-y-2 font-medium">
             {isUser && (
@@ -219,7 +228,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -243,7 +252,7 @@ function DashboardLayout() {
                 <li>
                   <Link
                     to="/Leave"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200  group"
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                   >
                     <FontAwesomeIcon icon={faEnvelopeOpenText} />
                     <span className="ms-3">Apply Leave</span>
@@ -287,7 +296,7 @@ function DashboardLayout() {
                 </Link>
               </li>
             )}
-            {isAdmin && (
+          {/*  {isAdmin && (
               <li>
                 <Link
                   to="/setting"
@@ -297,7 +306,7 @@ function DashboardLayout() {
                   <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
                 </Link>
               </li>
-            )}
+            )} */}
           </ul>
         </div>
       </aside>

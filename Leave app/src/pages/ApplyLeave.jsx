@@ -80,24 +80,16 @@ const ApplyLeave = () => {
             },
           })
           .then(function (response) {
-            axios
-              .post(
-                `${apiURL}/send_email`,
-                {
-                  name: values.name,
-                  email: values.email,
-                  leave_type: values.leave_type,
-                  days: days,
-                  to_date: values.to_date,
-                  from_date: values.from_date,
-                  leave_application: values.leave_application,
+            console.log(response.data.message)
+            axios.post(
+              `${apiURL}/send_email`,
+              response.data.message, // 2nd argument: request body
+              {
+                headers: {
+                  Authorization: `${local}`, // 3rd argument: headers/config
                 },
-                {
-                  headers: {
-                    Authorization: `${local}`,
-                  },
-                }
-              )
+              }
+            )
               .then((res) => {
                 setLoading(false);
                 toast.success("Leave applied successfully!");

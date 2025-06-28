@@ -18,6 +18,7 @@ import Sidebar from "./components/DashboardLayout";
 import Forgot from "./pages/Forgot";
 import NotifyLeave from "./pages/Notifyleave";
 import AssignEmployees from "./pages/AssociateEmployee";
+import DirectLeaveAction from "./pages/DirectLeaveAction";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/forgot_password" element={<Forgot/>} />
+        <Route path="/leave-action/:leaveId/:token" element={<DirectLeaveAction />} />
 
         <Route
           path="/dashboard"

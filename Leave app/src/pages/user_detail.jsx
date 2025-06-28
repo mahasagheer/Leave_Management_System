@@ -230,7 +230,7 @@ const user_detail = () => {
             </div>
             </div>
 
-{data.role === "Manager" &&(<AdminAssociatedEmployees />
+            {data.role === "Manager" &&(<AdminAssociatedEmployees managerId={data._id} />
 )}
           {/* Leave History Table & PDF Button */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mt-2">

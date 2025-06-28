@@ -7,13 +7,12 @@ import { faMagnifyingGlass, faUserXmark } from "@fortawesome/free-solid-svg-icon
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function AdminAssociatedEmployees() {
+function AdminAssociatedEmployees({managerId}) {
   const [associatedEmployees, setAssociatedEmployees] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const apiURL = import.meta.env.VITE_API;
-  const { data } = useContext(AuthContext);
   const [allEmployees, setAllEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,7 +22,7 @@ function AdminAssociatedEmployees() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `${apiURL}/association/associatedEmployees/${data._id}`
+        `${apiURL}/association/associatedEmployees/${managerId}`
       );
       setAssociatedEmployees(res.data);
       setLoading(false);
@@ -34,15 +33,15 @@ function AdminAssociatedEmployees() {
   };
 
   useEffect(() => {
-    if (data?._id) {
+    if (managerId) {
       fetchAssociated();
     }
-  }, [data]);
+  }, [managerId]);
 
   const handleUnassign = async (empId) => {
     try {
       await axios.put(`${apiURL}/association/unassignEmployee`, {
-        managerId: data._id,
+        managerId: managerId,
         employeeId: empId,
       });
       await fetchAssociated();
@@ -74,7 +73,7 @@ function AdminAssociatedEmployees() {
     try {
       await axios.put(`${apiURL}/association/assignEmployees`, {
         employeeIds: selectedEmployees,
-        managerId: data._id,
+        managerId:managerId,
       });
       setModalOpen(false);
       fetchAssociated();
@@ -87,11 +86,11 @@ function AdminAssociatedEmployees() {
   };
 
   return (
-    <section id="associate-employee" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <section id="associate-employee" className="p-0  bg-gray-50 dark:bg-gray-900">
       <ToastContainer />
       {loading && <div className="loader ml-[50%] mt-[25%]"></div>}
       {!loading && (
-        <div className="flex flex-col gap-4 h-auto mt-16">
+        <div className="flex flex-col gap-2 h-auto mt-5">
           <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow p-4 overflow-x-auto">
             {message && (
               <div className="mb-4 text-center text-sm text-green-600 dark:text-green-400">{message}</div>
@@ -149,7 +148,7 @@ function AdminAssociatedEmployees() {
                         <td className="px-4 py-4">
                           <img src={UserAvatar} alt="User" className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600 shadow-sm" />
                         </td>
-                        <td className="px-4 py-4 font-bold underline text-sky-600">{emp._id}</td>
+                        <td className="px-4 py-4 font-semibold  text-gray-900">{emp._id}</td>
                         <td className="px-4 py-4 font-semibold text-gray-900 dark:text-white">{emp.name}</td>
                         <td className="px-4 py-4">{emp.department}</td>
                         <td className="px-4 py-4">{emp.email}</td>

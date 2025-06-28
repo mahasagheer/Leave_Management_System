@@ -35,7 +35,7 @@ const DirectLeaveActionContent = () => {
     setLoading(true);
     setError(null);
     axios
-      .get(`${apiURL}/inbox_messages/${leaveId}`)
+      .get(`${apiURL}/inbox_messages/leave/verify_token`)
       .then((res) => {
         setLeave(res.data);
         setLoading(false);

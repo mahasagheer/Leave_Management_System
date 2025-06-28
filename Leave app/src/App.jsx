@@ -26,7 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/forgot_password" element={<Forgot/>} />
-        <Route path="/leave-action/:leaveId/:token" element={<DirectLeaveAction />} />
+        <Route path="/inbox_messages/:token" element={<DirectLeaveAction />} />
 
         <Route
           path="/dashboard"

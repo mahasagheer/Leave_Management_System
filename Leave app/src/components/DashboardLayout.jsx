@@ -352,18 +352,18 @@ function DashboardLayout() {
                 </Link>
               </li>
             )} 
-             {/*
+             
              {isAdmin && (
               <li>
                 <Link
-                  to="/setting"
+                  to="/leave-limit"
                   className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
                 >
                   <FontAwesomeIcon icon={faGear} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Setting</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Leave Limit</span>
                 </Link>
               </li>
-            )} */}
+            )}
           </ul>
         </div>
       </aside>

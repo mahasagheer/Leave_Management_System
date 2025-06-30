@@ -19,6 +19,7 @@ import Forgot from "./pages/Forgot";
 import NotifyLeave from "./pages/Notifyleave";
 import AssignEmployees from "./pages/AssociateEmployee";
 import DirectLeaveAction from "./pages/DirectLeaveAction";
+import LeaveLimitForm from "./pages/LeaveLimit";
 
 function App() {
   return (
@@ -46,6 +47,17 @@ function App() {
               <ProtectedRoute roles={["admin"]}>
                 <Sidebar />
                 <Setting />
+              </ProtectedRoute>
+            </ThemeProvider>
+          }
+        />
+        <Route
+          path="/leave-limit"
+          element={
+            <ThemeProvider>
+              <ProtectedRoute roles={["admin"]}>
+                <Sidebar />
+                <LeaveLimitForm />
               </ProtectedRoute>
             </ThemeProvider>
           }

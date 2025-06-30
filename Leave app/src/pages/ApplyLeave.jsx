@@ -135,12 +135,8 @@ const ApplyLeave = () => {
                     className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
                   >
                     <option value="">Select Leave Type</option>
-                  <option>Causal Leave</option>
-                  <option>Annual Leave</option>
-                  <option>Sick Leave</option>
-                  <option>Maternity Leave</option>
-                  <option>Paternity Leave</option>
-                  <option>Special Leave</option>
+                  <option value= "unpaid-leave">Unpaid Leave</option>
+                  <option value= "paid-leave">Paid Leave</option>
                 </select>
                   {errors.leave_type && touched.leave_type && <p className="text-red-600 text-xs mt-1">{errors.leave_type}</p>}
                 </div>

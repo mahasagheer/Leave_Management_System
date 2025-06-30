@@ -16,6 +16,20 @@ const updateUser = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
+    // Add role options based on current user's role
+    const roleOptions =  [
+        { value: "HR", label: "HR" },
+        { value: "Manager", label: "Manager" },
+        { value: "user", label: "User" },
+      ]
+    
+
+  const staffTypeOptions = [
+    { value: "permanent", label: "Permanent" },
+    { value: "intern", label: "Intern" },
+    { value: "probation", label: "Probation" },
+  ];
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -52,6 +66,7 @@ const updateUser = () => {
         department: data.department || "",
         city: data.city || "",
         email: data.email || "",
+        staff_type:data.staff_type||"",
         password: "",
       },
       enableReinitialize: true,
@@ -73,6 +88,7 @@ const updateUser = () => {
               city: values.city,
               email: values.email,
               password: values.password,
+              staff_type:values.staff_type
             },
             {
               headers: {
@@ -298,6 +314,41 @@ const updateUser = () => {
                 />
                 {errors.password && touched.password && <p className="text-red-600 text-xs mt-1">{errors.password}</p>}
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="staff_type" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Staff Type</label>
+                <select
+                  id="staff_type"
+                  name="staff_type"
+                  value={values.staff_type}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                >
+                  {staffTypeOptions.map((option, idx) => (
+                      <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                  {errors.staff_type && touched.staff_type && <p className="text-red-600 text-xs mt-1">{errors.staff_type}</p>}
+                </div>
+                <div>
+                  <label htmlFor="role" className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Select Role</label>
+                <select
+                  id="role"
+                  name="role"
+                  value={values.role}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2.5 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition"
+                  disabled={roleOptions.length === 1}
+                >
+                  {roleOptions.map((option, idx) => (
+                      <option key={option.value + '-' + idx} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                  {errors.role && touched.role && <p className="text-red-600 text-xs mt-1">{errors.role}</p>}
+                </div>
+              </div>
                 <button
                   type="submit"
                 className="w-full py-3 mt-4 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg shadow transition focus:outline-none focus:ring-2 focus:ring-blue-400"

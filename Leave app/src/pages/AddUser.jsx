@@ -281,16 +281,7 @@ const AddUser = () => {
       },
     });
 
-  // Auto-set annual leave and sick leave based on staff type
-  useEffect(() => {
-    if (values.staff_type === "permanent") {
-      setFieldValue("annual_leave", 18);
-      setFieldValue("sick_leave", 8);
-    } else if (values.staff_type === "intern" || values.staff_type === "probation") {
-      setFieldValue("annual_leave", 3);
-      setFieldValue("sick_leave", 3);
-    }
-  }, [values.staff_type, setFieldValue]);
+
 
   return (
     <section id="addUser" className="p-0 sm:p-4 sm:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
